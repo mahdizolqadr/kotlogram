@@ -29,9 +29,10 @@ import java.io.OutputStream
 import java.math.BigInteger
 import java.nio.channels.ClosedChannelException
 import java.nio.charset.Charset
-import java.security.SecureRandom
+import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.TimeoutException
+import kotlin.experimental.xor
 
 internal class DefaultTelegramClient internal constructor(val application: TelegramApp, val apiStorage: TelegramApiStorage,
                                                           val updateCallback: UpdateCallback?,
@@ -385,44 +386,51 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
         }
     }
 
-    private fun calculateInputCheckPasswordSRP(tlPassword: TLPassword, inputPassword: String) : TLInputCheckPasswordSRP? =
-        (tlPassword.currentAlgo as? TLPasswordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow)?.let { algo ->
-            val clientSalt = algo.salt1.data
-            val serverSalt = algo.salt2.data
-            val g = BigInteger.valueOf(algo.g.toLong())
-            val gForHash = fromBigInt(g).padStart(256, 0.toChar())
-            val p = loadBigInt(algo.p.data)
-            val pForHash = algo.p.data.padStart(256, 0.toChar())
-            val B = tlPassword
-            val srpBForHash = tlPassword.srpB.data.padStart(256, 0.toChar())
-            val x = loadBigInt(PH2(inputPassword.toByteArray(Charset.defaultCharset()), algo.salt1.data, algo.salt2.data))
-            val v = g.modPow(x, p)
-            val k = loadBigInt(SHA256(concat(pForHash, gForHash)))
-            val k_v = k.multiply(v).mod(p)
-            val bigIntA = BigInteger(2048, SecureRandom())
-            val g_a = fromBigInt(g.modPow(bigIntA, p)).padStart(256, 0.toChar())
-            val t = loadBigInt(tlPassword.srpB.data).mod(p).subtract(k_v)
-            val u = loadBigInt(SHA256(concat(g_a, srpBForHash)))
-            val uMultiplyX = u.multiply(x)
-            val s_a = fromBigInt(t.modPow(bigIntA.add(uMultiplyX), p)).padStart(256, 0.toChar())
-            val k_a = SHA256(s_a)
-            val hashP = SHA256(pForHash)
-            val hashG = SHA256(gForHash)
-            val hashPxorHashG = xor(hashP, hashG)
-            val salt1Hash = SHA256(algo.salt1.data)
-            val salt2Hash = SHA256(algo.salt2.data)
-            val M1 = SHA256(concat(hashPxorHashG, salt1Hash, salt2Hash, g_a, srpBForHash, k_a))
-            TLInputCheckPasswordSRP(tlPassword.srpId, TLBytes(g_a), TLBytes(M1))
-    }
+    private fun calculateInputCheckPasswordSRP(tlPassword: TLPassword, inputPassword: String): TLInputCheckPasswordSRP? =
+            (tlPassword.currentAlgo as? TLPasswordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow)?.let { algo ->
 
-    private fun SH(bytes: ByteArray, salt:ByteArray): ByteArray = SHA256(concat(salt, bytes, salt))
+                val passwordBytes: ByteArray = inputPassword.toByteArray(StandardCharsets.UTF_8)
+                val xBytes = computePasswordHash(passwordBytes, algo.salt1.data, algo.salt2.data);
+                val srpB = tlPassword.srpB.data
 
-    private fun PH1(password: ByteArray, salt1: ByteArray, salt2: ByteArray) = SH(SH(password, salt1), salt2)
+                val g = BigInteger.valueOf(algo.g.toLong())
+                val gBytes: ByteArray = getBigIntegerBytes(g)
+                val p = BigInteger(1, algo.p.data)
+                val kBytes: ByteArray = computeSHA256(algo.p.data, gBytes)
+                val k = BigInteger(1, kBytes)
+                val x = BigInteger(1, xBytes)
+                val a = getSecureRandomBigInteger()
+                val A = g.modPow(a, p)
+                val A_bytes: ByteArray = getBigIntegerBytes(A)
+                val b = BigInteger(1, srpB)
 
-    private fun PH2(password: ByteArray, salt1: ByteArray, salt2: ByteArray) : ByteArray {
-        val bytes = PH1(password, salt1, salt2)
-        val result = getPBKDF2Hash(bytes, salt1)
-        return SH(result, salt2)
+                val bBytes: ByteArray = getBigIntegerBytes(b)
+                val uBytes: ByteArray = computeSHA256(A_bytes, bBytes)
+                val u = BigInteger(1, uBytes)
+
+                var B_kgx = b.subtract(k.multiply(g.modPow(x, p)).mod(p))
+                if (B_kgx.compareTo(BigInteger.ZERO) < 0) {
+                    B_kgx = B_kgx.add(p)
+                }
+
+                val s = B_kgx.modPow(a.add(u.multiply(x)), p)
+                val sBytes: ByteArray = getBigIntegerBytes(s)
+                val K_bytes: ByteArray = computeSHA256(sBytes)
+                val pHash: ByteArray = computeSHA256(algo.p.data)
+                val gHash: ByteArray = computeSHA256(gBytes)
+                for (i in pHash.indices) {
+                    pHash[i] = (gHash[i] xor pHash[i]) as Byte
+                }
+                val M1 = computeSHA256(pHash, computeSHA256(algo.salt1.data), computeSHA256(algo.salt2.data), A_bytes, bBytes, K_bytes)
+
+                TLInputCheckPasswordSRP(tlPassword.srpId, TLBytes(A_bytes), TLBytes(M1))
+            }
+
+    private fun computePasswordHash(password: ByteArray, salt1: ByteArray, salt2: ByteArray): ByteArray {
+        var xBytes: ByteArray = computeSHA256(salt1, password, salt1)
+        xBytes = computeSHA256(salt2, xBytes, salt2)
+        xBytes = getPBKDF2Hash(xBytes, salt1)
+        return computeSHA256(salt2, xBytes, salt2)
     }
 
     private fun ByteArray.padStart(length: Int, padChar: Char) = String(this, Charset.defaultCharset()).padStart(length, padChar).toByteArray(
@@ -443,6 +451,7 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
             is TLUpdatesTooLong -> updateCallback?.onUpdateTooLong(this)
         }
     }
+
     private fun bytesToHex(hash: ByteArray): String {
         val hexString = StringBuilder(2 * hash.size)
         for (i in hash.indices) {
