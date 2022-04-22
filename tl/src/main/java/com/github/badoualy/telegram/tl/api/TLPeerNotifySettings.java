@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLBool;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
@@ -20,7 +21,7 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSeria
  */
 public class TLPeerNotifySettings extends TLAbsPeerNotifySettings {
 
-    public static final int CONSTRUCTOR_ID = 0x9acda4c0;
+    public static final int CONSTRUCTOR_ID = 0xaf509d20;
 
     protected int flags;
 
@@ -32,7 +33,7 @@ public class TLPeerNotifySettings extends TLAbsPeerNotifySettings {
 
     protected String sound;
 
-    private final String _constructor = "peerNotifySettings#9acda4c0";
+    private final String _constructor = "peerNotifySettings#af509d20";
 
     public TLPeerNotifySettings() {
     }
@@ -63,10 +64,19 @@ public class TLPeerNotifySettings extends TLAbsPeerNotifySettings {
     @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
-        showPreviews = (flags & 1) != 0;
-        silent = (flags & 2) != 0;
-        muteUntil = readInt(stream);
-        sound = readTLString(stream);
+
+        if ((flags & 1) != 0) {
+            showPreviews = readTLBool(stream);
+        }
+        if ((flags & 2) != 0) {
+            silent = readTLBool(stream);
+        }
+        if ((flags & 4) != 0) {
+            muteUntil = readInt(stream);
+        }
+        if ((flags & 8) != 0) {
+            sound =  readTLString(stream);
+        }
     }
 
     @Override
