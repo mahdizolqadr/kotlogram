@@ -12,6 +12,7 @@ import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 
@@ -21,6 +22,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public final class CryptoUtils {
+
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private CryptoUtils() {
 
@@ -211,15 +214,53 @@ public final class CryptoUtils {
         return crypt.digest();
     }
 
-    public static byte[] SHA256(byte[] src) {
+    public static BigInteger getSecureRandomBigInteger(){
+        byte[] aBytes = new byte[256];
+        SECURE_RANDOM.nextBytes(aBytes);
+        return new BigInteger(1, aBytes);
+    }
+
+    public static byte[] computeSHA256(byte[] originalBytes) {
+        return computeSHA256(originalBytes, 0, originalBytes.length);
+    }
+
+    public static byte[] computeSHA256(byte[] originalBytes, int offset, int len) {
         try {
-            String a = "";
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(src);
+            md.update(originalBytes, offset, len);
             return md.digest();
         } catch (Exception e) {
         }
-        return null;
+        return new byte[32];
+    }
+
+    public static byte[] computeSHA256(byte[]... args) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            for (int a = 0; a < args.length; a++) {
+                md.update(args[a], 0, args[a].length);
+            }
+            return md.digest();
+        } catch (Exception e) {
+        }
+        return new byte[32];
+    }
+
+    public static byte[] getBigIntegerBytes(BigInteger value) {
+        byte[] bytes = value.toByteArray();
+        if (bytes.length > 256) {
+            byte[] correctedAuth = new byte[256];
+            System.arraycopy(bytes, 1, correctedAuth, 0, 256);
+            return correctedAuth;
+        } else if (bytes.length < 256) {
+            byte[] correctedAuth = new byte[256];
+            System.arraycopy(bytes, 0, correctedAuth, 256 - bytes.length, bytes.length);
+            for (int a = 0; a < 256 - bytes.length; a++) {
+                correctedAuth[a] = 0;
+            }
+            return correctedAuth;
+        }
+        return bytes;
     }
 
     public static byte[] getPBKDF2Hash(byte[] password, byte[] salt) {
