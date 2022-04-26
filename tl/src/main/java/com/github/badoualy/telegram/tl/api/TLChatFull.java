@@ -92,10 +92,6 @@ public class TLChatFull extends TLAbsChatFull {
         }
 
         if ((flags & 8) != 0) {
-            int magic = readInt(stream);
-            if (magic != 0x1cb5c415) {
-                return;
-            }
             botInfo = readTLVector(stream, context);
         }
     }

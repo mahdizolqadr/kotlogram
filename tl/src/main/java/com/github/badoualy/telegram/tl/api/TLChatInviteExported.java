@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
@@ -75,7 +77,24 @@ public class TLChatInviteExported extends TLAbsExportedChatInvite {
     @Override
     @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
+        flags = readInt(stream);
+        revoked = (flags & 1) != 0;
+        permanent = (flags & 32) != 0;
         link = readTLString(stream);
+        adminId = readLong(stream);
+        date = readInt(stream);
+        if ((flags & 16) != 0) {
+            startDate = readInt(stream);
+        }
+        if ((flags & 2) != 0) {
+            expireDate =readInt(stream);
+        }
+        if ((flags & 4) != 0) {
+            usageLimit = readInt(stream);
+        }
+        if ((flags & 8) != 0) {
+            usage = readInt(stream);
+        }
     }
 
     @Override

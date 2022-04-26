@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
-import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
@@ -24,15 +24,15 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSeria
  */
 public class TLBotInfo extends TLObject {
 
-    public static final int CONSTRUCTOR_ID = 0x98e81d3a;
+    public static final int CONSTRUCTOR_ID = 0x1b74b335;
 
-    protected int userId;
+    protected long userId;
 
     protected String description;
 
     protected TLVector<TLBotCommand> commands;
 
-    private final String _constructor = "botInfo#98e81d3a";
+    private final String _constructor = "botInfo#1b74b335";
 
     public TLBotInfo() {
     }
@@ -45,7 +45,7 @@ public class TLBotInfo extends TLObject {
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
-        writeInt(userId, stream);
+        writeLong(userId, stream);
         writeString(description, stream);
         writeTLVector(commands, stream);
     }
@@ -53,7 +53,7 @@ public class TLBotInfo extends TLObject {
     @Override
     @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        userId = readInt(stream);
+        userId = readLong(stream);
         description = readTLString(stream);
         commands = readTLVector(stream, context);
     }
@@ -77,11 +77,11 @@ public class TLBotInfo extends TLObject {
         return CONSTRUCTOR_ID;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
