@@ -1,7 +1,6 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.api.TLPhoto;
 import com.github.badoualy.telegram.tl.core.TLVector;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
  * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
  */
 
-//TODO: check for correct data
+//TODO: field set is incomplete, @see <a href ="https://core.telegram.org/constructor/chatFull">
 public class TLChatFull extends TLAbsChatFull {
 
     public static final int CONSTRUCTOR_ID = 0x4dbdc099;
@@ -62,19 +61,6 @@ public class TLChatFull extends TLAbsChatFull {
         this.botInfo = botInfo;
     }
 
-    private void computeFlags() {
-        flags = 0;
-        flags = canSetUsername ? (flags | 128) : (flags & ~128);
-        flags = hasScheduled ? (flags | 256) : (flags & ~256);
-        flags = chatPhoto != null ? (flags | 4) : (flags & ~4);
-        flags = exportedInvite != null ? (flags | 8192) : (flags & ~8192);
-        flags = botInfo != null ? (flags | 8) : (flags & ~8);
-        flags = pinnedMsgId != null ? (flags | 64) : (flags & ~64);
-        flags = folderId != null ? (flags | 2048) : (flags & ~2048);
-        flags = ttlPeriod != null ? (flags | 16384) : (flags & ~16384);
-        flags = themeEmotion != null ? (flags | 65536) : (flags & ~65536);
-    }
-
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         writeLong(id, stream);
@@ -88,17 +74,34 @@ public class TLChatFull extends TLAbsChatFull {
     @Override
     @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        id = readInt(stream);
+
+        flags = readInt(stream);
+        canSetUsername = (flags & 128) != 0;
+        hasScheduled = (flags & 256) != 0;
+
+        id = readLong(stream);
+        about = readTLString(stream);
+
         participants = readTLObject(stream, context, TLAbsChatParticipants.class, -1);
-        chatPhoto = readTLObject(stream, context, TLAbsPhoto.class, -1);
+        if ((flags & 4) != 0) {
+            chatPhoto = readTLObject(stream, context, TLAbsPhoto.class, -1);
+        }
         notifySettings = readTLObject(stream, context, TLAbsPeerNotifySettings.class, -1);
-        exportedInvite = readTLObject(stream, context, TLAbsExportedChatInvite.class, -1);
-        botInfo = readTLVector(stream, context);
+        if ((flags & 8192) != 0) {
+            exportedInvite = readTLObject(stream, context, TLAbsExportedChatInvite.class, -1);
+        }
+
+        if ((flags & 8) != 0) {
+            int magic = readInt(stream);
+            if (magic != 0x1cb5c415) {
+                return;
+            }
+            botInfo = readTLVector(stream, context);
+        }
     }
 
     @Override
     public int computeSerializedSize() {
-        computeFlags();
         int size = SIZE_CONSTRUCTOR_ID;
 
         size += SIZE_INT32;

@@ -1045,7 +1045,7 @@ public abstract class TelegramApiWrapper implements TelegramApi {
     }
 
     @Override
-    public TLAbsUpdates messagesToggleChatAdmins(int chatId, boolean enabled) throws RpcErrorException, IOException {
+    public TLAbsUpdates messagesToggleChatAdmins(long chatId, boolean enabled) throws RpcErrorException, IOException {
         return (TLAbsUpdates) executeRpcQuery(new TLRequestMessagesToggleChatAdmins(chatId, enabled));
     }
 
