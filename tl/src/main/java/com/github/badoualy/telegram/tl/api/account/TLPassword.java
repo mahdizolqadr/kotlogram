@@ -128,11 +128,11 @@ public class TLPassword extends TLAbsPassword {
         }
         if ((flags & 8) != 0) {
             if (hint == null) throwNullFieldException("hint", flags);
-            computeTLStringSerializedSize(hint);
+            size += computeTLStringSerializedSize(hint);
         }
         if ((flags & 16) != 0) {
             if (emailUnconfirmedPattern == null) throwNullFieldException("emailUnconfirmedPattern", flags);
-            computeTLStringSerializedSize(emailUnconfirmedPattern);
+            size += computeTLStringSerializedSize(emailUnconfirmedPattern);
         }
         size += newAlgo.computeSerializedSize();
         size += newSecureAlgo.computeSerializedSize();

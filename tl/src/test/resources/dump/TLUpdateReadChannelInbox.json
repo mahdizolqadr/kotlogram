@@ -1,5 +1,9 @@
 {
+  "flags": 1,
+  "folderId": 0,
   "channelId": 0,
   "maxId": 0,
-  "_constructor": "updateReadChannelInbox#4214f37f"
+  "stillUnreadCount": 0,
+  "pts": 0,
+  "_constructor": "updateReadChannelInbox#922e6e10"
 }

@@ -25,7 +25,7 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSeria
  */
 public class TLWebPage extends TLAbsWebPage {
 
-    public static final int CONSTRUCTOR_ID = 0x5f07b4bc;
+    public static final int CONSTRUCTOR_ID = 0xe89c45b2;
 
     protected int flags;
 
@@ -63,12 +63,17 @@ public class TLWebPage extends TLAbsWebPage {
 
     protected TLAbsPage cachedPage;
 
-    private final String _constructor = "webPage#5f07b4bc";
+    protected TLWebPageAttribute attributes;
+
+    private final String _constructor = "webPage#e89c45b2";
 
     public TLWebPage() {
     }
 
-    public TLWebPage(long id, String url, String displayUrl, int hash, String type, String siteName, String title, String description, TLAbsPhoto photo, String embedUrl, String embedType, Integer embedWidth, Integer embedHeight, Integer duration, String author, TLAbsDocument document, TLAbsPage cachedPage) {
+    public TLWebPage(long id, String url, String displayUrl, int hash, String type, String siteName, String title,
+                     String description, TLAbsPhoto photo, String embedUrl, String embedType, Integer embedWidth,
+                     Integer embedHeight, Integer duration, String author, TLAbsDocument document,
+                     TLAbsPage cachedPage, TLWebPageAttribute attributes) {
         this.id = id;
         this.url = url;
         this.displayUrl = displayUrl;
@@ -86,6 +91,7 @@ public class TLWebPage extends TLAbsWebPage {
         this.author = author;
         this.document = document;
         this.cachedPage = cachedPage;
+        this.attributes = attributes;
     }
 
     private void computeFlags() {
@@ -103,6 +109,7 @@ public class TLWebPage extends TLAbsWebPage {
         flags = author != null ? (flags | 256) : (flags & ~256);
         flags = document != null ? (flags | 512) : (flags & ~512);
         flags = cachedPage != null ? (flags | 1024) : (flags & ~1024);
+        flags = attributes != null ? (flags | 4096) : (flags & ~4096);
     }
 
     @Override
@@ -166,10 +173,13 @@ public class TLWebPage extends TLAbsWebPage {
             if (cachedPage == null) throwNullFieldException("cachedPage", flags);
             writeTLObject(cachedPage, stream);
         }
+        if ((flags & 4096) != 0) {
+            if (attributes == null) throwNullFieldException("attributes", flags);
+            writeTLObject(attributes, stream);
+        }
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         id = readLong(stream);
@@ -189,6 +199,7 @@ public class TLWebPage extends TLAbsWebPage {
         author = (flags & 256) != 0 ? readTLString(stream) : null;
         document = (flags & 512) != 0 ? readTLObject(stream, context, TLAbsDocument.class, -1) : null;
         cachedPage = (flags & 1024) != 0 ? readTLObject(stream, context, TLAbsPage.class, -1) : null;
+        attributes = (flags & 4096) != 0 ? readTLObject(stream, context, TLWebPageAttribute.class, TLWebPageAttribute.CONSTRUCTOR_ID) : null;
     }
 
     @Override
@@ -252,6 +263,9 @@ public class TLWebPage extends TLAbsWebPage {
         if ((flags & 1024) != 0) {
             if (cachedPage == null) throwNullFieldException("cachedPage", flags);
             size += cachedPage.computeSerializedSize();
+        }
+        if ((flags & 4096) != 0) {
+            size += attributes.computeSerializedSize();
         }
         return size;
     }
@@ -400,5 +414,13 @@ public class TLWebPage extends TLAbsWebPage {
 
     public void setCachedPage(TLAbsPage cachedPage) {
         this.cachedPage = cachedPage;
+    }
+
+    public TLWebPageAttribute getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(TLWebPageAttribute attributes) {
+        this.attributes = attributes;
     }
 }

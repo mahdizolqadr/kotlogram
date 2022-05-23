@@ -3,6 +3,7 @@ package com.github.badoualy.telegram.tl.api.contacts;
 import com.github.badoualy.telegram.tl.TLContext;
 import com.github.badoualy.telegram.tl.api.TLAbsUser;
 import com.github.badoualy.telegram.tl.api.TLImportedContact;
+import com.github.badoualy.telegram.tl.api.TLPopularContact;
 import com.github.badoualy.telegram.tl.core.TLLongVector;
 import com.github.badoualy.telegram.tl.core.TLObject;
 import com.github.badoualy.telegram.tl.core.TLVector;
@@ -22,21 +23,25 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
  */
 public class TLImportedContacts extends TLObject {
 
-    public static final int CONSTRUCTOR_ID = 0xad524315;
+    public static final int CONSTRUCTOR_ID = 0x77d01c3b;
 
     protected TLVector<TLImportedContact> imported;
+
+    protected TLVector<TLPopularContact> popularInvites;
 
     protected TLLongVector retryContacts;
 
     protected TLVector<TLAbsUser> users;
 
-    private final String _constructor = "contacts.importedContacts#ad524315";
+    private final String _constructor = "contacts.importedContacts#77d01c3b";
 
     public TLImportedContacts() {
     }
 
-    public TLImportedContacts(TLVector<TLImportedContact> imported, TLLongVector retryContacts, TLVector<TLAbsUser> users) {
+    public TLImportedContacts(TLVector<TLImportedContact> imported, TLVector<TLPopularContact> popularInvites,
+                              TLLongVector retryContacts, TLVector<TLAbsUser> users) {
         this.imported = imported;
+        this.popularInvites = popularInvites;
         this.retryContacts = retryContacts;
         this.users = users;
     }
@@ -44,14 +49,16 @@ public class TLImportedContacts extends TLObject {
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         writeTLVector(imported, stream);
+        writeTLVector(popularInvites, stream);
         writeTLVector(retryContacts, stream);
         writeTLVector(users, stream);
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
+    @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         imported = readTLVector(stream, context);
+        popularInvites = readTLVector(stream, context);
         retryContacts = readTLLongVector(stream, context);
         users = readTLVector(stream, context);
     }
@@ -60,6 +67,7 @@ public class TLImportedContacts extends TLObject {
     public int computeSerializedSize() {
         int size = SIZE_CONSTRUCTOR_ID;
         size += imported.computeSerializedSize();
+        size += popularInvites.computeSerializedSize();
         size += retryContacts.computeSerializedSize();
         size += users.computeSerializedSize();
         return size;
@@ -81,6 +89,14 @@ public class TLImportedContacts extends TLObject {
 
     public void setImported(TLVector<TLImportedContact> imported) {
         this.imported = imported;
+    }
+
+    public TLVector<TLPopularContact> getPopularInvites() {
+        return popularInvites;
+    }
+
+    public void setPopularInvites(TLVector<TLPopularContact> popularInvites) {
+        this.popularInvites = popularInvites;
     }
 
     public TLLongVector getRetryContacts() {

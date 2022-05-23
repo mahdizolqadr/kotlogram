@@ -1,5 +1,6 @@
 package com.github.badoualy.telegram.tl.api;
 
+import com.github.badoualy.telegram.tl.api.account.TLAbsAccountWallPapers;
 import com.github.badoualy.telegram.tl.api.account.TLAbsPassword;
 import com.github.badoualy.telegram.tl.api.account.TLAuthorizations;
 import com.github.badoualy.telegram.tl.api.account.TLPasswordInputSettings;
@@ -100,7 +101,7 @@ public interface TelegramApi {
 
     TLTmpPassword accountGetTmpPassword(TLBytes passwordHash, int period) throws RpcErrorException, IOException;
 
-    TLVector<TLAbsWallPaper> accountGetWallPapers() throws RpcErrorException, IOException;
+    TLVector<TLAbsAccountWallPapers> accountGetWallPapers() throws RpcErrorException, IOException;
 
     TLBool accountRegisterDevice(int tokenType, String token) throws RpcErrorException, IOException;
 

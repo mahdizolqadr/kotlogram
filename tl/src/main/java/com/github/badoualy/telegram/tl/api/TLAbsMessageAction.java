@@ -14,7 +14,7 @@ import com.github.badoualy.telegram.tl.core.TLObject;
  * <li>{@link TLMessageActionChatEditPhoto}: messageActionChatEditPhoto#7fcb13a8</li>
  * <li>{@link TLMessageActionChatEditTitle}: messageActionChatEditTitle#b5a1ce5a</li>
  * <li>{@link TLMessageActionChatJoinedByLink}: messageActionChatJoinedByLink#31224c3</li>
- * <li>{@link TLMessageActionChatMigrateTo}: messageActionChatMigrateTo#51bdb021</li>
+ * <li>{@link TLMessageActionChatMigrateTo}: messageActionChatMigrateTo#e1037f92</li>
  * <li>{@link TLMessageActionEmpty}: messageActionEmpty#b6aef7b0</li>
  * <li>{@link TLMessageActionGameScore}: messageActionGameScore#92a72876</li>
  * <li>{@link TLMessageActionHistoryClear}: messageActionHistoryClear#9fbab604</li>
@@ -29,6 +29,6 @@ import com.github.badoualy.telegram.tl.core.TLObject;
  */
 public abstract class TLAbsMessageAction extends TLObject {
 
-    public TLAbsMessageAction() {
+    protected TLAbsMessageAction() {
     }
 }

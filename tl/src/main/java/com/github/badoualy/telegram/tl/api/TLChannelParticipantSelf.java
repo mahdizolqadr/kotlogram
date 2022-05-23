@@ -7,9 +7,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -17,18 +20,18 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
  */
 public class TLChannelParticipantSelf extends TLAbsChannelParticipant {
 
-    public static final int CONSTRUCTOR_ID = 0xa3289a6d;
+    public static final int CONSTRUCTOR_ID = 0x28a8bc67;
 
-    protected int inviterId;
+    protected long inviterId;
 
     protected int date;
 
-    private final String _constructor = "channelParticipantSelf#a3289a6d";
+    private final String _constructor = "channelParticipantSelf#28a8bc67";
 
     public TLChannelParticipantSelf() {
     }
 
-    public TLChannelParticipantSelf(int userId, int inviterId, int date) {
+    public TLChannelParticipantSelf(long userId, long inviterId, int date) {
         this.userId = userId;
         this.inviterId = inviterId;
         this.date = date;
@@ -36,24 +39,23 @@ public class TLChannelParticipantSelf extends TLAbsChannelParticipant {
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
-        writeInt(userId, stream);
-        writeInt(inviterId, stream);
+        writeLong(userId, stream);
+        writeLong(inviterId, stream);
         writeInt(date, stream);
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        userId = readInt(stream);
-        inviterId = readInt(stream);
+        userId = readLong(stream);
+        inviterId = readLong(stream);
         date = readInt(stream);
     }
 
     @Override
     public int computeSerializedSize() {
         int size = SIZE_CONSTRUCTOR_ID;
-        size += SIZE_INT32;
-        size += SIZE_INT32;
+        size += SIZE_INT64;
+        size += SIZE_INT64;
         size += SIZE_INT32;
         return size;
     }
@@ -68,19 +70,11 @@ public class TLChannelParticipantSelf extends TLAbsChannelParticipant {
         return CONSTRUCTOR_ID;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getInviterId() {
+    public long getInviterId() {
         return inviterId;
     }
 
-    public void setInviterId(int inviterId) {
+    public void setInviterId(long inviterId) {
         this.inviterId = inviterId;
     }
 

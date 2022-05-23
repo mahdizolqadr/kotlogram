@@ -16,6 +16,7 @@ import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
@@ -37,7 +38,7 @@ public class TLBotInfo extends TLObject {
     public TLBotInfo() {
     }
 
-    public TLBotInfo(int userId, String description, TLVector<TLBotCommand> commands) {
+    public TLBotInfo(long userId, String description, TLVector<TLBotCommand> commands) {
         this.userId = userId;
         this.description = description;
         this.commands = commands;
@@ -51,7 +52,7 @@ public class TLBotInfo extends TLObject {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
+    @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         userId = readLong(stream);
         description = readTLString(stream);
@@ -61,7 +62,7 @@ public class TLBotInfo extends TLObject {
     @Override
     public int computeSerializedSize() {
         int size = SIZE_CONSTRUCTOR_ID;
-        size += SIZE_INT32;
+        size += SIZE_INT64;
         size += computeTLStringSerializedSize(description);
         size += commands.computeSerializedSize();
         return size;

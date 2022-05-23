@@ -6,8 +6,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -30,6 +40,8 @@ public class TLChat extends TLAbsChat {
     protected boolean callActive;
 
     protected boolean callNotEmpty;
+
+    protected boolean noforwards;
 
     protected String title;
 
@@ -54,6 +66,7 @@ public class TLChat extends TLAbsChat {
 
     public TLChat(boolean creator, boolean kicked, boolean left,
                   boolean deactivated, boolean callActive, boolean callNotEmpty,
+                  boolean noforwards, long id,
                   String title, TLAbsChatPhoto photo, int participantsCount,
                   int date, int version, TLAbsInputChannel migratedTo,
                   TLChatAdminRights adminRights, TLChatBannedRights defaultBannedRights) {
@@ -63,6 +76,8 @@ public class TLChat extends TLAbsChat {
         this.deactivated = deactivated;
         this.callActive = callActive;
         this.callNotEmpty = callNotEmpty;
+        this.noforwards = noforwards;
+        this.id = id;
         this.title = title;
         this.photo = photo;
         this.participantsCount = participantsCount;
@@ -111,7 +126,6 @@ public class TLChat extends TLAbsChat {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         creator = (flags & 1) != 0;
@@ -215,6 +229,14 @@ public class TLChat extends TLAbsChat {
 
     public void setCallNotEmpty(boolean callNotEmpty) {
         this.callNotEmpty = callNotEmpty;
+    }
+
+    public boolean isNoforwards() {
+        return noforwards;
+    }
+
+    public void setNoforwards(boolean noforwards) {
+        this.noforwards = noforwards;
     }
 
     public String getTitle() {

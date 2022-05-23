@@ -1,55 +1,55 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
+import com.github.badoualy.telegram.tl.core.TLObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
-/**
- * @author Yannick Badoual yann.badoual@gmail.com
- * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
- */
-public class TLUpdateContactRegistered extends TLAbsUpdate {
+public class TLPopularContact extends TLObject {
 
-    public static final int CONSTRUCTOR_ID = 0x2575bbb9;
+    public static final int CONSTRUCTOR_ID = 0x5ce14175;
 
-    protected int userId;
+    protected long clientId;
 
-    protected int date;
+    protected int importers;
 
-    private final String _constructor = "updateContactRegistered#2575bbb9";
+    private final String _constructor = "popularContact#5ce14175";
 
-    public TLUpdateContactRegistered() {
+    public TLPopularContact() {
     }
 
-    public TLUpdateContactRegistered(int userId, int date) {
-        this.userId = userId;
-        this.date = date;
+    public TLPopularContact(long clientId, int importers) {
+        this.clientId = clientId;
+        this.importers = importers;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
-        writeInt(userId, stream);
-        writeInt(date, stream);
+        writeLong(clientId, stream);
+        writeInt(importers, stream);
     }
 
     @Override
     @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        userId = readInt(stream);
-        date = readInt(stream);
+        clientId = readLong(stream);
+        importers = readInt(stream);
     }
 
     @Override
     public int computeSerializedSize() {
         int size = SIZE_CONSTRUCTOR_ID;
-        size += SIZE_INT32;
+        size += SIZE_INT64;
         size += SIZE_INT32;
         return size;
     }
@@ -64,19 +64,19 @@ public class TLUpdateContactRegistered extends TLAbsUpdate {
         return CONSTRUCTOR_ID;
     }
 
-    public int getUserId() {
-        return userId;
+    public long getClientId() {
+        return clientId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setClientId(long clientId) {
+        this.clientId = clientId;
     }
 
-    public int getDate() {
-        return date;
+    public int getImporters() {
+        return importers;
     }
 
-    public void setDate(int date) {
-        this.date = date;
+    public void setImporters(int importers) {
+        this.importers = importers;
     }
 }
