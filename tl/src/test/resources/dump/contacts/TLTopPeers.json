@@ -9,7 +9,7 @@
         {
           "peer": {
             "channelId": 0,
-            "_constructor": "peerChannel#bddde532"
+            "_constructor": "peerChannel#a2a5371e"
           },
           "rating": 0.0,
           "_constructor": "topPeer#edcdc05b"
@@ -17,7 +17,7 @@
         {
           "peer": {
             "chatId": 0,
-            "_constructor": "peerChat#bad0e5bb"
+            "_constructor": "peerChat#36c6019a"
           },
           "rating": 0.0,
           "_constructor": "topPeer#edcdc05b"

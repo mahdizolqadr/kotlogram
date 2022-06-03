@@ -1,7 +1,6 @@
-package com.github.badoualy.telegram.tl.api;
+package com.github.badoualy.telegram.tl.api.theme;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.api.theme.TLAbsBaseTheme;
 import com.github.badoualy.telegram.tl.api.wallpaper.TLAbsWallPaper;
 import com.github.badoualy.telegram.tl.core.TLIntVector;
 import com.github.badoualy.telegram.tl.core.TLObject;

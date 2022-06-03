@@ -1,6 +1,7 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
+import com.github.badoualy.telegram.tl.api.theme.TLThemeSettings;
 import com.github.badoualy.telegram.tl.core.TLObject;
 import com.github.badoualy.telegram.tl.core.TLVector;
 
@@ -55,7 +56,7 @@ public class TLWebPageAttribute extends TLObject {
     @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
-        if ((flags & 1) != 0 ) {
+        if ((flags & 1) != 0) {
             documents = readTLVector(stream, context);
         }
         if ((flags & 2) != 0) {

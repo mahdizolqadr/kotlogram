@@ -272,9 +272,7 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
         do {
             methods.clear()
             for (i in 0..5) {
-                methods.add(TLRequestUploadGetFile(inputLocation.inputFileLocation,
-                                                   offset,
-                                                   partSize))
+                methods.add(TLRequestUploadGetFile(inputLocation.inputFileLocation, offset, partSize))
                 offset += partSize
                 if (offset >= size)
                     break
@@ -419,7 +417,7 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
                 val pHash: ByteArray = computeSHA256(algo.p.data)
                 val gHash: ByteArray = computeSHA256(gBytes)
                 for (i in pHash.indices) {
-                    pHash[i] = (gHash[i] xor pHash[i]) as Byte
+                    pHash[i] = (gHash[i] xor pHash[i])
                 }
                 val M1 = computeSHA256(pHash, computeSHA256(algo.salt1.data), computeSHA256(algo.salt2.data), A_bytes, bBytes, K_bytes)
 

@@ -12,7 +12,7 @@ import com.github.badoualy.telegram.tl.core.TLVector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Helper class for writing and reading data for tl (de-)serialization.
@@ -73,7 +73,7 @@ public final class StreamUtils {
     }
 
     public static void writeString(String v, OutputStream stream) throws IOException {
-        writeTLBytes(v.getBytes(Charset.forName("UTF-8")), stream);
+        writeTLBytes(v.getBytes(StandardCharsets.UTF_8), stream);
     }
 
     /**

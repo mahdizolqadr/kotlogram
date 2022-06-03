@@ -89,12 +89,12 @@ fun Collection<TLAbsPhotoSize>?.getMaxSize(): TLAbsPhotoSize? {
     if (this == null || isEmpty())
         return null
 
-    val maxSize = this?.filterIsInstance<TLPhotoSize>().sortedByDescending { it.w * it.h }.firstOrNull()
+    val maxSize = this.filterIsInstance<TLPhotoSize>().sortedByDescending { it.w * it.h }.firstOrNull()
     if (maxSize != null)
         return maxSize
 
     // No TLPhotoSize, look for cached size
-    return this?.filterIsInstance<TLPhotoCachedSize>().firstOrNull()
+    return this.filterIsInstance<TLPhotoCachedSize>().firstOrNull()
 }
 
 fun Collection<TLAbsPhotoSize>?.getMinSize(): TLAbsPhotoSize? {
@@ -102,11 +102,11 @@ fun Collection<TLAbsPhotoSize>?.getMinSize(): TLAbsPhotoSize? {
         return null
 
     // Look for cached size
-    val minSize = this?.filterIsInstance<TLPhotoCachedSize>().firstOrNull()
+    val minSize = this.filterIsInstance<TLPhotoCachedSize>().firstOrNull()
     if (minSize != null)
         return minSize
 
-    return this?.filterIsInstance<TLPhotoSize>().sortedBy { it.w * it.h }.firstOrNull()
+    return this.filterIsInstance<TLPhotoSize>().sortedBy { it.w * it.h }.firstOrNull()
 }
 
 fun TLAbsFileLocation.toInputFileLocation() = when (this) {

@@ -25,29 +25,7 @@ public class TLMessageEntityBold extends TLAbsMessageEntity {
     }
 
     public TLMessageEntityBold(int offset, int length) {
-        this.offset = offset;
-        this.length = length;
-    }
-
-    @Override
-    public void serializeBody(OutputStream stream) throws IOException {
-        writeInt(offset, stream);
-        writeInt(length, stream);
-    }
-
-    @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
-    public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        offset = readInt(stream);
-        length = readInt(stream);
-    }
-
-    @Override
-    public int computeSerializedSize() {
-        int size = SIZE_CONSTRUCTOR_ID;
-        size += SIZE_INT32;
-        size += SIZE_INT32;
-        return size;
+        super(offset, length);
     }
 
     @Override
@@ -58,21 +36,5 @@ public class TLMessageEntityBold extends TLAbsMessageEntity {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
     }
 }

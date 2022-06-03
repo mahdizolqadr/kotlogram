@@ -7,8 +7,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -37,6 +49,8 @@ public class TLMessage extends TLAbsMessage {
     protected boolean editHide;
 
     protected boolean pinned;
+
+    protected boolean noforwards;
 
     protected TLAbsPeer fromId;
 
@@ -81,7 +95,7 @@ public class TLMessage extends TLAbsMessage {
 
     public TLMessage(boolean out, boolean mentioned, boolean mediaUnread, boolean silent,
                      boolean post, boolean fromScheduled, boolean legacy, boolean editHide,
-                     boolean pinned, TLAbsPeer fromId, TLAbsPeer peerId, TLMessageFwdHeader fwdFrom,
+                     boolean pinned, boolean noforwards, TLAbsPeer fromId, TLAbsPeer peerId, TLMessageFwdHeader fwdFrom,
                      Long viaBotId, TLMessageReplyHeader replyTo, int date, String message,
                      TLAbsMessageMedia media, TLAbsReplyMarkup replyMarkup,
                      TLVector<TLAbsMessageEntity> entities, Integer views,
@@ -97,6 +111,7 @@ public class TLMessage extends TLAbsMessage {
         this.legacy = legacy;
         this.editHide = editHide;
         this.pinned = pinned;
+        this.noforwards = noforwards;
         this.fromId = fromId;
         this.peerId = peerId;
         this.fwdFrom = fwdFrom;
@@ -128,6 +143,7 @@ public class TLMessage extends TLAbsMessage {
         flags = legacy ? (flags | 524288) : (flags & ~524288);
         flags = editHide ? (flags | 2097152) : (flags & ~2097152);
         flags = pinned ? (flags | 16777216) : (flags & ~16777216);
+        flags = noforwards ? (flags | 67108864) : (flags & ~67108864);
         flags = fromId != null ? (flags | 256) : (flags & ~256);
         flags = fwdFrom != null ? (flags | 4) : (flags & ~4);
         flags = viaBotId != null ? (flags | 2048) : (flags & ~2048);
@@ -191,23 +207,23 @@ public class TLMessage extends TLAbsMessage {
         if ((flags & 8388608) != 0) {
             if (replies == null) throwNullFieldException("replies", flags);
             writeTLObject(replies, stream);
-        }        
+        }
         if ((flags & 32768) != 0) {
             if (editDate == null) throwNullFieldException("editDate", flags);
             writeInt(editDate, stream);
-        }        
+        }
         if ((flags & 65536) != 0) {
             if (postAuthor == null) throwNullFieldException("postAuthor", flags);
             writeString(postAuthor, stream);
-        }        
+        }
         if ((flags & 131072) != 0) {
             if (groupedId == null) throwNullFieldException("groupedId", flags);
             writeLong(groupedId, stream);
-        }        
+        }
         if ((flags & 4194304) != 0) {
             if (restrictionReason == null) throwNullFieldException("restrictionReason", flags);
             writeTLVector(restrictionReason, stream);
-        }        
+        }
         if ((flags & 33554432) != 0) {
             if (ttlPeriod == null) throwNullFieldException("ttlPeriod", flags);
             writeInt(ttlPeriod, stream);
@@ -215,7 +231,7 @@ public class TLMessage extends TLAbsMessage {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
+    @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         out = (flags & 2) != 0;
@@ -227,6 +243,7 @@ public class TLMessage extends TLAbsMessage {
         legacy = (flags & 524288) != 0;
         editHide = (flags & 2097152) != 0;
         pinned = (flags & 16777216) != 0;
+        noforwards = (flags & 67108864) != 0;
         id = readInt(stream);
         fromId = (flags & 256) != 0 ? readTLObject(stream, context, TLAbsPeer.class, -1) : null;
         peerId = readTLObject(stream, context, TLAbsPeer.class, -1);
@@ -401,6 +418,14 @@ public class TLMessage extends TLAbsMessage {
 
     public void setPinned(boolean pinned) {
         this.pinned = pinned;
+    }
+
+    public boolean isNoforwards() {
+        return noforwards;
+    }
+
+    public void setNoforwards(boolean noforwards) {
+        this.noforwards = noforwards;
     }
 
     public TLAbsPeer getFromId() {

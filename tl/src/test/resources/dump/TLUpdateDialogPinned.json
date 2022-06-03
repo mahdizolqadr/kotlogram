@@ -2,8 +2,11 @@
   "flags": 0,
   "pinned": false,
   "peer": {
-    "chatId": 0,
-    "_constructor": "peerChat#bad0e5bb"
+    "peer": {
+      "chatId": 0,
+      "_constructor": "peerChat#36c6019a"
+    },
+    "_constructor": "dialogPeer#e56dbf05"
   },
-  "_constructor": "updateDialogPinned#d711a2cc"
+  "_constructor": "updateDialogPinned#6e6fe51c"
 }

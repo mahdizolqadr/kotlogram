@@ -5,9 +5,9 @@ import com.github.badoualy.telegram.tl.core.TLObject;
 /**
  * Abstraction level for the following constructors:
  * <ul>
- * <li>{@link TLMessage}: message#c09be45f</li>
- * <li>{@link TLMessageEmpty}: messageEmpty#83e5de54</li>
- * <li>{@link TLMessageService}: messageService#9e19a1f6</li>
+ * <li>{@link TLMessage}: message#85d6cbe2</li>
+ * <li>{@link TLMessageEmpty}: messageEmpty#90a6ca84</li>
+ * <li>{@link TLMessageService}: messageService#2b085862</li>
  * </ul>
  *
  * @author Yannick Badoual yann.badoual@gmail.com
