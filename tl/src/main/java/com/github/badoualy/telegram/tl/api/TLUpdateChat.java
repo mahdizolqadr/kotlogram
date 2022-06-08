@@ -6,25 +6,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
-/**
- * @author Yannick Badoual yann.badoual@gmail.com
- * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
- */
-public class TLInputPeerChat extends TLAbsInputPeer {
+public class TLUpdateChat extends TLAbsUpdate {
 
-    public static final int CONSTRUCTOR_ID = 0x35a95cb9;
+    public static final int CONSTRUCTOR_ID = 0xf89a6a4e;
 
     protected long chatId;
 
-    private final String _constructor = "inputPeerChat#35a95cb9";
+    private final String _constructor = "updateChat#f89a6a4e";
 
-    public TLInputPeerChat() {
+    public TLUpdateChat() {
     }
 
-    public TLInputPeerChat(long chatId) {
+    public TLUpdateChat(long chatId) {
         this.chatId = chatId;
     }
 
@@ -34,7 +32,6 @@ public class TLInputPeerChat extends TLAbsInputPeer {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         chatId = readLong(stream);
     }

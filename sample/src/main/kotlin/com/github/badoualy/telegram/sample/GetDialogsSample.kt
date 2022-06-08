@@ -5,7 +5,7 @@ import com.github.badoualy.telegram.api.utils.id
 import com.github.badoualy.telegram.api.utils.title
 import com.github.badoualy.telegram.sample.config.Config
 import com.github.badoualy.telegram.sample.config.FileApiStorage
-import com.github.badoualy.telegram.tl.api.TLInputPeerEmpty
+import com.github.badoualy.telegram.tl.api.peer.TLInputPeerEmpty
 import com.github.badoualy.telegram.tl.api.TLMessage
 import com.github.badoualy.telegram.tl.api.TLMessageService
 import com.github.badoualy.telegram.tl.api.TLUser
@@ -24,7 +24,8 @@ object GetDialogsSample {
 
         // You can start making requests
         try {
-            val tlAbsDialogs = client.messagesGetDialogs(true, 0, 0, TLInputPeerEmpty(), count)
+            val tlAbsDialogs = client.messagesGetDialogs(true, 0, 0,
+                TLInputPeerEmpty(), count)
 
             // Create a map of id to name map
             val nameMap = HashMap<Long, String>()

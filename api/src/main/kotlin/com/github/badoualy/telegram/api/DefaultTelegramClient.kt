@@ -14,6 +14,7 @@ import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.api.account.TLPassword
 import com.github.badoualy.telegram.tl.api.account.TLPasswordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow
 import com.github.badoualy.telegram.tl.api.auth.TLAuthorization
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputPeer
 import com.github.badoualy.telegram.tl.api.request.*
 import com.github.badoualy.telegram.tl.api.upload.TLAbsFile
 import com.github.badoualy.telegram.tl.api.upload.TLFile

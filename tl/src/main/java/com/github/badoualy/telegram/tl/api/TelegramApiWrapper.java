@@ -51,6 +51,7 @@ import com.github.badoualy.telegram.tl.api.payments.TLPaymentForm;
 import com.github.badoualy.telegram.tl.api.payments.TLPaymentReceipt;
 import com.github.badoualy.telegram.tl.api.payments.TLSavedInfo;
 import com.github.badoualy.telegram.tl.api.payments.TLValidatedRequestedInfo;
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputPeer;
 import com.github.badoualy.telegram.tl.api.phone.TLPhoneCall;
 import com.github.badoualy.telegram.tl.api.photos.TLAbsPhotos;
 import com.github.badoualy.telegram.tl.api.photos.TLPhoto;

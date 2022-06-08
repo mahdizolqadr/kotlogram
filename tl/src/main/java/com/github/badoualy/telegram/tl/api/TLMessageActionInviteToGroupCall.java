@@ -1,6 +1,7 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
+import com.github.badoualy.telegram.tl.api.call.TLInputGroupCall;
 import com.github.badoualy.telegram.tl.core.TLLongVector;
 
 import java.io.IOException;

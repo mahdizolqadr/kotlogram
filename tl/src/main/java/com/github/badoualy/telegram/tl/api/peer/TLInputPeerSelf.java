@@ -1,4 +1,4 @@
-package com.github.badoualy.telegram.tl.api;
+package com.github.badoualy.telegram.tl.api.peer;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com

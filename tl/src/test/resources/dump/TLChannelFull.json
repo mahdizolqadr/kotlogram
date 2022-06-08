@@ -27,8 +27,17 @@
     "_constructor": "peerNotifySettings#9acda4c0"
   },
   "exportedInvite": {
+    "flags": 30,
+    "revoked": false,
+    "permanent": false,
     "link": "my0AluO1C6jQTKYNikpNXV",
-    "_constructor": "chatInviteExported#fc2e05bc"
+    "adminId": 0,
+    "date": 0,
+    "startDate": 0,
+    "expireDate": 0,
+    "usageLimit": 0,
+    "usage": 0,
+    "_constructor": "chatInviteExported#b18105e8"
   },
   "botInfo": []
 }

@@ -1,7 +1,7 @@
 package com.github.badoualy.telegram.tl.api.request;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.api.TLAbsInputPeer;
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputPeer;
 import com.github.badoualy.telegram.tl.api.messages.TLBotCallbackAnswer;
 import com.github.badoualy.telegram.tl.core.TLBytes;
 import com.github.badoualy.telegram.tl.core.TLMethod;

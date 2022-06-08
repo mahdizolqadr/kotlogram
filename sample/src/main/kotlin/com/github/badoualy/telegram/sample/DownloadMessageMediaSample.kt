@@ -7,6 +7,7 @@ import com.github.badoualy.telegram.api.utils.toInputPeer
 import com.github.badoualy.telegram.sample.config.Config
 import com.github.badoualy.telegram.sample.config.FileApiStorage
 import com.github.badoualy.telegram.tl.api.*
+import com.github.badoualy.telegram.tl.api.peer.TLInputPeerEmpty
 import com.github.badoualy.telegram.tl.core.TLObject
 import com.github.badoualy.telegram.tl.exception.RpcErrorException
 import java.io.File
@@ -21,7 +22,8 @@ object DownloadMessageMediaSample {
 
         // You can start making requests
         try {
-            val tlAbsDialogs = client.messagesGetDialogs(false, 0, 0, TLInputPeerEmpty(), 1)
+            val tlAbsDialogs = client.messagesGetDialogs(false, 0, 0,
+                TLInputPeerEmpty(), 1)
             val tlAbsPeer = tlAbsDialogs.dialogs[0].peer
             val tlPeerObj: TLObject =
                     if (tlAbsPeer is TLPeerUser) tlAbsDialogs.users.first { it.id == tlAbsPeer.id }

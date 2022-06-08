@@ -1,4 +1,4 @@
-package com.github.badoualy.telegram.tl.api;
+package com.github.badoualy.telegram.tl.api.peer;
 
 import com.github.badoualy.telegram.tl.TLContext;
 
@@ -6,53 +6,44 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
-import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
  * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
  */
-public class TLInputPeerChannel extends TLAbsInputPeer {
+public class TLInputPeerChat extends TLAbsInputPeer {
 
-    public static final int CONSTRUCTOR_ID = 0x27bcbbfc;
+    public static final int CONSTRUCTOR_ID = 0x35a95cb9;
 
-    protected long channelId;
+    protected long chatId;
 
-    protected long accessHash;
+    private final String _constructor = "inputPeerChat#35a95cb9";
 
-    private final String _constructor = "inputPeerChannel#27bcbbfc";
-
-    public TLInputPeerChannel() {
+    public TLInputPeerChat() {
     }
 
-    public TLInputPeerChannel(long channelId, long accessHash) {
-        this.channelId = channelId;
-        this.accessHash = accessHash;
+    public TLInputPeerChat(long chatId) {
+        this.chatId = chatId;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
-        writeLong(channelId, stream);
-        writeLong(accessHash, stream);
+        writeLong(chatId, stream);
     }
 
     @Override
     @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        channelId = readLong(stream);
-        accessHash = readLong(stream);
+        chatId = readLong(stream);
     }
 
     @Override
     public int computeSerializedSize() {
         int size = SIZE_CONSTRUCTOR_ID;
-        size += SIZE_INT64;
         size += SIZE_INT64;
         return size;
     }
@@ -67,19 +58,11 @@ public class TLInputPeerChannel extends TLAbsInputPeer {
         return CONSTRUCTOR_ID;
     }
 
-    public long getChannelId() {
-        return channelId;
+    public long getChatId() {
+        return chatId;
     }
 
-    public void setChannelId(long channelId) {
-        this.channelId = channelId;
-    }
-
-    public long getAccessHash() {
-        return accessHash;
-    }
-
-    public void setAccessHash(long accessHash) {
-        this.accessHash = accessHash;
+    public void setChatId(long chatId) {
+        this.chatId = chatId;
     }
 }
