@@ -5,7 +5,7 @@
     "_constructor": "chatParticipants#3f460fed",
     "chatId": 0
   },
-  "_constructor": "chatFull#2e02a614",
+  "_constructor": "chatFull#4dbdc099",
   "id": 0,
   "chatPhoto": {
     "flags": 0,
@@ -68,7 +68,7 @@
         "type": "B30NvlnxjQAZ"
       }
     ],
-    "_constructor": "photo#9288dd29",
+    "_constructor": "photo#fb197a65",
     "id": 0
   },
   "notifySettings": {

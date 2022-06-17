@@ -29,7 +29,7 @@ public class TLPeerNotifySettings extends TLAbsPeerNotifySettings {
 
     protected boolean silent;
 
-    protected int muteUntil;
+    protected Integer muteUntil;
 
     protected String sound;
 
@@ -38,7 +38,7 @@ public class TLPeerNotifySettings extends TLAbsPeerNotifySettings {
     public TLPeerNotifySettings() {
     }
 
-    public TLPeerNotifySettings(boolean showPreviews, boolean silent, int muteUntil, String sound) {
+    public TLPeerNotifySettings(boolean showPreviews, boolean silent, Integer muteUntil, String sound) {
         this.showPreviews = showPreviews;
         this.silent = silent;
         this.muteUntil = muteUntil;
@@ -49,44 +49,54 @@ public class TLPeerNotifySettings extends TLAbsPeerNotifySettings {
         flags = 0;
         flags = showPreviews ? (flags | 1) : (flags & ~1);
         flags = silent ? (flags | 2) : (flags & ~2);
+        flags = muteUntil != null ? (flags | 4) : (flags & ~4);
+        flags = sound != null ? (flags | 8) : (flags & ~8);
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         computeFlags();
-
         writeInt(flags, stream);
-        writeInt(muteUntil, stream);
-        writeString(sound, stream);
+        if ((flags & 4) != 0) {
+            if (muteUntil == null) {
+                throwNullFieldException("muteUntil", flags);
+            }
+            writeInt(muteUntil, stream);
+        }
+        if ((flags & 4) != 0) {
+            if (sound == null) {
+                throwNullFieldException("sound", flags);
+            }
+            writeString(sound, stream);
+        }
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
-
-        if ((flags & 1) != 0) {
-            showPreviews = readTLBool(stream);
-        }
-        if ((flags & 2) != 0) {
-            silent = readTLBool(stream);
-        }
-        if ((flags & 4) != 0) {
-            muteUntil = readInt(stream);
-        }
-        if ((flags & 8) != 0) {
-            sound =  readTLString(stream);
-        }
+        showPreviews = (flags & 1) != 0;
+        silent = (flags & 2) != 0;
+        muteUntil = (flags & 4) != 0 ? readInt(stream) : null;
+        sound = (flags & 8) != 0 ? readTLString(stream) : null;
     }
 
     @Override
     public int computeSerializedSize() {
         computeFlags();
-
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
-        size += SIZE_INT32;
-        size += computeTLStringSerializedSize(sound);
+        if ((flags & 4) != 0) {
+            if (muteUntil == null) {
+                throwNullFieldException("muteUntil", flags);
+            }
+            size += SIZE_INT32;
+        }
+        if ((flags & 4) != 0) {
+            if (sound == null) {
+                throwNullFieldException("sound", flags);
+            }
+            size += computeTLStringSerializedSize(sound);
+        }
         return size;
     }
 
@@ -116,11 +126,11 @@ public class TLPeerNotifySettings extends TLAbsPeerNotifySettings {
         this.silent = silent;
     }
 
-    public int getMuteUntil() {
+    public Integer getMuteUntil() {
         return muteUntil;
     }
 
-    public void setMuteUntil(int muteUntil) {
+    public void setMuteUntil(Integer muteUntil) {
         this.muteUntil = muteUntil;
     }
 

@@ -2,10 +2,10 @@
   "participants": {
     "flags": 1,
     "selfParticipant": {
-      "_constructor": "chatParticipantCreator#da13538a",
+      "_constructor": "chatParticipantCreator#e46bcee4",
       "userId": 0
     },
-    "_constructor": "chatParticipantsForbidden#fc900c2b",
+    "_constructor": "chatParticipantsForbidden#8763d3e1",
     "chatId": 0
   },
   "_constructor": "updateChatParticipants#7761198"

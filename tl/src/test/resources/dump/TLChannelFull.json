@@ -19,12 +19,12 @@
     "id": 0
   },
   "notifySettings": {
-    "flags": 1,
+    "flags": 13,
     "showPreviews": true,
     "silent": false,
     "muteUntil": 0,
     "sound": "MHpeqxeiJWkR",
-    "_constructor": "peerNotifySettings#9acda4c0"
+    "_constructor": "peerNotifySettings#af509d20"
   },
   "exportedInvite": {
     "flags": 30,
