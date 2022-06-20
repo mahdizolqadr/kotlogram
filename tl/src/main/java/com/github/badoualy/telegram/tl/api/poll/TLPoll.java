@@ -20,7 +20,7 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSeria
 
 public class TLPoll extends TLObject {
 
-    public static final int CONSTRUCTOR_ID = 0xfa0f3ca2;
+    public static final int CONSTRUCTOR_ID = 0x86e18161;
 
     protected long id;
     protected int flags;
@@ -33,7 +33,7 @@ public class TLPoll extends TLObject {
     protected Integer closePeriod;
     protected Integer closeDate;
 
-    private final String _constructor = "updatePinnedDialogs#fa0f3ca2";
+    private final String _constructor = "poll#86e18161";
 
     public TLPoll() {
     }

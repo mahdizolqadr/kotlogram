@@ -27,6 +27,8 @@ public class TLWallPaperSettings extends TLObject {
     protected Integer intensity;
     protected Integer rotation;
 
+    private final String _constructor = "wallPaperSettings#1dc1bca4";
+
     public TLWallPaperSettings() {
     }
 
@@ -42,8 +44,6 @@ public class TLWallPaperSettings extends TLObject {
         this.intensity = intensity;
         this.rotation = rotation;
     }
-
-    private final String _constructor = "wallPaperSettings#1dc1bca4";
 
     private void computeFlags() {
         flags = 0;
