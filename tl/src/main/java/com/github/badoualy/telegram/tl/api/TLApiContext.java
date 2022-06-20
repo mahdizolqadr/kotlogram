@@ -19,6 +19,8 @@ import com.github.badoualy.telegram.tl.api.call.TLGroupCallParticipant;
 import com.github.badoualy.telegram.tl.api.call.TLGroupCallParticipantVideo;
 import com.github.badoualy.telegram.tl.api.call.TLGroupCallParticipantVideoSourceGroup;
 import com.github.badoualy.telegram.tl.api.call.TLInputGroupCall;
+import com.github.badoualy.telegram.tl.api.channel.TLChannelLocation;
+import com.github.badoualy.telegram.tl.api.channel.TLChannelLocationEmpty;
 import com.github.badoualy.telegram.tl.api.channels.TLChannelParticipants;
 import com.github.badoualy.telegram.tl.api.contacts.TLBlocked;
 import com.github.badoualy.telegram.tl.api.contacts.TLBlockedSlice;
@@ -215,6 +217,8 @@ public class TLApiContext extends TLContext {
         registerClass(TLChannel.CONSTRUCTOR_ID, TLChannel.class);
         registerClass(TLChannelForbidden.CONSTRUCTOR_ID, TLChannelForbidden.class);
         registerClass(TLChannelFull.CONSTRUCTOR_ID, TLChannelFull.class);
+        registerClass(TLChannelLocation.CONSTRUCTOR_ID, TLChannelLocation.class);
+        registerClass(TLChannelLocationEmpty.CONSTRUCTOR_ID, TLChannelLocationEmpty.class);
         registerClass(TLChannelMessagesFilter.CONSTRUCTOR_ID, TLChannelMessagesFilter.class);
         registerClass(TLChannelMessagesFilterEmpty.CONSTRUCTOR_ID, TLChannelMessagesFilterEmpty.class);
         registerClass(TLChannelParticipant.CONSTRUCTOR_ID, TLChannelParticipant.class);
