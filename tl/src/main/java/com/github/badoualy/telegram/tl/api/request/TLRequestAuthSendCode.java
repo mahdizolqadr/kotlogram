@@ -13,9 +13,9 @@ import java.io.OutputStream;
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
-import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
@@ -33,7 +33,7 @@ public class TLRequestAuthSendCode extends TLMethod<TLSentCode> {
     protected int apiId;
 
     protected String apiHash;
-    
+
     protected TLCodeSettings settings;
 
     private final String _constructor = "auth.sendCode#a677244f";
@@ -49,7 +49,6 @@ public class TLRequestAuthSendCode extends TLMethod<TLSentCode> {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public TLSentCode deserializeResponse(InputStream stream, TLContext context) throws IOException {
         final TLObject response = readTLObject(stream, context);
         if (response == null) {
@@ -72,12 +71,11 @@ public class TLRequestAuthSendCode extends TLMethod<TLSentCode> {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         phoneNumber = readTLString(stream);
         apiId = readInt(stream);
         apiHash = readTLString(stream);
-        settings = readTLObject(stream, context, TLCodeSettings.class, -1);
+        settings = readTLObject(stream, context, TLCodeSettings.class, TLCodeSettings.CONSTRUCTOR_ID);
     }
 
     @Override

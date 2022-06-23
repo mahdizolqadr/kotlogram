@@ -7,6 +7,7 @@ import com.github.badoualy.telegram.tl.core.TLObject;
  * <ul>
  * <li>{@link TLInputChannel}: inputChannel#f35aec28</li>
  * <li>{@link TLInputChannelEmpty}: inputChannelEmpty#ee8c1e86</li>
+ * <li>{@link TLInputChannelFromMessage}: inputChannelFromMessage#5b934f9d</li>
  * </ul>
  *
  * @author Yannick Badoual yann.badoual@gmail.com

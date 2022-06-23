@@ -48,18 +48,21 @@ public class TLVideoSize extends TLObject {
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
+        computeFlags();
+        writeInt(flags, stream);
         writeString(type, stream);
         writeInt(w, stream);
         writeInt(h, stream);
         writeInt(size, stream);
         if ((flags & 1) != 0) {
-            if (videoStartTs == null) throwNullFieldException("videoStartTs", flags);
+            if (videoStartTs == null) {
+                throwNullFieldException("videoStartTs", flags);
+            }
             writeDouble(videoStartTs, stream);
         }
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         type = readTLString(stream);
@@ -79,7 +82,9 @@ public class TLVideoSize extends TLObject {
         size += SIZE_INT32;
         size += SIZE_INT32;
         if ((flags & 1) != 0) {
-            if (videoStartTs == null) throwNullFieldException("videoStartTs", flags);
+            if (videoStartTs == null) {
+                throwNullFieldException("videoStartTs", flags);
+            }
             size += SIZE_DOUBLE;
         }
         return size;
@@ -127,4 +132,11 @@ public class TLVideoSize extends TLObject {
         this.size = size;
     }
 
+    public Double getVideoStartTs() {
+        return videoStartTs;
+    }
+
+    public void setVideoStartTs(Double videoStartTs) {
+        this.videoStartTs = videoStartTs;
+    }
 }

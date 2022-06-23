@@ -6,6 +6,8 @@
       "text": "PaMPCLf5KaKjXZb8nq9"
     },
     {
+      "flags": 0,
+      "requiresPassword": false,
       "data": {
         "data": [
           0,
@@ -173,7 +175,7 @@
         "offset": 0,
         "len": 161
       },
-      "_constructor": "keyboardButtonCallback#683a5e46",
+      "_constructor": "keyboardButtonCallback#35bbdb6b",
       "text": "dmIciBsKoljFfQ2rQGYzA9X9Sz"
     }
   ],

@@ -73,7 +73,6 @@ public class TLMessageFwdHeader extends TLObject {
     public void serializeBody(OutputStream stream) throws IOException {
         computeFlags();
         writeInt(flags, stream);
-
         if ((flags & 1) != 0) {
             if (fromId == null) throwNullFieldException("fromId", flags);
             writeTLObject(fromId, stream);
@@ -106,7 +105,6 @@ public class TLMessageFwdHeader extends TLObject {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         imported = (flags & 128) != 0;
@@ -125,9 +123,6 @@ public class TLMessageFwdHeader extends TLObject {
         computeFlags();
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
-        if ((flags & 128) != 0) {
-            size += SIZE_BOOLEAN;
-        }
         if ((flags & 1) != 0) {
             if (fromId == null) throwNullFieldException("fromId", flags);
             size += fromId.computeSerializedSize();
@@ -143,7 +138,7 @@ public class TLMessageFwdHeader extends TLObject {
         }
         if ((flags & 8) != 0) {
             if (postAuthor == null) throwNullFieldException("postAuthor", flags);
-            computeTLStringSerializedSize(postAuthor);
+            size += computeTLStringSerializedSize(postAuthor);
         }
         if ((flags & 16) != 0) {
             if (savedFromPeer != null) {
@@ -155,7 +150,7 @@ public class TLMessageFwdHeader extends TLObject {
         }
         if ((flags & 64) != 0) {
             if (psaType == null) throwNullFieldException("psaType", flags);
-            computeTLStringSerializedSize(psaType);
+            size += computeTLStringSerializedSize(psaType);
         }
         return size;
     }

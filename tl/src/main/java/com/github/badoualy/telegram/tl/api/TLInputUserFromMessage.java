@@ -17,40 +17,37 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
-public class TLInputChannelFromMessage extends TLAbsInputChannel {
+public class TLInputUserFromMessage extends TLAbsInputUser {
 
-
-    public static final int CONSTRUCTOR_ID = 0x5b934f9d;
+    public static final int CONSTRUCTOR_ID = 0x1da448e2;
 
     protected TLAbsInputPeer peer;
-
     protected int msgId;
+    protected long userId;
 
-    protected long channelId;
+    private final String _constructor = "inputUserFromMessage#1da448e2";
 
-    private final String _constructor = "inputChannelFromMessage#5b934f9d";
-
-    public TLInputChannelFromMessage() {
+    public TLInputUserFromMessage() {
     }
 
-    public TLInputChannelFromMessage(TLAbsInputPeer peer, int msgId, long channelId) {
+    public TLInputUserFromMessage(TLAbsInputPeer peer, int msgId, long userId) {
         this.peer = peer;
         this.msgId = msgId;
-        this.channelId = channelId;
+        this.userId = userId;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         writeTLObject(peer, stream);
         writeInt(msgId, stream);
-        writeLong(channelId, stream);
+        writeLong(userId, stream);
     }
 
     @Override
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         peer = readTLObject(stream, context, TLAbsInputPeer.class, -1);
         msgId = readInt(stream);
-        channelId = readLong(stream);
+        userId = readLong(stream);
     }
 
     @Override
@@ -88,21 +85,11 @@ public class TLInputChannelFromMessage extends TLAbsInputChannel {
         this.msgId = msgId;
     }
 
-    public long getChannelId() {
-        return channelId;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setChannelId(long channelId) {
-        this.channelId = channelId;
-    }
-
-    @Override
-    public final boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public final boolean isNotEmpty() {
-        return true;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }

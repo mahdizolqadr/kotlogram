@@ -9,7 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 
@@ -32,10 +35,10 @@ public class TLContacts extends TLAbsContacts {
     public TLContacts() {
     }
 
-    public TLContacts(TLVector<TLContact> contacts, TLVector<TLAbsUser> users, int savedCount) {
+    public TLContacts(TLVector<TLContact> contacts, int savedCount, TLVector<TLAbsUser> users) {
         this.contacts = contacts;
-        this.users = users;
         this.savedCount = savedCount;
+        this.users = users;
     }
 
     @Override

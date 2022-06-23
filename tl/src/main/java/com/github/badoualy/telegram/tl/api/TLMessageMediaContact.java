@@ -50,13 +50,12 @@ public class TLMessageMediaContact extends TLAbsMessageMedia {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         phoneNumber = readTLString(stream);
         firstName = readTLString(stream);
         lastName = readTLString(stream);
         vcard = readTLString(stream);
-        userId = readInt(stream);
+        userId = readLong(stream);
     }
 
     @Override

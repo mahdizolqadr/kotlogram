@@ -4,7 +4,7 @@ public class TLMessageEntityBankCard extends TLAbsMessageEntity {
 
     public static final int CONSTRUCTOR_ID = 0x761e6af4;
 
-    private final String _constructor = "messageEntityPhone#9b69e34b";
+    private final String _constructor = "messageEntityBankCard#761e6af4";
 
     public TLMessageEntityBankCard() {
     }

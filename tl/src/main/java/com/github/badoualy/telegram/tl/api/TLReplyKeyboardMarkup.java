@@ -8,11 +8,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -39,11 +42,13 @@ public class TLReplyKeyboardMarkup extends TLAbsReplyMarkup {
     public TLReplyKeyboardMarkup() {
     }
 
-    public TLReplyKeyboardMarkup(boolean resize, boolean singleUse, boolean selective, TLVector<TLKeyboardButtonRow> rows, String placeholder) {
+    public TLReplyKeyboardMarkup(boolean resize, boolean singleUse, boolean selective,
+                                 TLVector<TLKeyboardButtonRow> rows, String placeholder) {
         this.resize = resize;
         this.singleUse = singleUse;
         this.selective = selective;
         this.rows = rows;
+        this.placeholder = placeholder;
     }
 
     private void computeFlags() {
@@ -57,19 +62,25 @@ public class TLReplyKeyboardMarkup extends TLAbsReplyMarkup {
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         computeFlags();
-
         writeInt(flags, stream);
         writeTLVector(rows, stream);
+        if ((flags & 8) != 0) {
+            if (placeholder == null) {
+                throwNullFieldException("placeholder", flags);
+            }
+            writeString(placeholder, stream);
+        }
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
+    @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         resize = (flags & 1) != 0;
         singleUse = (flags & 2) != 0;
         selective = (flags & 4) != 0;
         rows = readTLVector(stream, context);
+        placeholder = (flags & 8) != 0 ? readTLString(stream) : null;
     }
 
     @Override
@@ -79,6 +90,12 @@ public class TLReplyKeyboardMarkup extends TLAbsReplyMarkup {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
         size += rows.computeSerializedSize();
+        if ((flags & 8) != 0) {
+            if (placeholder == null) {
+                throwNullFieldException("placeholder", flags);
+            }
+            size += computeTLStringSerializedSize(placeholder);
+        }
         return size;
     }
 
@@ -92,7 +109,7 @@ public class TLReplyKeyboardMarkup extends TLAbsReplyMarkup {
         return CONSTRUCTOR_ID;
     }
 
-    public boolean getResize() {
+    public boolean isResize() {
         return resize;
     }
 
@@ -100,7 +117,7 @@ public class TLReplyKeyboardMarkup extends TLAbsReplyMarkup {
         this.resize = resize;
     }
 
-    public boolean getSingleUse() {
+    public boolean isSingleUse() {
         return singleUse;
     }
 
@@ -108,7 +125,7 @@ public class TLReplyKeyboardMarkup extends TLAbsReplyMarkup {
         this.singleUse = singleUse;
     }
 
-    public boolean getSelective() {
+    public boolean isSelective() {
         return selective;
     }
 

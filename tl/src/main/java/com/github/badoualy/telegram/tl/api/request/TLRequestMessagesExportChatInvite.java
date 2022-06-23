@@ -1,7 +1,7 @@
 package com.github.badoualy.telegram.tl.api.request;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.api.TLAbsExportedChatInvite;
+import com.github.badoualy.telegram.tl.api.TLChatInviteExported;
 import com.github.badoualy.telegram.tl.api.peer.TLAbsInputPeer;
 import com.github.badoualy.telegram.tl.core.TLMethod;
 import com.github.badoualy.telegram.tl.core.TLObject;
@@ -10,14 +10,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
  * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
  */
-public class TLRequestMessagesExportChatInvite extends TLMethod<TLAbsExportedChatInvite> {
+public class TLRequestMessagesExportChatInvite extends TLMethod<TLChatInviteExported> {
 
     public static final int CONSTRUCTOR_ID = 0x14b9bcd7;
 
@@ -36,7 +40,8 @@ public class TLRequestMessagesExportChatInvite extends TLMethod<TLAbsExportedCha
     public TLRequestMessagesExportChatInvite() {
     }
 
-    public TLRequestMessagesExportChatInvite(boolean legacyRevokePermanent, TLAbsInputPeer peer, Integer expireDate, Integer usageLimit) {
+    public TLRequestMessagesExportChatInvite(boolean legacyRevokePermanent, TLAbsInputPeer peer, Integer expireDate,
+                                             Integer usageLimit) {
         this.legacyRevokePermanent = legacyRevokePermanent;
         this.peer = peer;
         this.expireDate = expireDate;
@@ -51,26 +56,24 @@ public class TLRequestMessagesExportChatInvite extends TLMethod<TLAbsExportedCha
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
-    public TLAbsExportedChatInvite deserializeResponse(InputStream stream, TLContext context) throws IOException {
+    public TLChatInviteExported deserializeResponse(InputStream stream, TLContext context) throws IOException {
         final TLObject response = readTLObject(stream, context);
         if (response == null) {
             throw new IOException("Unable to parse response");
         }
-        if (!(response instanceof TLAbsExportedChatInvite)) {
+        if (!(response instanceof TLChatInviteExported)) {
             throw new IOException(
                     "Incorrect response type, expected " + getClass().getCanonicalName() + ", found " + response
                             .getClass().getCanonicalName());
         }
-        return (TLAbsExportedChatInvite) response;
+        return (TLChatInviteExported) response;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
+        computeFlags();
+        writeInt(flags, stream);
         writeTLObject(peer, stream);
-        if ((flags & 4) != 0) {
-            writeBoolean(legacyRevokePermanent, stream);
-        }
         if ((flags & 1) != 0) {
             if (expireDate == null) {
                 throwNullFieldException("expireDate", flags);
@@ -86,19 +89,32 @@ public class TLRequestMessagesExportChatInvite extends TLMethod<TLAbsExportedCha
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
+        flags = readInt(stream);
+        legacyRevokePermanent = (flags & 4) != 0;
         peer = readTLObject(stream, context, TLAbsInputPeer.class, -1);
+        expireDate = (flags & 1) != 0 ? readInt(stream) : null;
+        usageLimit = (flags & 2) != 0 ? readInt(stream) : null;
     }
 
     @Override
     public int computeSerializedSize() {
-        int size = SIZE_CONSTRUCTOR_ID;
         computeFlags();
-        size += SIZE_BOOLEAN;
-        size += SIZE_INT32;
+        int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
         size += peer.computeSerializedSize();
+        if ((flags & 1) != 0) {
+            if (expireDate == null) {
+                throwNullFieldException("expireDate", flags);
+            }
+            size += SIZE_INT32;
+        }
+        if ((flags & 2) != 0) {
+            if (usageLimit == null) {
+                throwNullFieldException("usageLimit", flags);
+            }
+            size += SIZE_INT32;
+        }
         return size;
     }
 
@@ -142,9 +158,5 @@ public class TLRequestMessagesExportChatInvite extends TLMethod<TLAbsExportedCha
 
     public void setUsageLimit(Integer usageLimit) {
         this.usageLimit = usageLimit;
-    }
-
-    public String get_constructor() {
-        return _constructor;
     }
 }

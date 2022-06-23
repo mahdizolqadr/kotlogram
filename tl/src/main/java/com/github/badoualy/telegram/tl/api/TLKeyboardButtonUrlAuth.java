@@ -1,49 +1,43 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.core.TLBytes;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
-import static com.github.badoualy.telegram.tl.StreamUtils.readTLBytes;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
-import static com.github.badoualy.telegram.tl.StreamUtils.writeTLBytes;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLBytesSerializedSize;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
-/**
- * @author Yannick Badoual yann.badoual@gmail.com
- * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
- */
-public class TLKeyboardButtonCallback extends TLAbsKeyboardButton {
+public class TLKeyboardButtonUrlAuth extends TLAbsKeyboardButton {
 
-    public static final int CONSTRUCTOR_ID = 0x35bbdb6b;
+    public static final int CONSTRUCTOR_ID = 0x10b78d29;
 
     protected int flags;
-    protected boolean requiresPassword;
-    protected TLBytes data;
+    protected String fwdText;
+    protected String url;
+    protected int buttonId;
 
-    private final String _constructor = "keyboardButtonCallback#35bbdb6b";
+    private final String _constructor = "keyboardButtonUrlAuth#10b78d29";
 
-    public TLKeyboardButtonCallback() {
+    public TLKeyboardButtonUrlAuth() {
     }
 
-    public TLKeyboardButtonCallback(boolean requiresPassword, String text, TLBytes data) {
-        this.requiresPassword = requiresPassword;
+    public TLKeyboardButtonUrlAuth(String text, String fwdText, String url, int buttonId) {
         this.text = text;
-        this.data = data;
+        this.fwdText = fwdText;
+        this.url = url;
+        this.buttonId = buttonId;
     }
 
     private void computeFlags() {
         flags = 0;
-        flags = requiresPassword ? (flags | 1) : (flags & ~1);
+        flags = fwdText != null ? (flags | 1) : (flags & ~1);
     }
 
     @Override
@@ -51,15 +45,23 @@ public class TLKeyboardButtonCallback extends TLAbsKeyboardButton {
         computeFlags();
         writeInt(flags, stream);
         writeString(text, stream);
-        writeTLBytes(data, stream);
+        if ((flags & 1) != 0) {
+            if (fwdText == null) {
+                throwNullFieldException("fwdText", flags);
+            }
+            writeString(fwdText, stream);
+        }
+        writeString(url, stream);
+        writeInt(buttonId, stream);
     }
 
     @Override
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
-        requiresPassword = (flags & 1) != 0;
         text = readTLString(stream);
-        data = readTLBytes(stream, context);
+        fwdText = (flags & 1) != 0 ? readTLString(stream) : null;
+        url = readTLString(stream);
+        buttonId = readInt(stream);
     }
 
     @Override
@@ -68,7 +70,14 @@ public class TLKeyboardButtonCallback extends TLAbsKeyboardButton {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
         size += computeTLStringSerializedSize(text);
-        size += computeTLBytesSerializedSize(data);
+        if ((flags & 1) != 0) {
+            if (fwdText == null) {
+                throwNullFieldException("fwdText", flags);
+            }
+            size += computeTLStringSerializedSize(fwdText);
+        }
+        size += computeTLStringSerializedSize(url);
+        size += SIZE_INT32;
         return size;
     }
 
@@ -82,27 +91,27 @@ public class TLKeyboardButtonCallback extends TLAbsKeyboardButton {
         return CONSTRUCTOR_ID;
     }
 
-    public boolean isRequiresPassword() {
-        return requiresPassword;
+    public String getFwdText() {
+        return fwdText;
     }
 
-    public void setRequiresPassword(boolean requiresPassword) {
-        this.requiresPassword = requiresPassword;
+    public void setFwdText(String fwdText) {
+        this.fwdText = fwdText;
     }
 
-    public String getText() {
-        return text;
+    public String getUrl() {
+        return url;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public TLBytes getData() {
-        return data;
+    public int getButtonId() {
+        return buttonId;
     }
 
-    public void setData(TLBytes data) {
-        this.data = data;
+    public void setButtonId(int buttonId) {
+        this.buttonId = buttonId;
     }
 }

@@ -8,8 +8,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLBytes;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLBytes;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLBytesSerializedSize;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -44,9 +57,10 @@ public class TLDocument extends TLAbsDocument {
     public TLDocument() {
     }
 
-    public TLDocument(long accessHash, TLBytes fileReference, int date, String mimeType,
+    public TLDocument(long id, long accessHash, TLBytes fileReference, int date, String mimeType,
                       int size, TLVector<TLAbsPhotoSize> thumbs, TLVector<TLVideoSize> videoThumbs,
                       int dcId, TLVector<TLAbsDocumentAttribute> attributes) {
+        this.id = id;
         this.accessHash = accessHash;
         this.fileReference = fileReference;
         this.date = date;
@@ -67,6 +81,7 @@ public class TLDocument extends TLAbsDocument {
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         computeFlags();
+        writeInt(flags, stream);
         writeLong(id, stream);
         writeLong(accessHash, stream);
         writeTLBytes(fileReference, stream);
@@ -74,11 +89,15 @@ public class TLDocument extends TLAbsDocument {
         writeString(mimeType, stream);
         writeInt(size, stream);
         if ((flags & 1) != 0) {
-            if (thumbs == null) throwNullFieldException("thumbs", flags);
+            if (thumbs == null) {
+                throwNullFieldException("thumbs", flags);
+            }
             writeTLVector(thumbs, stream);
         }
         if ((flags & 2) != 0) {
-            if (videoThumbs == null) throwNullFieldException("videoThumbs", flags);
+            if (videoThumbs == null) {
+                throwNullFieldException("videoThumbs", flags);
+            }
             writeTLVector(videoThumbs, stream);
         }
         writeInt(dcId, stream);
@@ -86,7 +105,7 @@ public class TLDocument extends TLAbsDocument {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
+    @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         id = readLong(stream);
@@ -112,8 +131,18 @@ public class TLDocument extends TLAbsDocument {
         size += SIZE_INT32;
         size += computeTLStringSerializedSize(mimeType);
         size += SIZE_INT32;
-        size += thumbs.computeSerializedSize();
-        size += videoThumbs.computeSerializedSize();
+        if ((flags & 1) != 0) {
+            if (thumbs == null) {
+                throwNullFieldException("thumbs", flags);
+            }
+            size += thumbs.computeSerializedSize();
+        }
+        if ((flags & 2) != 0) {
+            if (videoThumbs == null) {
+                throwNullFieldException("videoThumbs", flags);
+            }
+            size += videoThumbs.computeSerializedSize();
+        }
         size += SIZE_INT32;
         size += attributes.computeSerializedSize();
         return size;
