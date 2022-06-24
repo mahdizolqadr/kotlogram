@@ -858,7 +858,12 @@ public abstract class TelegramApiWrapper implements TelegramApi {
 
     @Override
     public TLAbsUpdates messagesDeleteChatUser(long chatId, TLAbsInputUser userId) throws RpcErrorException, IOException {
-        return (TLAbsUpdates) executeRpcQuery(new TLRequestMessagesDeleteChatUser(chatId, userId));
+        return (TLAbsUpdates) executeRpcQuery(new TLRequestMessagesDeleteChatUser(false, chatId, userId));
+    }
+
+    @Override
+    public TLAbsUpdates messagesDeleteChatUser(boolean revokeHistory, long chatId, TLAbsInputUser userId) throws RpcErrorException, IOException {
+        return (TLAbsUpdates) executeRpcQuery(new TLRequestMessagesDeleteChatUser(revokeHistory, chatId, userId));
     }
 
     @Override

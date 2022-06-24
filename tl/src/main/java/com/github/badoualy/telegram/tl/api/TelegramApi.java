@@ -301,6 +301,8 @@ public interface TelegramApi {
 
     TLAbsUpdates messagesDeleteChatUser(long chatId, TLAbsInputUser userId) throws RpcErrorException, IOException;
 
+    TLAbsUpdates messagesDeleteChatUser(boolean revokeHistory, long chatId, TLAbsInputUser userId) throws RpcErrorException, IOException;
+
     TLAffectedHistory messagesDeleteHistory(boolean justClear, TLAbsInputPeer peer, int maxId) throws RpcErrorException, IOException;
 
     TLAffectedMessages messagesDeleteMessages(boolean revoke, TLIntVector id) throws RpcErrorException, IOException;
