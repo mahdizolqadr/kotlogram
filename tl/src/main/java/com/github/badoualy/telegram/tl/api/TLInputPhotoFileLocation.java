@@ -7,65 +7,61 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLBytes;
-import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeTLBytes;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLBytesSerializedSize;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
-/**
- * @author Yannick Badoual yann.badoual@gmail.com
- * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
- */
-public class TLInputFileLocation extends TLAbsInputFileLocation {
+public class TLInputPhotoFileLocation extends TLAbsInputFileLocation {
 
-    public static final int CONSTRUCTOR_ID = 0xdfdaabe1;
+    public static final int CONSTRUCTOR_ID = 0x40181ffe;
 
-    protected long volumeId;
-    protected int localId;
-    protected long secret;
+    protected long id;
+    protected long accessHash;
     protected TLBytes fileReference;
+    protected String thumbSize;
 
-    private final String _constructor = "inputFileLocation#dfdaabe1";
+    private final String _constructor = "inputPhotoFileLocation#40181ffe";
 
-    public TLInputFileLocation() {
+    public TLInputPhotoFileLocation() {
     }
 
-    public TLInputFileLocation(long volumeId, int localId, long secret, TLBytes fileReference) {
-        this.volumeId = volumeId;
-        this.localId = localId;
-        this.secret = secret;
+    public TLInputPhotoFileLocation(long id, long accessHash, TLBytes fileReference, String thumbSize) {
+        this.id = id;
+        this.accessHash = accessHash;
         this.fileReference = fileReference;
+        this.thumbSize = thumbSize;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
-        writeLong(volumeId, stream);
-        writeInt(localId, stream);
-        writeLong(secret, stream);
+        writeLong(id, stream);
+        writeLong(accessHash, stream);
         writeTLBytes(fileReference, stream);
+        writeString(thumbSize, stream);
     }
 
     @Override
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        volumeId = readLong(stream);
-        localId = readInt(stream);
-        secret = readLong(stream);
+        id = readLong(stream);
+        accessHash = readLong(stream);
         fileReference = readTLBytes(stream, context);
+        thumbSize = readTLString(stream);
     }
 
     @Override
     public int computeSerializedSize() {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT64;
-        size += SIZE_INT32;
         size += SIZE_INT64;
         size += computeTLBytesSerializedSize(fileReference);
+        size += computeTLStringSerializedSize(thumbSize);
         return size;
     }
 
@@ -79,28 +75,20 @@ public class TLInputFileLocation extends TLAbsInputFileLocation {
         return CONSTRUCTOR_ID;
     }
 
-    public long getVolumeId() {
-        return volumeId;
+    public long getId() {
+        return id;
     }
 
-    public void setVolumeId(long volumeId) {
-        this.volumeId = volumeId;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public int getLocalId() {
-        return localId;
+    public long getAccessHash() {
+        return accessHash;
     }
 
-    public void setLocalId(int localId) {
-        this.localId = localId;
-    }
-
-    public long getSecret() {
-        return secret;
-    }
-
-    public void setSecret(long secret) {
-        this.secret = secret;
+    public void setAccessHash(long accessHash) {
+        this.accessHash = accessHash;
     }
 
     public TLBytes getFileReference() {
@@ -109,5 +97,13 @@ public class TLInputFileLocation extends TLAbsInputFileLocation {
 
     public void setFileReference(TLBytes fileReference) {
         this.fileReference = fileReference;
+    }
+
+    public String getThumbSize() {
+        return thumbSize;
+    }
+
+    public void setThumbSize(String thumbSize) {
+        this.thumbSize = thumbSize;
     }
 }

@@ -357,9 +357,11 @@ public class TLApiContext extends TLContext {
         registerClass(TLInputGameShortName.CONSTRUCTOR_ID, TLInputGameShortName.class);
         registerClass(TLInputGeoPoint.CONSTRUCTOR_ID, TLInputGeoPoint.class);
         registerClass(TLInputGeoPointEmpty.CONSTRUCTOR_ID, TLInputGeoPointEmpty.class);
+        registerClass(TLInputGroupCallStream.CONSTRUCTOR_ID, TLInputGroupCallStream.class);
         registerClass(TLInputKeyboardButtonUrlAuth.CONSTRUCTOR_ID, TLInputKeyboardButtonUrlAuth.class);
         registerClass(TLInputGroupCall.CONSTRUCTOR_ID, TLInputGroupCall.class);
         registerClass(TLInputMediaContact.CONSTRUCTOR_ID, TLInputMediaContact.class);
+        registerClass(TLInputMediaDice.CONSTRUCTOR_ID, TLInputMediaDice.class);
         registerClass(TLInputMediaDocument.CONSTRUCTOR_ID, TLInputMediaDocument.class);
         registerClass(TLInputMediaDocumentExternal.CONSTRUCTOR_ID, TLInputMediaDocumentExternal.class);
         registerClass(TLInputMediaEmpty.CONSTRUCTOR_ID, TLInputMediaEmpty.class);
@@ -402,6 +404,7 @@ public class TLApiContext extends TLContext {
         registerClass(TLInputPeerNotifyEventsAll.CONSTRUCTOR_ID, TLInputPeerNotifyEventsAll.class);
         registerClass(TLInputPeerNotifyEventsEmpty.CONSTRUCTOR_ID, TLInputPeerNotifyEventsEmpty.class);
         registerClass(TLInputPeerNotifySettings.CONSTRUCTOR_ID, TLInputPeerNotifySettings.class);
+        registerClass(TLInputPeerPhotoFileLocation.CONSTRUCTOR_ID, TLInputPeerPhotoFileLocation.class);
         registerClass(TLInputPeerSelf.CONSTRUCTOR_ID, TLInputPeerSelf.class);
         registerClass(TLInputPeerUser.CONSTRUCTOR_ID, TLInputPeerUser.class);
         registerClass(TLInputPeerUserFromMessage.CONSTRUCTOR_ID, TLInputPeerUserFromMessage.class);
@@ -409,6 +412,8 @@ public class TLApiContext extends TLContext {
         registerClass(TLInputPhoneContact.CONSTRUCTOR_ID, TLInputPhoneContact.class);
         registerClass(TLInputPhoto.CONSTRUCTOR_ID, TLInputPhoto.class);
         registerClass(TLInputPhotoEmpty.CONSTRUCTOR_ID, TLInputPhotoEmpty.class);
+        registerClass(TLInputPhotoFileLocation.CONSTRUCTOR_ID, TLInputPhotoFileLocation.class);
+        registerClass(TLInputPhotoLegacyFileLocation.CONSTRUCTOR_ID, TLInputPhotoLegacyFileLocation.class);
         registerClass(TLInputPrivacyKeyChatInvite.CONSTRUCTOR_ID, TLInputPrivacyKeyChatInvite.class);
         registerClass(TLInputPrivacyKeyPhoneCall.CONSTRUCTOR_ID, TLInputPrivacyKeyPhoneCall.class);
         registerClass(TLInputPrivacyKeyStatusTimestamp.CONSTRUCTOR_ID, TLInputPrivacyKeyStatusTimestamp.class);
@@ -422,9 +427,15 @@ public class TLApiContext extends TLContext {
         registerClass(TLInputReportReasonPornography.CONSTRUCTOR_ID, TLInputReportReasonPornography.class);
         registerClass(TLInputReportReasonSpam.CONSTRUCTOR_ID, TLInputReportReasonSpam.class);
         registerClass(TLInputReportReasonViolence.CONSTRUCTOR_ID, TLInputReportReasonViolence.class);
+        registerClass(TLInputStickerSetAnimatedEmoji.CONSTRUCTOR_ID, TLInputStickerSetAnimatedEmoji.class);
+        registerClass(TLInputStickerSetAnimatedEmojiAnimations.CONSTRUCTOR_ID, TLInputStickerSetAnimatedEmojiAnimations.class);
+        registerClass(TLInputStickerSetDice.CONSTRUCTOR_ID, TLInputStickerSetDice.class);
         registerClass(TLInputStickerSetEmpty.CONSTRUCTOR_ID, TLInputStickerSetEmpty.class);
         registerClass(TLInputStickerSetID.CONSTRUCTOR_ID, TLInputStickerSetID.class);
         registerClass(TLInputStickerSetShortName.CONSTRUCTOR_ID, TLInputStickerSetShortName.class);
+        registerClass(TLInputStickerSetThumb.CONSTRUCTOR_ID, TLInputStickerSetThumb.class);
+        registerClass(TLInputTakeoutFileLocation.CONSTRUCTOR_ID, TLInputTakeoutFileLocation.class);
+        registerClass(TLInputSecureFileLocation.CONSTRUCTOR_ID, TLInputSecureFileLocation.class);
         registerClass(TLInputStickeredMediaDocument.CONSTRUCTOR_ID, TLInputStickeredMediaDocument.class);
         registerClass(TLInputStickeredMediaPhoto.CONSTRUCTOR_ID, TLInputStickeredMediaPhoto.class);
         registerClass(TLInputUser.CONSTRUCTOR_ID, TLInputUser.class);

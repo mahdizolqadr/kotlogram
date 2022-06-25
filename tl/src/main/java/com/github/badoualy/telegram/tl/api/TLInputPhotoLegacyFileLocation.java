@@ -18,54 +18,61 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLBytesSerializedSize;
 
-/**
- * @author Yannick Badoual yann.badoual@gmail.com
- * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
- */
-public class TLInputFileLocation extends TLAbsInputFileLocation {
+public class TLInputPhotoLegacyFileLocation extends TLAbsInputFileLocation {
 
-    public static final int CONSTRUCTOR_ID = 0xdfdaabe1;
+    public static final int CONSTRUCTOR_ID = 0xd83466f3;
 
+    protected long id;
+    protected long accessHash;
+    protected TLBytes fileReference;
     protected long volumeId;
     protected int localId;
     protected long secret;
-    protected TLBytes fileReference;
 
-    private final String _constructor = "inputFileLocation#dfdaabe1";
+    private final String _constructor = "inputPhotoLegacyFileLocation#d83466f3";
 
-    public TLInputFileLocation() {
+    public TLInputPhotoLegacyFileLocation() {
     }
 
-    public TLInputFileLocation(long volumeId, int localId, long secret, TLBytes fileReference) {
+    public TLInputPhotoLegacyFileLocation(long id, long accessHash, TLBytes fileReference, long volumeId, int localId,
+                                          long secret) {
+        this.id = id;
+        this.accessHash = accessHash;
+        this.fileReference = fileReference;
         this.volumeId = volumeId;
         this.localId = localId;
         this.secret = secret;
-        this.fileReference = fileReference;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
+        writeLong(id, stream);
+        writeLong(accessHash, stream);
+        writeTLBytes(fileReference, stream);
         writeLong(volumeId, stream);
         writeInt(localId, stream);
         writeLong(secret, stream);
-        writeTLBytes(fileReference, stream);
     }
 
     @Override
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
+        id = readLong(stream);
+        accessHash = readLong(stream);
+        fileReference = readTLBytes(stream, context);
         volumeId = readLong(stream);
         localId = readInt(stream);
         secret = readLong(stream);
-        fileReference = readTLBytes(stream, context);
     }
 
     @Override
     public int computeSerializedSize() {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT64;
-        size += SIZE_INT32;
         size += SIZE_INT64;
         size += computeTLBytesSerializedSize(fileReference);
+        size += SIZE_INT64;
+        size += SIZE_INT32;
+        size += SIZE_INT64;
         return size;
     }
 
@@ -77,6 +84,30 @@ public class TLInputFileLocation extends TLAbsInputFileLocation {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getAccessHash() {
+        return accessHash;
+    }
+
+    public void setAccessHash(long accessHash) {
+        this.accessHash = accessHash;
+    }
+
+    public TLBytes getFileReference() {
+        return fileReference;
+    }
+
+    public void setFileReference(TLBytes fileReference) {
+        this.fileReference = fileReference;
     }
 
     public long getVolumeId() {
@@ -101,13 +132,5 @@ public class TLInputFileLocation extends TLAbsInputFileLocation {
 
     public void setSecret(long secret) {
         this.secret = secret;
-    }
-
-    public TLBytes getFileReference() {
-        return fileReference;
-    }
-
-    public void setFileReference(TLBytes fileReference) {
-        this.fileReference = fileReference;
     }
 }

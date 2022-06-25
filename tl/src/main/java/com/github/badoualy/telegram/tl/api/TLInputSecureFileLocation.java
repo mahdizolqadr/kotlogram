@@ -18,45 +18,33 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLBytesSerializedSize;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
-/**
- * @author Yannick Badoual yann.badoual@gmail.com
- * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
- */
-public class TLInputDocumentFileLocation extends TLAbsInputFileLocation {
+public class TLInputSecureFileLocation extends TLAbsInputFileLocation {
 
-    public static final int CONSTRUCTOR_ID = 0xbad07584;
+    public static final int CONSTRUCTOR_ID = 0xcbc7ee28;
 
     protected long id;
     protected long accessHash;
-    protected TLBytes fileReference;
-    protected String thumbSize;
 
-    private final String _constructor = "inputDocumentFileLocation#bad07584";
+    private final String _constructor = "inputSecureFileLocation#cbc7ee28";
 
-    public TLInputDocumentFileLocation() {
+    public TLInputSecureFileLocation() {
     }
 
-    public TLInputDocumentFileLocation(long id, long accessHash, TLBytes fileReference, String thumbSize) {
+    public TLInputSecureFileLocation(long id, long accessHash) {
         this.id = id;
         this.accessHash = accessHash;
-        this.fileReference = fileReference;
-        this.thumbSize = thumbSize;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         writeLong(id, stream);
         writeLong(accessHash, stream);
-        writeTLBytes(fileReference, stream);
-        writeString(thumbSize, stream);
     }
 
     @Override
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         id = readLong(stream);
         accessHash = readLong(stream);
-        fileReference = readTLBytes(stream, context);
-        thumbSize = readTLString(stream);
     }
 
     @Override
@@ -64,8 +52,6 @@ public class TLInputDocumentFileLocation extends TLAbsInputFileLocation {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT64;
         size += SIZE_INT64;
-        size += computeTLBytesSerializedSize(fileReference);
-        size += computeTLStringSerializedSize(thumbSize);
         return size;
     }
 
@@ -93,21 +79,5 @@ public class TLInputDocumentFileLocation extends TLAbsInputFileLocation {
 
     public void setAccessHash(long accessHash) {
         this.accessHash = accessHash;
-    }
-
-    public TLBytes getFileReference() {
-        return fileReference;
-    }
-
-    public void setFileReference(TLBytes fileReference) {
-        this.fileReference = fileReference;
-    }
-
-    public String getThumbSize() {
-        return thumbSize;
-    }
-
-    public void setThumbSize(String thumbSize) {
-        this.thumbSize = thumbSize;
     }
 }

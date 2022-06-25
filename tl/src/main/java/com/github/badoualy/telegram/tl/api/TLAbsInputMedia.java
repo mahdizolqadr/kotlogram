@@ -6,6 +6,7 @@ import com.github.badoualy.telegram.tl.core.TLObject;
  * Abstraction level for the following constructors:
  * <ul>
  * <li>{@link TLInputMediaContact}: inputMediaContact#a6e45987</li>
+ * <li>{@link TLInputMediaDice}: inputMediaDice#e66fbf7b</li>
  * <li>{@link TLInputMediaDocument}: inputMediaDocument#1a77f29c</li>
  * <li>{@link TLInputMediaDocumentExternal}: inputMediaDocumentExternal#e5e9607c</li>
  * <li>{@link TLInputMediaEmpty}: inputMediaEmpty#9664f57f</li>
