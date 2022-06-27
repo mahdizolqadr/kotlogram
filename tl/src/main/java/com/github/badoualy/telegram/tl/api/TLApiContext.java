@@ -858,6 +858,7 @@ public class TLApiContext extends TLContext {
         registerClass(TLWallPaper.CONSTRUCTOR_ID, TLWallPaper.class);
         registerClass(TLWallPaperNoFile.CONSTRUCTOR_ID, TLWallPaperNoFile.class);
         registerClass(TLWallPaperSettings.CONSTRUCTOR_ID, TLWallPaperSettings.class);
+        registerClass(TLWallPaperSettings.CONSTRUCTOR_ID, TLWallPaperSettings.class);
         registerClass(TLWebDocument.CONSTRUCTOR_ID, TLWebDocument.class);
         registerClass(TLWebPage.CONSTRUCTOR_ID, TLWebPage.class);
         registerClass(TLWebPageAttribute.CONSTRUCTOR_ID, TLWebPageAttribute.class);
