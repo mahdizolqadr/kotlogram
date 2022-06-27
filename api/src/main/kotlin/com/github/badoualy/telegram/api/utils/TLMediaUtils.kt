@@ -1,15 +1,11 @@
 package com.github.badoualy.telegram.api.utils
 
-import com.github.badoualy.telegram.tl.api.TLAbsFileLocation
 import com.github.badoualy.telegram.tl.api.TLAbsInputFileLocation
 import com.github.badoualy.telegram.tl.api.TLAbsMessageMedia
 import com.github.badoualy.telegram.tl.api.TLAbsPhotoSize
 import com.github.badoualy.telegram.tl.api.TLDocument
-import com.github.badoualy.telegram.tl.api.TLFileLocation
-import com.github.badoualy.telegram.tl.api.TLFileLocationUnavailable
 import com.github.badoualy.telegram.tl.api.TLGeoPoint
 import com.github.badoualy.telegram.tl.api.TLInputDocumentFileLocation
-import com.github.badoualy.telegram.tl.api.TLInputFileLocation
 import com.github.badoualy.telegram.tl.api.TLMessageMediaContact
 import com.github.badoualy.telegram.tl.api.TLMessageMediaDocument
 import com.github.badoualy.telegram.tl.api.TLMessageMediaEmpty
@@ -63,7 +59,7 @@ fun TLMessageMediaDocument.getMediaInput() = when (document) {
         val document = document as TLDocument
         //TODO: fix TLInputDocumentFileLocation if method will be required
         val inputFileLocation = InputFileLocation(
-            TLInputDocumentFileLocation(document.id, document.accessHash, 0),
+            TLInputDocumentFileLocation(document.id, document.accessHash, document.fileReference, ""),
             document.dcId
         )
         MediaInput(inputFileLocation, document.size, document.mimeType)
@@ -117,12 +113,6 @@ fun Collection<TLAbsPhotoSize>?.getMaxSize() = this?.getFilteredPhotoSize {
 fun Collection<TLAbsPhotoSize>?.getMinSize() = this?.getFilteredPhotoSize {
     filterIsInstance<TLPhotoCachedSize>().firstOrNull()
         ?: filterIsInstance<TLPhotoSize>().sortedBy { it.w * it.h }.firstOrNull()
-}
-
-fun TLAbsFileLocation.toInputFileLocation() = when (this) {
-    is TLFileLocation -> InputFileLocation(TLInputFileLocation(volumeId, localId, secret), dcId)
-    is TLFileLocationUnavailable -> null
-    else -> null
 }
 
 data class MediaInput(

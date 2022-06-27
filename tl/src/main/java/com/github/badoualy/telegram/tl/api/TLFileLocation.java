@@ -17,7 +17,9 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
  * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
+ * @deprecated after API version 105
  */
+@Deprecated
 public class TLFileLocation extends TLAbsFileLocation {
 
     public static final int CONSTRUCTOR_ID = 0x53d69076;

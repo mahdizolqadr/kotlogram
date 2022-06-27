@@ -33,7 +33,7 @@ public class TLPhotoSize extends TLAbsPhotoSize {
     public TLPhotoSize() {
     }
 
-    public TLPhotoSize(String type, TLAbsFileLocation location, int w, int h, int size) {
+    public TLPhotoSize(String type, int w, int h, int size) {
         this.type = type;
         this.w = w;
         this.h = h;
