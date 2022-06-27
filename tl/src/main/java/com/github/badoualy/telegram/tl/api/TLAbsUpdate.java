@@ -34,6 +34,7 @@ import com.github.badoualy.telegram.tl.core.TLObject;
  * <li>{@link TLUpdateChatUserTyping}: updateChatUserTyping#83487af0</li>
  * <li>{@link TLUpdateConfig}: updateConfig#a229dd06</li>
  * <li>{@link TLUpdateContactsReset}: updateContactsReset#7084a7be</li>
+ * <li>{@link TLUpdateContactRegistered}: updateContactRegistered#2575bbb9</li>
  * <li>{@link TLUpdateDcOptions}: updateDcOptions#8e5e9873</li>
  * <li>{@link TLUpdateDeleteChannelMessages}: updateDeleteChannelMessages#c32d5b12</li>
  * <li>{@link TLUpdateDeleteMessages}: updateDeleteMessages#a20db0e5</li>
@@ -92,6 +93,7 @@ import com.github.badoualy.telegram.tl.core.TLObject;
  * <li>{@link TLUpdateServiceNotification}: updateServiceNotification#ebe46819</li>
  * <li>{@link TLUpdateStickerSets}: updateStickerSets#43ae3dec</li>
  * <li>{@link TLUpdateStickerSetsOrder}: updateStickerSetsOrder#bb2d201</li>
+ * <li>{@link TLUpdateUserBlocked}: updateUserBlocked#80ece81a</li>
  * <li>{@link TLUpdateTheme}: updateTheme#8216fba3</li>
  * <li>{@link TLUpdateUserName}: updateUserName#c3f202e0</li>
  * <li>{@link TLUpdateUserPhone}: updateUserPhone#5492a13</li>
