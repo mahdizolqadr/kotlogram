@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
@@ -52,6 +54,7 @@ public class TLLangPackStringPluralized extends TLAbsLangPackString {
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         computeFlags();
+        writeInt(flags, stream);
         writeString(key, stream);
         if ((flags & 1) != 0) {
             if (zeroValue == null) {
@@ -88,6 +91,7 @@ public class TLLangPackStringPluralized extends TLAbsLangPackString {
 
     @Override
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
+        flags = readInt(stream);
         key = readTLString(stream);
         zeroValue = (flags & 1) != 0 ? readTLString(stream) : null;
         oneValue = (flags & 2) != 0 ? readTLString(stream) : null;

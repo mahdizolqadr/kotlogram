@@ -15,7 +15,6 @@ public class TLMessagesNotModified extends TLAbsMessages {
 
     public static final int CONSTRUCTOR_ID = 0x74535f21;
 
-
     protected int count;
 
     private final String _constructor = "messages.messagesNotModified#74535f21";

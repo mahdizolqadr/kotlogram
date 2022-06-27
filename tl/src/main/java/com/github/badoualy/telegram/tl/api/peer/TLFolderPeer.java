@@ -2,6 +2,7 @@ package com.github.badoualy.telegram.tl.api.peer;
 
 import com.github.badoualy.telegram.tl.TLContext;
 import com.github.badoualy.telegram.tl.api.TLAbsPeer;
+import com.github.badoualy.telegram.tl.core.TLObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +15,7 @@ import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 
-public class TLFolderPeer extends TLAbsDialogPeer {
+public class TLFolderPeer extends TLObject {
 
     public static final int CONSTRUCTOR_ID = 0xe9baa668;
 

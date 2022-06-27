@@ -83,7 +83,7 @@ import com.github.badoualy.telegram.tl.core.TLObject;
  * <li>{@link TLUpdateReadChannelDiscussionOutbox}: updateReadChannelDiscussionOutbox#695c9e7c</li>
  * <li>{@link TLUpdateReadChannelInbox}: updateReadChannelInbox#922e6e10</li>
  * <li>{@link TLUpdateReadChannelOutbox}: updateReadChannelOutbox#b75f99a9</li>
- * <li>{@link TLUpdateReadChannelUserTyping}: updateChannelUserTyping#8c88c923</li>
+ * <li>{@link TLUpdateChannelUserTyping}: updateChannelUserTyping#8c88c923</li>
  * <li>{@link TLUpdateReadFeaturedStickers}: updateReadFeaturedStickers#571d2742</li>
  * <li>{@link TLUpdateReadHistoryInbox}: updateReadHistoryInbox#9c974fdf</li>
  * <li>{@link TLUpdateReadHistoryOutbox}: updateReadHistoryOutbox#2f2f21bf</li>

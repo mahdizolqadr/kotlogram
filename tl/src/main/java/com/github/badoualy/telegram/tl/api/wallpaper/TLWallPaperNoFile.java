@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
@@ -54,7 +55,7 @@ public class TLWallPaperNoFile extends TLAbsWallPaper {
 
     @Override
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        id = readInt(stream);
+        id = readLong(stream);
         flags = readInt(stream);
         isDefault = (flags & 2) != 0;
         dark = (flags & 16) != 0;

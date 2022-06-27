@@ -16,7 +16,7 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
-public class TLUpdateReadChannelUserTyping extends TLAbsUpdate {
+public class TLUpdateChannelUserTyping extends TLAbsUpdate {
 
     public static final int CONSTRUCTOR_ID = 0x8c88c923;
 
@@ -28,10 +28,10 @@ public class TLUpdateReadChannelUserTyping extends TLAbsUpdate {
 
     private final String _constructor = "updateChannelUserTyping#8c88c923";
 
-    public TLUpdateReadChannelUserTyping() {
+    public TLUpdateChannelUserTyping() {
     }
 
-    public TLUpdateReadChannelUserTyping(long channelId, Integer topMsgId, TLAbsPeer fromId, TLAbsSendMessageAction action) {
+    public TLUpdateChannelUserTyping(long channelId, Integer topMsgId, TLAbsPeer fromId, TLAbsSendMessageAction action) {
         this.channelId = channelId;
         this.topMsgId = topMsgId;
         this.fromId = fromId;

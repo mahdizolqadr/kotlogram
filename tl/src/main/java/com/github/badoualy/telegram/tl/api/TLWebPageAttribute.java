@@ -16,6 +16,7 @@ import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 
 public class TLWebPageAttribute extends TLObject {
 
@@ -68,6 +69,7 @@ public class TLWebPageAttribute extends TLObject {
     public int computeSerializedSize() {
         computeFlags();
         int size = SIZE_CONSTRUCTOR_ID;
+        size += SIZE_INT32;
         if ((flags & 1) != 0) {
             size += documents.computeSerializedSize();
         }

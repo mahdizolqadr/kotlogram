@@ -76,7 +76,7 @@ public class TLWallPaper extends TLAbsWallPaper {
 
     @Override
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        id = readInt(stream);
+        id = readLong(stream);
         flags = readInt(stream);
         creator = (flags & 1) != 0;
         isDefault = (flags & 2) != 0;

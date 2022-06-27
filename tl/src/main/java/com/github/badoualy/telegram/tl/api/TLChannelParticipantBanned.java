@@ -16,10 +16,6 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
-/**
- * @author Yannick Badoual yann.badoual@gmail.com
- * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
- */
 public class TLChannelParticipantBanned extends TLAbsChannelParticipant {
 
     public static final int CONSTRUCTOR_ID = 0x6df8014e;

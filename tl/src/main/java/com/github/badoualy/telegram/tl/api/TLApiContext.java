@@ -807,7 +807,7 @@ public class TLApiContext extends TLContext {
         registerClass(TLUpdateReadChannelDiscussionOutbox.CONSTRUCTOR_ID, TLUpdateReadChannelDiscussionOutbox.class);
         registerClass(TLUpdateReadChannelInbox.CONSTRUCTOR_ID, TLUpdateReadChannelInbox.class);
         registerClass(TLUpdateReadChannelOutbox.CONSTRUCTOR_ID, TLUpdateReadChannelOutbox.class);
-        registerClass(TLUpdateReadChannelUserTyping.CONSTRUCTOR_ID, TLUpdateReadChannelUserTyping.class);
+        registerClass(TLUpdateChannelUserTyping.CONSTRUCTOR_ID, TLUpdateChannelUserTyping.class);
         registerClass(TLUpdateReadFeaturedStickers.CONSTRUCTOR_ID, TLUpdateReadFeaturedStickers.class);
         registerClass(TLUpdateReadHistoryInbox.CONSTRUCTOR_ID, TLUpdateReadHistoryInbox.class);
         registerClass(TLUpdateReadHistoryOutbox.CONSTRUCTOR_ID, TLUpdateReadHistoryOutbox.class);
