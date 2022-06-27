@@ -1,15 +1,23 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputPeer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
-public class TLInputChannelFromMessage extends TLAbsInputChannel{
+public class TLInputChannelFromMessage extends TLAbsInputChannel {
 
 
     public static final int CONSTRUCTOR_ID = 0x5b934f9d;
@@ -20,7 +28,7 @@ public class TLInputChannelFromMessage extends TLAbsInputChannel{
 
     protected long channelId;
 
-    private final String _constructor = "inputChannel#5b934f9d";
+    private final String _constructor = "inputChannelFromMessage#5b934f9d";
 
     public TLInputChannelFromMessage() {
     }
@@ -39,11 +47,10 @@ public class TLInputChannelFromMessage extends TLAbsInputChannel{
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         peer = readTLObject(stream, context, TLAbsInputPeer.class, -1);
         msgId = readInt(stream);
-        channelId = readInt(stream);
+        channelId = readLong(stream);
     }
 
     @Override
@@ -98,6 +105,4 @@ public class TLInputChannelFromMessage extends TLAbsInputChannel{
     public final boolean isNotEmpty() {
         return true;
     }
-
-
 }

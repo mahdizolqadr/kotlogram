@@ -29,13 +29,13 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSeria
  */
 public class TLUpdateBotPrecheckoutQuery extends TLAbsUpdate {
 
-    public static final int CONSTRUCTOR_ID = 0x5d2f3aa9;
+    public static final int CONSTRUCTOR_ID = 0x8caa9a96;
 
     protected int flags;
 
     protected long queryId;
 
-    protected int userId;
+    protected long userId;
 
     protected TLBytes payload;
 
@@ -47,12 +47,12 @@ public class TLUpdateBotPrecheckoutQuery extends TLAbsUpdate {
 
     protected long totalAmount;
 
-    private final String _constructor = "updateBotPrecheckoutQuery#5d2f3aa9";
+    private final String _constructor = "updateBotPrecheckoutQuery#8caa9a96";
 
     public TLUpdateBotPrecheckoutQuery() {
     }
 
-    public TLUpdateBotPrecheckoutQuery(long queryId, int userId, TLBytes payload, TLPaymentRequestedInfo info, String shippingOptionId, String currency, long totalAmount) {
+    public TLUpdateBotPrecheckoutQuery(long queryId, long userId, TLBytes payload, TLPaymentRequestedInfo info, String shippingOptionId, String currency, long totalAmount) {
         this.queryId = queryId;
         this.userId = userId;
         this.payload = payload;
@@ -74,7 +74,7 @@ public class TLUpdateBotPrecheckoutQuery extends TLAbsUpdate {
 
         writeInt(flags, stream);
         writeLong(queryId, stream);
-        writeInt(userId, stream);
+        writeLong(userId, stream);
         writeTLBytes(payload, stream);
         if ((flags & 1) != 0) {
             if (info == null) throwNullFieldException("info", flags);
@@ -89,14 +89,13 @@ public class TLUpdateBotPrecheckoutQuery extends TLAbsUpdate {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         queryId = readLong(stream);
-        userId = readInt(stream);
+        userId = readLong(stream);
         payload = readTLBytes(stream, context);
         info = (flags & 1) != 0 ? readTLObject(stream, context, TLPaymentRequestedInfo.class,
-                                               TLPaymentRequestedInfo.CONSTRUCTOR_ID) : null;
+                TLPaymentRequestedInfo.CONSTRUCTOR_ID) : null;
         shippingOptionId = (flags & 2) != 0 ? readTLString(stream) : null;
         currency = readTLString(stream);
         totalAmount = readLong(stream);
@@ -109,7 +108,7 @@ public class TLUpdateBotPrecheckoutQuery extends TLAbsUpdate {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
         size += SIZE_INT64;
-        size += SIZE_INT32;
+        size += SIZE_INT64;
         size += computeTLBytesSerializedSize(payload);
         if ((flags & 1) != 0) {
             if (info == null) throwNullFieldException("info", flags);
@@ -142,11 +141,11 @@ public class TLUpdateBotPrecheckoutQuery extends TLAbsUpdate {
         this.queryId = queryId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

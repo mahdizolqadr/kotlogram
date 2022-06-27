@@ -23,8 +23,6 @@ public class TLPhoto extends TLAbsPhoto {
 
     protected boolean hasStickers;
 
-    protected long id;
-
     protected long accessHash;
 
     protected TLBytes fileReference;
@@ -140,16 +138,6 @@ public class TLPhoto extends TLAbsPhoto {
 
     public void setHasStickers(boolean hasStickers) {
         this.hasStickers = hasStickers;
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
     }
 
     public long getAccessHash() {

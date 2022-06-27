@@ -1,16 +1,10 @@
 package com.github.badoualy.telegram.tl.api.contacts;
 
-import com.github.badoualy.telegram.tl.TLContext;
+import com.github.badoualy.telegram.tl.api.TLAbsChat;
 import com.github.badoualy.telegram.tl.api.TLAbsUser;
-import com.github.badoualy.telegram.tl.api.TLContactBlocked;
+import com.github.badoualy.telegram.tl.api.TLPeerBlocked;
 import com.github.badoualy.telegram.tl.core.TLVector;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
-import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 
 /**
@@ -19,35 +13,22 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
  */
 public class TLBlocked extends TLAbsBlocked {
 
-    public static final int CONSTRUCTOR_ID = 0x1c138d15;
+    public static final int CONSTRUCTOR_ID = 0xade1591;
 
-    private final String _constructor = "contacts.blocked#1c138d15";
+    private final String _constructor = "contacts.blocked#ade1591";
 
     public TLBlocked() {
     }
 
-    public TLBlocked(TLVector<TLContactBlocked> blocked, TLVector<TLAbsUser> users) {
-        this.blocked = blocked;
-        this.users = users;
-    }
-
-    @Override
-    public void serializeBody(OutputStream stream) throws IOException {
-        writeTLVector(blocked, stream);
-        writeTLVector(users, stream);
-    }
-
-    @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
-    public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        blocked = readTLVector(stream, context);
-        users = readTLVector(stream, context);
+    public TLBlocked(TLVector<TLPeerBlocked> blocked, TLVector<TLAbsChat> chats, TLVector<TLAbsUser> users) {
+        super(blocked, chats, users);
     }
 
     @Override
     public int computeSerializedSize() {
         int size = SIZE_CONSTRUCTOR_ID;
         size += blocked.computeSerializedSize();
+        size += chats.computeSerializedSize();
         size += users.computeSerializedSize();
         return size;
     }
@@ -60,21 +41,5 @@ public class TLBlocked extends TLAbsBlocked {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
-    }
-
-    public TLVector<TLContactBlocked> getBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(TLVector<TLContactBlocked> blocked) {
-        this.blocked = blocked;
-    }
-
-    public TLVector<TLAbsUser> getUsers() {
-        return users;
-    }
-
-    public void setUsers(TLVector<TLAbsUser> users) {
-        this.users = users;
     }
 }

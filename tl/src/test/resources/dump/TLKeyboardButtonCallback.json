@@ -1,4 +1,6 @@
 {
+  "flags": 1,
+  "requiresPassword": true,
   "data": {
     "data": [
       0,
@@ -28,6 +30,6 @@
     "offset": 0,
     "len": 23
   },
-  "_constructor": "keyboardButtonCallback#683a5e46",
+  "_constructor": "keyboardButtonCallback#35bbdb6b",
   "text": "M6hbUpYjArOe"
 }

@@ -62,6 +62,7 @@ public class TLMessagesSlice extends TLAbsMessages {
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         computeFlags();
+        writeInt(flags, stream);
         writeInt(count, stream);
         if ((flags & 1) != 0) {
             if (nextRate == null) throwNullFieldException("nextRate", flags);
@@ -77,7 +78,7 @@ public class TLMessagesSlice extends TLAbsMessages {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
+    @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         inexact = (flags & 2) != 0;
@@ -119,6 +120,14 @@ public class TLMessagesSlice extends TLAbsMessages {
         return CONSTRUCTOR_ID;
     }
 
+    public boolean isInexact() {
+        return inexact;
+    }
+
+    public void setInexact(boolean inexact) {
+        this.inexact = inexact;
+    }
+
     public int getCount() {
         return count;
     }
@@ -127,27 +136,19 @@ public class TLMessagesSlice extends TLAbsMessages {
         this.count = count;
     }
 
-    public TLVector<TLAbsMessage> getMessages() {
-        return messages;
+    public Integer getNextRate() {
+        return nextRate;
     }
 
-    public void setMessages(TLVector<TLAbsMessage> messages) {
-        this.messages = messages;
+    public void setNextRate(Integer nextRate) {
+        this.nextRate = nextRate;
     }
 
-    public TLVector<TLAbsChat> getChats() {
-        return chats;
+    public Integer getOffsetIdOffset() {
+        return offsetIdOffset;
     }
 
-    public void setChats(TLVector<TLAbsChat> chats) {
-        this.chats = chats;
-    }
-
-    public TLVector<TLAbsUser> getUsers() {
-        return users;
-    }
-
-    public void setUsers(TLVector<TLAbsUser> users) {
-        this.users = users;
+    public void setOffsetIdOffset(Integer offsetIdOffset) {
+        this.offsetIdOffset = offsetIdOffset;
     }
 }

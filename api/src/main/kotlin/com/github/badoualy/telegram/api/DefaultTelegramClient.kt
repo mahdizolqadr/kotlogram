@@ -14,6 +14,7 @@ import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.api.account.TLPassword
 import com.github.badoualy.telegram.tl.api.account.TLPasswordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow
 import com.github.badoualy.telegram.tl.api.auth.TLAuthorization
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputPeer
 import com.github.badoualy.telegram.tl.api.request.*
 import com.github.badoualy.telegram.tl.api.upload.TLAbsFile
 import com.github.badoualy.telegram.tl.api.upload.TLFile
@@ -272,9 +273,7 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
         do {
             methods.clear()
             for (i in 0..5) {
-                methods.add(TLRequestUploadGetFile(inputLocation.inputFileLocation,
-                                                   offset,
-                                                   partSize))
+                methods.add(TLRequestUploadGetFile(inputLocation.inputFileLocation, offset, partSize))
                 offset += partSize
                 if (offset >= size)
                     break
@@ -419,7 +418,7 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
                 val pHash: ByteArray = computeSHA256(algo.p.data)
                 val gHash: ByteArray = computeSHA256(gBytes)
                 for (i in pHash.indices) {
-                    pHash[i] = (gHash[i] xor pHash[i]) as Byte
+                    pHash[i] = (gHash[i] xor pHash[i])
                 }
                 val M1 = computeSHA256(pHash, computeSHA256(algo.salt1.data), computeSHA256(algo.salt2.data), A_bytes, bBytes, K_bytes)
 

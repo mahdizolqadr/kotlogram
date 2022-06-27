@@ -11,12 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.readTLBool;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
-import static com.github.badoualy.telegram.tl.StreamUtils.writeBoolean;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_BOOLEAN;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 
 /**
@@ -39,7 +36,6 @@ public class TLRequestContactsImportContacts extends TLMethod<TLImportedContacts
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public TLImportedContacts deserializeResponse(InputStream stream, TLContext context) throws IOException {
         final TLObject response = readTLObject(stream, context);
         if (response == null) {
@@ -59,7 +55,7 @@ public class TLRequestContactsImportContacts extends TLMethod<TLImportedContacts
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
+    @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         contacts = readTLVector(stream, context);
     }

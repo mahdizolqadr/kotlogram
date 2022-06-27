@@ -1,6 +1,23 @@
 package com.github.badoualy.telegram.api.utils
 
-import com.github.badoualy.telegram.tl.api.*
+import com.github.badoualy.telegram.tl.api.TLAbsInputFileLocation
+import com.github.badoualy.telegram.tl.api.TLAbsMessageMedia
+import com.github.badoualy.telegram.tl.api.TLAbsPhotoSize
+import com.github.badoualy.telegram.tl.api.TLDocument
+import com.github.badoualy.telegram.tl.api.TLGeoPoint
+import com.github.badoualy.telegram.tl.api.TLInputDocumentFileLocation
+import com.github.badoualy.telegram.tl.api.TLMessageMediaContact
+import com.github.badoualy.telegram.tl.api.TLMessageMediaDocument
+import com.github.badoualy.telegram.tl.api.TLMessageMediaEmpty
+import com.github.badoualy.telegram.tl.api.TLMessageMediaGeo
+import com.github.badoualy.telegram.tl.api.TLMessageMediaPhoto
+import com.github.badoualy.telegram.tl.api.TLMessageMediaUnsupported
+import com.github.badoualy.telegram.tl.api.TLMessageMediaVenue
+import com.github.badoualy.telegram.tl.api.TLMessageMediaWebPage
+import com.github.badoualy.telegram.tl.api.TLPhoto
+import com.github.badoualy.telegram.tl.api.TLPhotoCachedSize
+import com.github.badoualy.telegram.tl.api.TLPhotoSize
+import com.github.badoualy.telegram.tl.api.TLWebPage
 import com.github.badoualy.telegram.tl.core.TLBytes
 
 fun TLAbsMessageMedia.getLocation(): TLGeoPoint? = when (this) {
@@ -41,7 +58,10 @@ fun TLMessageMediaDocument.getMediaInput() = when (document) {
     is TLDocument -> {
         val document = document as TLDocument
         //TODO: fix TLInputDocumentFileLocation if method will be required
-        val inputFileLocation = InputFileLocation(TLInputDocumentFileLocation(document.id, document.accessHash, 0), document.dcId)
+        val inputFileLocation = InputFileLocation(
+            TLInputDocumentFileLocation(document.id, document.accessHash, document.fileReference, ""),
+            document.dcId
+        )
         MediaInput(inputFileLocation, document.size, document.mimeType)
     }
     else -> null
@@ -85,35 +105,24 @@ fun TLMessageMediaWebPage.getMediaThumbnailInput() = when (webpage) {
 //TODO: fix getting file location by file id
 fun TLAbsPhotoSize?.getMediaInput() = null
 
-fun Collection<TLAbsPhotoSize>?.getMaxSize(): TLAbsPhotoSize? {
-    if (this == null || isEmpty())
-        return null
-
-    val maxSize = this?.filterIsInstance<TLPhotoSize>().sortedByDescending { it.w * it.h }.firstOrNull()
-    if (maxSize != null)
-        return maxSize
-
-    // No TLPhotoSize, look for cached size
-    return this?.filterIsInstance<TLPhotoCachedSize>().firstOrNull()
+fun Collection<TLAbsPhotoSize>?.getMaxSize() = this?.getFilteredPhotoSize {
+    filterIsInstance<TLPhotoSize>().sortedByDescending { it.w * it.h }.firstOrNull()
+        ?: filterIsInstance<TLPhotoCachedSize>().firstOrNull()
 }
 
-fun Collection<TLAbsPhotoSize>?.getMinSize(): TLAbsPhotoSize? {
-    if (this == null || isEmpty())
-        return null
-
-    // Look for cached size
-    val minSize = this?.filterIsInstance<TLPhotoCachedSize>().firstOrNull()
-    if (minSize != null)
-        return minSize
-
-    return this?.filterIsInstance<TLPhotoSize>().sortedBy { it.w * it.h }.firstOrNull()
+fun Collection<TLAbsPhotoSize>?.getMinSize() = this?.getFilteredPhotoSize {
+    filterIsInstance<TLPhotoCachedSize>().firstOrNull()
+        ?: filterIsInstance<TLPhotoSize>().sortedBy { it.w * it.h }.firstOrNull()
 }
 
-fun TLAbsFileLocation.toInputFileLocation() = when (this) {
-    is TLFileLocation -> InputFileLocation(TLInputFileLocation(volumeId, localId, secret), dcId)
-    is TLFileLocationUnavailable -> null
-    else -> null
-}
+data class MediaInput(
+    val inputFileLocation: InputFileLocation,
+    val size: Int,
+    val mimeType: String,
+    val cached: TLBytes? = null
+)
 
-data class MediaInput(val inputFileLocation: InputFileLocation, val size: Int, val mimeType: String, val cached: TLBytes? = null)
 data class InputFileLocation(val inputFileLocation: TLAbsInputFileLocation, val dcId: Int)
+
+fun Collection<TLAbsPhotoSize>.getFilteredPhotoSize(filter: Collection<TLAbsPhotoSize>.() -> TLAbsPhotoSize?) =
+    if (isNotEmpty()) filter() else null

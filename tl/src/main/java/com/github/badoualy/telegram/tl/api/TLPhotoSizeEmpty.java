@@ -34,7 +34,6 @@ public class TLPhotoSizeEmpty extends TLAbsPhotoSize {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         type = readTLString(stream);
     }
@@ -54,13 +53,5 @@ public class TLPhotoSizeEmpty extends TLAbsPhotoSize {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

@@ -5,9 +5,8 @@ import com.github.badoualy.telegram.mtproto.MTProtoHandler
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.api.auth.TLAuthorization
 import com.github.badoualy.telegram.tl.api.auth.TLSentCode
-import com.github.badoualy.telegram.tl.api.request.TLRequestUploadGetFile
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputPeer
 import com.github.badoualy.telegram.tl.api.upload.TLFile
-import com.github.badoualy.telegram.tl.core.TLBytes
 import com.github.badoualy.telegram.tl.core.TLMethod
 import com.github.badoualy.telegram.tl.core.TLObject
 import com.github.badoualy.telegram.tl.exception.RpcErrorException

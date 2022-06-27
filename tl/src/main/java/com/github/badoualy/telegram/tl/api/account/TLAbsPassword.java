@@ -7,7 +7,7 @@ import com.github.badoualy.telegram.tl.core.TLObject;
  * Abstraction level for the following constructors:
  * <ul>
  * <li>{@link TLNoPassword}: account.noPassword#96dabc18</li>
- * <li>{@link TLPassword}: account.password#7c18141c</li>
+ * <li>{@link TLPassword}: account.password#185b184f</li>
  * </ul>
  *
  * @author Yannick Badoual yann.badoual@gmail.com

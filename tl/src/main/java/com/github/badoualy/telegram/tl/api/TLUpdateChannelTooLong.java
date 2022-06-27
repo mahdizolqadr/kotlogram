@@ -7,9 +7,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -17,20 +20,20 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
  */
 public class TLUpdateChannelTooLong extends TLAbsUpdate {
 
-    public static final int CONSTRUCTOR_ID = 0xeb0467fb;
+    public static final int CONSTRUCTOR_ID = 0x108d941f;
 
     protected int flags;
 
-    protected int channelId;
+    protected long channelId;
 
     protected Integer pts;
 
-    private final String _constructor = "updateChannelTooLong#eb0467fb";
+    private final String _constructor = "updateChannelTooLong#108d941f";
 
     public TLUpdateChannelTooLong() {
     }
 
-    public TLUpdateChannelTooLong(int channelId, Integer pts) {
+    public TLUpdateChannelTooLong(long channelId, Integer pts) {
         this.channelId = channelId;
         this.pts = pts;
     }
@@ -45,7 +48,7 @@ public class TLUpdateChannelTooLong extends TLAbsUpdate {
         computeFlags();
 
         writeInt(flags, stream);
-        writeInt(channelId, stream);
+        writeLong(channelId, stream);
         if ((flags & 1) != 0) {
             if (pts == null) throwNullFieldException("pts", flags);
             writeInt(pts, stream);
@@ -53,10 +56,9 @@ public class TLUpdateChannelTooLong extends TLAbsUpdate {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
-        channelId = readInt(stream);
+        channelId = readLong(stream);
         pts = (flags & 1) != 0 ? readInt(stream) : null;
     }
 
@@ -66,7 +68,7 @@ public class TLUpdateChannelTooLong extends TLAbsUpdate {
 
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
-        size += SIZE_INT32;
+        size += SIZE_INT64;
         if ((flags & 1) != 0) {
             if (pts == null) throwNullFieldException("pts", flags);
             size += SIZE_INT32;
@@ -84,11 +86,11 @@ public class TLUpdateChannelTooLong extends TLAbsUpdate {
         return CONSTRUCTOR_ID;
     }
 
-    public int getChannelId() {
+    public long getChannelId() {
         return channelId;
     }
 
-    public void setChannelId(int channelId) {
+    public void setChannelId(long channelId) {
         this.channelId = channelId;
     }
 

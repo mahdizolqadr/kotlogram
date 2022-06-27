@@ -1,6 +1,7 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
+import com.github.badoualy.telegram.tl.core.TLBytes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,11 +9,14 @@ import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLBytes;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLBytes;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLBytesSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -20,23 +24,23 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
  */
 public class TLInputFileLocation extends TLAbsInputFileLocation {
 
-    public static final int CONSTRUCTOR_ID = 0x14637196;
+    public static final int CONSTRUCTOR_ID = 0xdfdaabe1;
 
     protected long volumeId;
-
     protected int localId;
-
     protected long secret;
+    protected TLBytes fileReference;
 
-    private final String _constructor = "inputFileLocation#14637196";
+    private final String _constructor = "inputFileLocation#dfdaabe1";
 
     public TLInputFileLocation() {
     }
 
-    public TLInputFileLocation(long volumeId, int localId, long secret) {
+    public TLInputFileLocation(long volumeId, int localId, long secret, TLBytes fileReference) {
         this.volumeId = volumeId;
         this.localId = localId;
         this.secret = secret;
+        this.fileReference = fileReference;
     }
 
     @Override
@@ -44,14 +48,15 @@ public class TLInputFileLocation extends TLAbsInputFileLocation {
         writeLong(volumeId, stream);
         writeInt(localId, stream);
         writeLong(secret, stream);
+        writeTLBytes(fileReference, stream);
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         volumeId = readLong(stream);
         localId = readInt(stream);
         secret = readLong(stream);
+        fileReference = readTLBytes(stream, context);
     }
 
     @Override
@@ -60,6 +65,7 @@ public class TLInputFileLocation extends TLAbsInputFileLocation {
         size += SIZE_INT64;
         size += SIZE_INT32;
         size += SIZE_INT64;
+        size += computeTLBytesSerializedSize(fileReference);
         return size;
     }
 
@@ -95,5 +101,13 @@ public class TLInputFileLocation extends TLAbsInputFileLocation {
 
     public void setSecret(long secret) {
         this.secret = secret;
+    }
+
+    public TLBytes getFileReference() {
+        return fileReference;
+    }
+
+    public void setFileReference(TLBytes fileReference) {
+        this.fileReference = fileReference;
     }
 }

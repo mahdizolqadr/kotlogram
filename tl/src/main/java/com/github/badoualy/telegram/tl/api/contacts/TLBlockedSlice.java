@@ -1,8 +1,9 @@
 package com.github.badoualy.telegram.tl.api.contacts;
 
 import com.github.badoualy.telegram.tl.TLContext;
+import com.github.badoualy.telegram.tl.api.TLAbsChat;
 import com.github.badoualy.telegram.tl.api.TLAbsUser;
-import com.github.badoualy.telegram.tl.api.TLContactBlocked;
+import com.github.badoualy.telegram.tl.api.TLPeerBlocked;
 import com.github.badoualy.telegram.tl.core.TLVector;
 
 import java.io.IOException;
@@ -10,9 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
-import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
-import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 
@@ -22,34 +21,30 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
  */
 public class TLBlockedSlice extends TLAbsBlocked {
 
-    public static final int CONSTRUCTOR_ID = 0x900802a1;
+    public static final int CONSTRUCTOR_ID = 0xe1664194;
 
     protected int count;
 
-    private final String _constructor = "contacts.blockedSlice#900802a1";
+    private final String _constructor = "contacts.blockedSlice#e1664194";
 
     public TLBlockedSlice() {
     }
 
-    public TLBlockedSlice(int count, TLVector<TLContactBlocked> blocked, TLVector<TLAbsUser> users) {
+    public TLBlockedSlice(int count, TLVector<TLPeerBlocked> blocked, TLVector<TLAbsChat> chats, TLVector<TLAbsUser> users) {
+        super(blocked, chats, users);
         this.count = count;
-        this.blocked = blocked;
-        this.users = users;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         writeInt(count, stream);
-        writeTLVector(blocked, stream);
-        writeTLVector(users, stream);
+        super.serializeBody(stream);
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         count = readInt(stream);
-        blocked = readTLVector(stream, context);
-        users = readTLVector(stream, context);
+        super.deserializeBody(stream, context);
     }
 
     @Override
@@ -57,6 +52,7 @@ public class TLBlockedSlice extends TLAbsBlocked {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
         size += blocked.computeSerializedSize();
+        size += chats.computeSerializedSize();
         size += users.computeSerializedSize();
         return size;
     }
@@ -77,21 +73,5 @@ public class TLBlockedSlice extends TLAbsBlocked {
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public TLVector<TLContactBlocked> getBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(TLVector<TLContactBlocked> blocked) {
-        this.blocked = blocked;
-    }
-
-    public TLVector<TLAbsUser> getUsers() {
-        return users;
-    }
-
-    public void setUsers(TLVector<TLAbsUser> users) {
-        this.users = users;
     }
 }

@@ -1,14 +1,16 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.api.TLAbsPeer;
 import com.github.badoualy.telegram.tl.core.TLObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 
@@ -17,6 +19,7 @@ public class TLMessageReplyHeader extends TLObject {
     public static final int CONSTRUCTOR_ID = 0xa6d57763;
 
     protected int flags;
+    protected boolean replyToScheduled;
     protected int replyToMsgId;
     protected TLAbsPeer replyToPeerId;
     protected Integer replyToTopId;
@@ -26,7 +29,8 @@ public class TLMessageReplyHeader extends TLObject {
     public TLMessageReplyHeader() {
     }
 
-    public TLMessageReplyHeader(int replyToMsgId, TLAbsPeer replyToPeerId, Integer replyToTopId) {
+    public TLMessageReplyHeader(boolean replyToScheduled, int replyToMsgId, TLAbsPeer replyToPeerId, Integer replyToTopId) {
+        this.replyToScheduled = replyToScheduled;
         this.replyToMsgId = replyToMsgId;
         this.replyToPeerId = replyToPeerId;
         this.replyToTopId = replyToTopId;
@@ -34,6 +38,7 @@ public class TLMessageReplyHeader extends TLObject {
 
     private void computeFlags() {
         flags = 0;
+        flags = replyToScheduled ? (flags | 4) : (flags & ~4);
         flags = replyToPeerId != null ? (flags | 1) : (flags & ~1);
         flags = replyToTopId != null ? (flags | 2) : (flags & ~2);
     }
@@ -54,9 +59,9 @@ public class TLMessageReplyHeader extends TLObject {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
+        replyToScheduled = (flags & 4) != 0;
         replyToMsgId = readInt(stream);
         replyToPeerId = (flags & 1) != 0 ? readTLObject(stream, context, TLAbsPeer.class, -1) : null;
         replyToTopId = (flags & 2) != 0 ? readInt(stream) : null;
@@ -87,6 +92,14 @@ public class TLMessageReplyHeader extends TLObject {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
+    }
+
+    public boolean isReplyToScheduled() {
+        return replyToScheduled;
+    }
+
+    public void setReplyToScheduled(boolean replyToScheduled) {
+        this.replyToScheduled = replyToScheduled;
     }
 
     public int getReplyToMsgId() {

@@ -1,7 +1,8 @@
 package com.github.badoualy.telegram.tl.api.request;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.api.TLAbsWallPaper;
+import com.github.badoualy.telegram.tl.api.account.TLAbsAccountWallPapers;
+import com.github.badoualy.telegram.tl.api.wallpaper.TLAbsWallPaper;
 import com.github.badoualy.telegram.tl.core.TLMethod;
 import com.github.badoualy.telegram.tl.core.TLVector;
 
@@ -14,18 +15,15 @@ import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
  * @author Yannick Badoual yann.badoual@gmail.com
  * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
  */
-public class TLRequestAccountGetWallPapers extends TLMethod<TLVector<TLAbsWallPaper>> {
+public class TLRequestAccountGetWallPapers extends TLMethod<TLVector<TLAbsAccountWallPapers>> {
 
-    public static final int CONSTRUCTOR_ID = 0xc04cfac2;
+    public static final int CONSTRUCTOR_ID = 0x7967d36;
 
-    private final String _constructor = "account.getWallPapers#c04cfac2";
-
-    public TLRequestAccountGetWallPapers() {
-    }
+    private final String _constructor = "account.getWallPapers#7967d36";
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
-    public TLVector<TLAbsWallPaper> deserializeResponse(InputStream stream, TLContext context) throws IOException {
+    @SuppressWarnings({"unchecked"})
+    public TLVector<TLAbsAccountWallPapers> deserializeResponse(InputStream stream, TLContext context) throws IOException {
         return readTLVector(stream, context);
     }
 

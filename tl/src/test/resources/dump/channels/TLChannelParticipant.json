@@ -2,7 +2,7 @@
   "participant": {
     "kickedBy": 0,
     "date": 0,
-    "_constructor": "channelParticipantKicked#8cc5e69a",
+    "_constructor": "channelParticipantBanned#6df8014e",
     "userId": 0
   },
   "users": [

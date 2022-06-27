@@ -6,8 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -24,7 +29,7 @@ public class TLMessageEntityMentionName extends TLAbsMessageEntity {
     public TLMessageEntityMentionName() {
     }
 
-    public TLMessageEntityMentionName(int offset, int length, int userId) {
+    public TLMessageEntityMentionName(int offset, int length, long userId) {
         this.offset = offset;
         this.length = length;
         this.userId = userId;
@@ -38,7 +43,6 @@ public class TLMessageEntityMentionName extends TLAbsMessageEntity {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         offset = readInt(stream);
         length = readInt(stream);
@@ -62,22 +66,6 @@ public class TLMessageEntityMentionName extends TLAbsMessageEntity {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
     }
 
     public long getUserId() {

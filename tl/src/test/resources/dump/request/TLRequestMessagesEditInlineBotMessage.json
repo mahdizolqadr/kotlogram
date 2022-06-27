@@ -41,7 +41,7 @@
   "entities": [
     {
       "userId": 0,
-      "_constructor": "messageEntityMentionName#352dca58",
+      "_constructor": "messageEntityMentionName#dc7b1140",
       "offset": 0,
       "length": 0
     }

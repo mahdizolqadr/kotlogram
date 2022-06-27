@@ -1,6 +1,7 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
+import com.github.badoualy.telegram.tl.api.peer.TLAbsDialogPeer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,43 +20,49 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
  */
 public class TLUpdateDialogPinned extends TLAbsUpdate {
 
-    public static final int CONSTRUCTOR_ID = 0xd711a2cc;
+    public static final int CONSTRUCTOR_ID = 0x6e6fe51c;
 
     protected int flags;
-
     protected boolean pinned;
+    protected Integer folderId;
+    protected TLAbsDialogPeer peer;
 
-    protected TLAbsPeer peer;
-
-    private final String _constructor = "updateDialogPinned#d711a2cc";
+    private final String _constructor = "updateDialogPinned#6e6fe51c";
 
     public TLUpdateDialogPinned() {
     }
 
-    public TLUpdateDialogPinned(boolean pinned, TLAbsPeer peer) {
+    public TLUpdateDialogPinned(boolean pinned, Integer folderId, TLAbsDialogPeer peer) {
         this.pinned = pinned;
+        this.folderId = folderId;
         this.peer = peer;
     }
 
     private void computeFlags() {
         flags = 0;
         flags = pinned ? (flags | 1) : (flags & ~1);
+        flags = folderId != null ? (flags | 2) : (flags & ~2);
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         computeFlags();
-
         writeInt(flags, stream);
+        if ((flags & 2) != 0) {
+            if (folderId == null) {
+                throwNullFieldException("folderId", flags);
+            }
+            writeInt(folderId, stream);
+        }
         writeTLObject(peer, stream);
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         pinned = (flags & 1) != 0;
-        peer = readTLObject(stream, context, TLAbsPeer.class, -1);
+        folderId = (flags & 2) != 0 ? readInt(stream) : null;
+        peer = readTLObject(stream, context, TLAbsDialogPeer.class, -1);
     }
 
     @Override
@@ -64,6 +71,12 @@ public class TLUpdateDialogPinned extends TLAbsUpdate {
 
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
+        if ((flags & 2) != 0) {
+            if (folderId == null) {
+                throwNullFieldException("folderId", flags);
+            }
+            size += SIZE_INT32;
+        }
         size += peer.computeSerializedSize();
         return size;
     }
@@ -86,11 +99,19 @@ public class TLUpdateDialogPinned extends TLAbsUpdate {
         this.pinned = pinned;
     }
 
-    public TLAbsPeer getPeer() {
+    public Integer getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(Integer folderId) {
+        this.folderId = folderId;
+    }
+
+    public TLAbsDialogPeer getPeer() {
         return peer;
     }
 
-    public void setPeer(TLAbsPeer peer) {
+    public void setPeer(TLAbsDialogPeer peer) {
         this.peer = peer;
     }
 }

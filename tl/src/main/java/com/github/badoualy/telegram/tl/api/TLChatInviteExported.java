@@ -9,8 +9,13 @@ import java.io.OutputStream;
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -71,11 +76,38 @@ public class TLChatInviteExported extends TLAbsExportedChatInvite {
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
+        computeFlags();
+        writeInt(flags, stream);
         writeString(link, stream);
+        writeLong(adminId, stream);
+        writeInt(date, stream);
+        if ((flags & 16) != 0) {
+            if (startDate == null) {
+                throwNullFieldException("startDate", flags);
+            }
+            writeInt(startDate, stream);
+        }
+        if ((flags & 2) != 0) {
+            if (expireDate == null) {
+                throwNullFieldException("expireDate", flags);
+            }
+            writeInt(expireDate, stream);
+        }
+        if ((flags & 4) != 0) {
+            if (usageLimit == null) {
+                throwNullFieldException("usageLimit", flags);
+            }
+            writeInt(usageLimit, stream);
+        }
+        if ((flags & 8) != 0) {
+            if (usage == null) {
+                throwNullFieldException("usage", flags);
+            }
+            writeInt(usage, stream);
+        }
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         revoked = (flags & 1) != 0;
@@ -83,26 +115,44 @@ public class TLChatInviteExported extends TLAbsExportedChatInvite {
         link = readTLString(stream);
         adminId = readLong(stream);
         date = readInt(stream);
-        if ((flags & 16) != 0) {
-            startDate = readInt(stream);
-        }
-        if ((flags & 2) != 0) {
-            expireDate =readInt(stream);
-        }
-        if ((flags & 4) != 0) {
-            usageLimit = readInt(stream);
-        }
-        if ((flags & 8) != 0) {
-            usage = readInt(stream);
-        }
+        startDate = (flags & 16) != 0 ? readInt(stream) : null;
+        expireDate = (flags & 2) != 0 ? readInt(stream) : null;
+        usageLimit = (flags & 4) != 0 ? readInt(stream) : null;
+        usage = (flags & 8) != 0 ? readInt(stream) : null;
     }
 
     @Override
     public int computeSerializedSize() {
-        int size = SIZE_CONSTRUCTOR_ID;
         computeFlags();
+        int size = SIZE_CONSTRUCTOR_ID;
+        size += SIZE_INT32;
         size += computeTLStringSerializedSize(link);
         size += SIZE_INT64;
+        size += SIZE_INT32;
+        if ((flags & 16) != 0) {
+            if (startDate == null) {
+                throwNullFieldException("startDate", flags);
+            }
+            size += SIZE_INT32;
+        }
+        if ((flags & 2) != 0) {
+            if (expireDate == null) {
+                throwNullFieldException("expireDate", flags);
+            }
+            size += SIZE_INT32;
+        }
+        if ((flags & 4) != 0) {
+            if (usageLimit == null) {
+                throwNullFieldException("usageLimit", flags);
+            }
+            size += SIZE_INT32;
+        }
+        if ((flags & 8) != 0) {
+            if (usage == null) {
+                throwNullFieldException("usage", flags);
+            }
+            size += SIZE_INT32;
+        }
         return size;
     }
 
@@ -114,14 +164,6 @@ public class TLChatInviteExported extends TLAbsExportedChatInvite {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
     }
 
     @Override
@@ -153,6 +195,14 @@ public class TLChatInviteExported extends TLAbsExportedChatInvite {
 
     public void setPermanent(boolean permanent) {
         this.permanent = permanent;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public long getAdminId() {

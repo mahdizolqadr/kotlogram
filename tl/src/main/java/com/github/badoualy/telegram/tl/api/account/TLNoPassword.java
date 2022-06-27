@@ -19,6 +19,7 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSeria
  * @author Yannick Badoual yann.badoual@gmail.com
  * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
  */
+@Deprecated
 public class TLNoPassword extends TLAbsPassword {
 
     public static final int CONSTRUCTOR_ID = 0x96dabc18;

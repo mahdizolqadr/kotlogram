@@ -1,4 +1,13 @@
 {
+  "flags": 30,
+  "revoked": false,
+  "permanent": false,
   "link": "1ELwuMQGIFPLq7E6jRXScrONW03HR",
-  "_constructor": "chatInviteExported#fc2e05bc"
+  "adminId": 0,
+  "date": 0,
+  "startDate": 0,
+  "expireDate": 0,
+  "usageLimit": 0,
+  "usage": 0,
+  "_constructor": "chatInviteExported#b18105e8"
 }

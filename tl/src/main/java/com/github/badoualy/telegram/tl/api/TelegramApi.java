@@ -1,7 +1,8 @@
 package com.github.badoualy.telegram.tl.api;
 
-import com.github.badoualy.telegram.tl.api.account.TLAbsPassword;
+import com.github.badoualy.telegram.tl.api.account.TLAbsAccountWallPapers;
 import com.github.badoualy.telegram.tl.api.account.TLAuthorizations;
+import com.github.badoualy.telegram.tl.api.account.TLPassword;
 import com.github.badoualy.telegram.tl.api.account.TLPasswordInputSettings;
 import com.github.badoualy.telegram.tl.api.account.TLPasswordSettings;
 import com.github.badoualy.telegram.tl.api.account.TLPrivacyRules;
@@ -50,6 +51,8 @@ import com.github.badoualy.telegram.tl.api.payments.TLPaymentForm;
 import com.github.badoualy.telegram.tl.api.payments.TLPaymentReceipt;
 import com.github.badoualy.telegram.tl.api.payments.TLSavedInfo;
 import com.github.badoualy.telegram.tl.api.payments.TLValidatedRequestedInfo;
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputDialogPeer;
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputPeer;
 import com.github.badoualy.telegram.tl.api.phone.TLPhoneCall;
 import com.github.badoualy.telegram.tl.api.photos.TLAbsPhotos;
 import com.github.badoualy.telegram.tl.api.photos.TLPhoto;
@@ -92,7 +95,7 @@ public interface TelegramApi {
 
     TLAbsPeerNotifySettings accountGetNotifySettings(TLAbsInputNotifyPeer peer) throws RpcErrorException, IOException;
 
-    TLAbsPassword accountGetPassword() throws RpcErrorException, IOException;
+    TLPassword accountGetPassword() throws RpcErrorException, IOException;
 
     TLPasswordSettings accountGetPasswordSettings(TLBytes currentPasswordHash) throws RpcErrorException, IOException;
 
@@ -100,7 +103,7 @@ public interface TelegramApi {
 
     TLTmpPassword accountGetTmpPassword(TLBytes passwordHash, int period) throws RpcErrorException, IOException;
 
-    TLVector<TLAbsWallPaper> accountGetWallPapers() throws RpcErrorException, IOException;
+    TLVector<TLAbsAccountWallPapers> accountGetWallPapers() throws RpcErrorException, IOException;
 
     TLBool accountRegisterDevice(int tokenType, String token) throws RpcErrorException, IOException;
 
@@ -298,6 +301,8 @@ public interface TelegramApi {
 
     TLAbsUpdates messagesDeleteChatUser(long chatId, TLAbsInputUser userId) throws RpcErrorException, IOException;
 
+    TLAbsUpdates messagesDeleteChatUser(boolean revokeHistory, long chatId, TLAbsInputUser userId) throws RpcErrorException, IOException;
+
     TLAffectedHistory messagesDeleteHistory(boolean justClear, TLAbsInputPeer peer, int maxId) throws RpcErrorException, IOException;
 
     TLAffectedMessages messagesDeleteMessages(boolean revoke, TLIntVector id) throws RpcErrorException, IOException;
@@ -314,7 +319,10 @@ public interface TelegramApi {
 
     TLAbsUpdates messagesEditMessage(boolean noWebpage, TLAbsInputPeer peer, int id, String message, TLAbsReplyMarkup replyMarkup, TLVector<TLAbsMessageEntity> entities) throws RpcErrorException, IOException;
 
-    TLAbsExportedChatInvite messagesExportChatInvite(TLAbsInputPeer peer) throws RpcErrorException, IOException;
+    TLChatInviteExported messagesExportChatInvite(TLAbsInputPeer peer) throws RpcErrorException, IOException;
+
+    TLChatInviteExported messagesExportChatInvite(boolean legacyRevokePermanent, TLAbsInputPeer peer,
+                                                  Integer expireDate, Integer usageLimit) throws RpcErrorException, IOException;
 
     TLAbsUpdates messagesForwardMessage(TLAbsInputPeer peer, int id, long randomId) throws RpcErrorException, IOException;
 
@@ -450,9 +458,9 @@ public interface TelegramApi {
 
     TLAbsUpdates messagesStartBot(TLAbsInputUser bot, TLAbsInputPeer peer, long randomId, String startParam) throws RpcErrorException, IOException;
 
-    TLAbsUpdates messagesToggleChatAdmins(long chatId, boolean enabled) throws RpcErrorException, IOException;
+    TLAbsUpdates messagesToggleChatAdmins(int chatId, boolean enabled) throws RpcErrorException, IOException;
 
-    TLBool messagesToggleDialogPin(boolean pinned, TLAbsInputPeer peer) throws RpcErrorException, IOException;
+    TLBool messagesToggleDialogPin(boolean pinned, TLAbsInputDialogPeer peer) throws RpcErrorException, IOException;
 
     TLBool messagesUninstallStickerSet(TLAbsInputStickerSet stickerset) throws RpcErrorException, IOException;
 

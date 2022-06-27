@@ -9,7 +9,7 @@
     "fromId": 0,
     "toId": {
       "userId": 0,
-      "_constructor": "peerUser#9db1bc6d"
+      "_constructor": "peerUser#59511722"
     },
     "fwdFrom": {
       "flags": 7,
@@ -37,7 +37,7 @@
           "accessHash": 0,
           "date": 0,
           "sizes": [],
-          "_constructor": "photo#9288dd29",
+          "_constructor": "photo#fb197a65",
           "id": 0
         },
         "document": {

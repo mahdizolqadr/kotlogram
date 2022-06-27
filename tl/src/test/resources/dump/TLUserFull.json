@@ -36,7 +36,7 @@
         "localId": 0,
         "secret": 0
       },
-      "_constructor": "userProfilePhoto#d559d8c8"
+      "_constructor": "userProfilePhoto#82d1f706"
     },
     "status": {
       "_constructor": "userStatusEmpty#9d05049"
@@ -66,9 +66,20 @@
     "flags": 1,
     "hasStickers": true,
     "accessHash": 0,
+    "fileReference": {
+      "data": [
+        0,
+        0,
+        0
+      ],
+      "offset": 0,
+      "len": 3
+    },
     "date": 0,
     "sizes": [],
-    "_constructor": "photo#9288dd29",
+    "videoSizes": null,
+    "dcId": 0,
+    "_constructor": "photo#fb197a65",
     "id": 0
   },
   "notifySettings": {
@@ -89,7 +100,7 @@
         "_constructor": "botCommand#c27ac8c7"
       }
     ],
-    "_constructor": "botInfo#98e81d3a"
+    "_constructor": "botInfo#1b74b335"
   },
   "commonChatsCount": 0,
   "_constructor": "userFull#f220f3f"

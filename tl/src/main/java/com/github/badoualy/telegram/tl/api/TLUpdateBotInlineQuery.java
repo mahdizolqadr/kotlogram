@@ -25,13 +25,13 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSeria
  */
 public class TLUpdateBotInlineQuery extends TLAbsUpdate {
 
-    public static final int CONSTRUCTOR_ID = 0x54826690;
+    public static final int CONSTRUCTOR_ID = 0x496f379c;
 
     protected int flags;
 
     protected long queryId;
 
-    protected int userId;
+    protected long userId;
 
     protected String query;
 
@@ -39,12 +39,12 @@ public class TLUpdateBotInlineQuery extends TLAbsUpdate {
 
     protected String offset;
 
-    private final String _constructor = "updateBotInlineQuery#54826690";
+    private final String _constructor = "updateBotInlineQuery#496f379c";
 
     public TLUpdateBotInlineQuery() {
     }
 
-    public TLUpdateBotInlineQuery(long queryId, int userId, String query, TLAbsGeoPoint geo, String offset) {
+    public TLUpdateBotInlineQuery(long queryId, long userId, String query, TLAbsGeoPoint geo, String offset) {
         this.queryId = queryId;
         this.userId = userId;
         this.query = query;
@@ -63,7 +63,7 @@ public class TLUpdateBotInlineQuery extends TLAbsUpdate {
 
         writeInt(flags, stream);
         writeLong(queryId, stream);
-        writeInt(userId, stream);
+        writeLong(userId, stream);
         writeString(query, stream);
         if ((flags & 1) != 0) {
             if (geo == null) throwNullFieldException("geo", flags);
@@ -73,11 +73,10 @@ public class TLUpdateBotInlineQuery extends TLAbsUpdate {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         queryId = readLong(stream);
-        userId = readInt(stream);
+        userId = readLong(stream);
         query = readTLString(stream);
         geo = (flags & 1) != 0 ? readTLObject(stream, context, TLAbsGeoPoint.class, -1) : null;
         offset = readTLString(stream);
@@ -90,7 +89,7 @@ public class TLUpdateBotInlineQuery extends TLAbsUpdate {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
         size += SIZE_INT64;
-        size += SIZE_INT32;
+        size += SIZE_INT64;
         size += computeTLStringSerializedSize(query);
         if ((flags & 1) != 0) {
             if (geo == null) throwNullFieldException("geo", flags);
@@ -118,11 +117,11 @@ public class TLUpdateBotInlineQuery extends TLAbsUpdate {
         this.queryId = queryId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

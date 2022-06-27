@@ -1,7 +1,7 @@
 package com.github.badoualy.telegram.tl.api.request;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.api.account.TLAbsPassword;
+import com.github.badoualy.telegram.tl.api.account.TLPassword;
 import com.github.badoualy.telegram.tl.core.TLMethod;
 import com.github.badoualy.telegram.tl.core.TLObject;
 
@@ -14,7 +14,7 @@ import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
  * @author Yannick Badoual yann.badoual@gmail.com
  * @see <a href="http://github.com/badoualy/kotlogram">http://github.com/badoualy/kotlogram</a>
  */
-public class TLRequestAccountGetPassword extends TLMethod<TLAbsPassword> {
+public class TLRequestAccountGetPassword extends TLMethod<TLPassword> {
 
     public static final int CONSTRUCTOR_ID = 0x548a30f5;
 
@@ -24,18 +24,17 @@ public class TLRequestAccountGetPassword extends TLMethod<TLAbsPassword> {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
-    public TLAbsPassword deserializeResponse(InputStream stream, TLContext context) throws IOException {
+    public TLPassword deserializeResponse(InputStream stream, TLContext context) throws IOException {
         final TLObject response = readTLObject(stream, context);
         if (response == null) {
             throw new IOException("Unable to parse response");
         }
-        if (!(response instanceof TLAbsPassword)) {
+        if (!(response instanceof TLPassword)) {
             throw new IOException(
                     "Incorrect response type, expected " + getClass().getCanonicalName() + ", found " + response
                             .getClass().getCanonicalName());
         }
-        return (TLAbsPassword) response;
+        return (TLPassword) response;
     }
 
     @Override

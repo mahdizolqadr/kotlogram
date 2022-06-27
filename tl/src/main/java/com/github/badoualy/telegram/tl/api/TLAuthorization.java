@@ -24,32 +24,25 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSeria
  */
 public class TLAuthorization extends TLObject {
 
-    public static final int CONSTRUCTOR_ID = 0xad01d61d ;
-
-    protected long hash;
+    public static final int CONSTRUCTOR_ID = 0xad01d61d;
 
     protected int flags;
-
+    protected boolean current;
+    protected boolean officialApp;
+    protected boolean passwordPending;
+    protected boolean encryptedRequestsDisabled;
+    protected boolean callRequestsDisabled;
+    protected long hash;
     protected String deviceModel;
-
     protected String platform;
-
     protected String systemVersion;
-
     protected int apiId;
-
     protected String appName;
-
     protected String appVersion;
-
     protected int dateCreated;
-
     protected int dateActive;
-
     protected String ip;
-
     protected String country;
-
     protected String region;
 
     private final String _constructor = "authorization#ad01d61d";
@@ -57,7 +50,15 @@ public class TLAuthorization extends TLObject {
     public TLAuthorization() {
     }
 
-    public TLAuthorization(long hash, int flags, String deviceModel, String platform, String systemVersion, int apiId, String appName, String appVersion, int dateCreated, int dateActive, String ip, String country, String region) {
+    public TLAuthorization(boolean current, boolean officialApp, boolean passwordPending,
+                           boolean encryptedRequestsDisabled, boolean callRequestsDisabled, long hash, int flags,
+                           String deviceModel, String platform, String systemVersion, int apiId, String appName,
+                           String appVersion, int dateCreated, int dateActive, String ip, String country, String region) {
+        this.current = current;
+        this.officialApp = officialApp;
+        this.passwordPending = passwordPending;
+        this.encryptedRequestsDisabled = encryptedRequestsDisabled;
+        this.callRequestsDisabled = callRequestsDisabled;
         this.hash = hash;
         this.flags = flags;
         this.deviceModel = deviceModel;
@@ -73,8 +74,19 @@ public class TLAuthorization extends TLObject {
         this.region = region;
     }
 
+    private void computeFlags() {
+        flags = 0;
+        flags = current ? (flags | 1) : (flags & ~1);
+        flags = officialApp ? (flags | 2) : (flags & ~2);
+        flags = passwordPending ? (flags | 4) : (flags & ~4);
+        flags = encryptedRequestsDisabled ? (flags | 8) : (flags & ~8);
+        flags = callRequestsDisabled ? (flags | 16) : (flags & ~16);
+    }
+
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
+        computeFlags();
+        writeInt(flags, stream);
         writeLong(hash, stream);
         writeInt(flags, stream);
         writeString(deviceModel, stream);
@@ -91,10 +103,14 @@ public class TLAuthorization extends TLObject {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        hash = readLong(stream);
         flags = readInt(stream);
+        current = (flags & 1) != 0;
+        officialApp = (flags & 2) != 0;
+        passwordPending = (flags & 4) != 0;
+        encryptedRequestsDisabled = (flags & 8) != 0;
+        callRequestsDisabled = (flags & 16) != 0;
+        hash = readLong(stream);
         deviceModel = readTLString(stream);
         platform = readTLString(stream);
         systemVersion = readTLString(stream);
@@ -110,9 +126,10 @@ public class TLAuthorization extends TLObject {
 
     @Override
     public int computeSerializedSize() {
+        computeFlags();
         int size = SIZE_CONSTRUCTOR_ID;
-        size += SIZE_INT64;
         size += SIZE_INT32;
+        size += SIZE_INT64;
         size += computeTLStringSerializedSize(deviceModel);
         size += computeTLStringSerializedSize(platform);
         size += computeTLStringSerializedSize(systemVersion);
@@ -135,6 +152,46 @@ public class TLAuthorization extends TLObject {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
+    }
+
+    public boolean isCurrent() {
+        return current;
+    }
+
+    public void setCurrent(boolean current) {
+        this.current = current;
+    }
+
+    public boolean isOfficialApp() {
+        return officialApp;
+    }
+
+    public void setOfficialApp(boolean officialApp) {
+        this.officialApp = officialApp;
+    }
+
+    public boolean isPasswordPending() {
+        return passwordPending;
+    }
+
+    public void setPasswordPending(boolean passwordPending) {
+        this.passwordPending = passwordPending;
+    }
+
+    public boolean isEncryptedRequestsDisabled() {
+        return encryptedRequestsDisabled;
+    }
+
+    public void setEncryptedRequestsDisabled(boolean encryptedRequestsDisabled) {
+        this.encryptedRequestsDisabled = encryptedRequestsDisabled;
+    }
+
+    public boolean isCallRequestsDisabled() {
+        return callRequestsDisabled;
+    }
+
+    public void setCallRequestsDisabled(boolean callRequestsDisabled) {
+        this.callRequestsDisabled = callRequestsDisabled;
     }
 
     public long getHash() {

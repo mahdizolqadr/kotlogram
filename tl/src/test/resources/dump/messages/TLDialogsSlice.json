@@ -7,7 +7,7 @@
       "pinned": true,
       "peer": {
         "userId": 0,
-        "_constructor": "peerUser#9db1bc6d"
+        "_constructor": "peerUser#59511722"
       },
       "topMessage": 0,
       "readInboxMaxId": 0,
@@ -25,7 +25,8 @@
   ],
   "messages": [
     {
-      "_constructor": "messageEmpty#83e5de54",
+      "_constructor": "messageEmpty#90a6ca84",
+      "flags": 0,
       "id": 0
     }
   ],

@@ -2,6 +2,15 @@
   "flags": 0,
   "hasStickers": false,
   "accessHash": 0,
+  "fileReference": {
+    "data": [
+      0,
+      0,
+      0
+    ],
+    "offset": 0,
+    "len": 3
+  },
   "date": 0,
   "sizes": [
     {
@@ -130,6 +139,8 @@
       "type": "j0YyQ2nRUj1YAR3yS"
     }
   ],
-  "_constructor": "photo#9288dd29",
+  "videoSizes": null,
+  "dcId": 0,
+  "_constructor": "photo#fb197a65",
   "id": 0
 }

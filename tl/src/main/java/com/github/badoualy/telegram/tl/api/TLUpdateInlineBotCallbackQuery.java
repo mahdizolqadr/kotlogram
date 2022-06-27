@@ -29,13 +29,13 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSeria
  */
 public class TLUpdateInlineBotCallbackQuery extends TLAbsUpdate {
 
-    public static final int CONSTRUCTOR_ID = 0xf9d27a5a;
+    public static final int CONSTRUCTOR_ID = 0x691e9052;
 
     protected int flags;
 
     protected long queryId;
 
-    protected int userId;
+    protected long userId;
 
     protected TLInputBotInlineMessageID msgId;
 
@@ -45,12 +45,12 @@ public class TLUpdateInlineBotCallbackQuery extends TLAbsUpdate {
 
     protected String gameShortName;
 
-    private final String _constructor = "updateInlineBotCallbackQuery#f9d27a5a";
+    private final String _constructor = "updateInlineBotCallbackQuery#691e9052";
 
     public TLUpdateInlineBotCallbackQuery() {
     }
 
-    public TLUpdateInlineBotCallbackQuery(long queryId, int userId, TLInputBotInlineMessageID msgId, long chatInstance, TLBytes data, String gameShortName) {
+    public TLUpdateInlineBotCallbackQuery(long queryId, long userId, TLInputBotInlineMessageID msgId, long chatInstance, TLBytes data, String gameShortName) {
         this.queryId = queryId;
         this.userId = userId;
         this.msgId = msgId;
@@ -71,7 +71,7 @@ public class TLUpdateInlineBotCallbackQuery extends TLAbsUpdate {
 
         writeInt(flags, stream);
         writeLong(queryId, stream);
-        writeInt(userId, stream);
+        writeLong(userId, stream);
         writeTLObject(msgId, stream);
         writeLong(chatInstance, stream);
         if ((flags & 1) != 0) {
@@ -85,11 +85,10 @@ public class TLUpdateInlineBotCallbackQuery extends TLAbsUpdate {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         queryId = readLong(stream);
-        userId = readInt(stream);
+        userId = readLong(stream);
         msgId = readTLObject(stream, context, TLInputBotInlineMessageID.class,
                              TLInputBotInlineMessageID.CONSTRUCTOR_ID);
         chatInstance = readLong(stream);
@@ -104,7 +103,7 @@ public class TLUpdateInlineBotCallbackQuery extends TLAbsUpdate {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
         size += SIZE_INT64;
-        size += SIZE_INT32;
+        size += SIZE_INT64;
         size += msgId.computeSerializedSize();
         size += SIZE_INT64;
         if ((flags & 1) != 0) {
@@ -136,11 +135,11 @@ public class TLUpdateInlineBotCallbackQuery extends TLAbsUpdate {
         this.queryId = queryId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

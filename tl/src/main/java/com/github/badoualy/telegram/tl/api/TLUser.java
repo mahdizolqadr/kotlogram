@@ -7,8 +7,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -21,55 +33,30 @@ public class TLUser extends TLAbsUser {
     protected int flags;
 
     protected boolean self;
-
     protected boolean contact;
-
     protected boolean mutualContact;
-
     protected boolean deleted;
-
     protected boolean bot;
-
     protected boolean botChatHistory;
-
     protected boolean botNochats;
-
     protected boolean verified;
-
     protected boolean restricted;
-
     protected boolean min;
-
     protected boolean botInlineGeo;
-
     protected boolean support;
-
     protected boolean scam;
-
     protected boolean applyMinPhoto;
-
     protected boolean fake;
-
     protected Long accessHash;
-
     protected String firstName;
-
     protected String lastName;
-
     protected String username;
-
     protected String phone;
-
     protected TLAbsUserProfilePhoto photo;
-
     protected TLAbsUserStatus status;
-
     protected Integer botInfoVersion;
-
     protected TLVector<TLRestrictionReason> restrictionReason;
-
     protected String botInlinePlaceholder;
-
     protected String langCode;
 
     private final String _constructor = "user#3ff6ecb0";
@@ -125,6 +112,10 @@ public class TLUser extends TLAbsUser {
         flags = restricted ? (flags | 262144) : (flags & ~262144);
         flags = min ? (flags | 1048576) : (flags & ~1048576);
         flags = botInlineGeo ? (flags | 2097152) : (flags & ~2097152);
+        flags = support ? (flags | 8388608) : (flags & ~8388608);
+        flags = scam ? (flags | 16777216) : (flags & ~16777216);
+        flags = applyMinPhoto ? (flags | 33554432) : (flags & ~33554432);
+        flags = fake ? (flags | 67108864) : (flags & ~67108864);
         flags = accessHash != null ? (flags | 1) : (flags & ~1);
         flags = firstName != null ? (flags | 2) : (flags & ~2);
         flags = lastName != null ? (flags | 4) : (flags & ~4);
@@ -136,20 +127,11 @@ public class TLUser extends TLAbsUser {
         flags = restrictionReason != null ? (flags | 262144) : (flags & ~262144);
         flags = botInlinePlaceholder != null ? (flags | 524288) : (flags & ~524288);
         flags = langCode != null ? (flags | 4194304) : (flags & ~4194304);
-        flags = support ? (flags | 8388608) : (flags & ~8388608);
-        flags = scam ? (flags | 16777216) : (flags & ~16777216);
-        flags = applyMinPhoto ? (flags | 33554432) : (flags & ~33554432);
-        flags = fake ? (flags | 67108864) : (flags & ~67108864);
-
-        // Following parameters might be forced to true by another field that updated the flags
-        bot = (flags & 16384) != 0;
-        restricted = (flags & 262144) != 0;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         computeFlags();
-
         writeInt(flags, stream);
         writeLong(id, stream);
         if ((flags & 1) != 0) {
@@ -199,7 +181,7 @@ public class TLUser extends TLAbsUser {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
+    @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         self = (flags & 1024) != 0;
@@ -269,7 +251,6 @@ public class TLUser extends TLAbsUser {
             if (botInfoVersion == null) throwNullFieldException("botInfoVersion", flags);
             size += SIZE_INT32;
         }
-        size += restrictionReason.computeSerializedSize();
         if ((flags & 262144) != 0) {
             if (restrictionReason == null) throwNullFieldException("restrictionReason", flags);
             size += restrictionReason.computeSerializedSize();
@@ -295,7 +276,7 @@ public class TLUser extends TLAbsUser {
         return CONSTRUCTOR_ID;
     }
 
-    public boolean getSelf() {
+    public boolean isSelf() {
         return self;
     }
 
@@ -303,7 +284,7 @@ public class TLUser extends TLAbsUser {
         this.self = self;
     }
 
-    public boolean getContact() {
+    public boolean isContact() {
         return contact;
     }
 
@@ -311,7 +292,7 @@ public class TLUser extends TLAbsUser {
         this.contact = contact;
     }
 
-    public boolean getMutualContact() {
+    public boolean isMutualContact() {
         return mutualContact;
     }
 
@@ -319,7 +300,7 @@ public class TLUser extends TLAbsUser {
         this.mutualContact = mutualContact;
     }
 
-    public boolean getDeleted() {
+    public boolean isDeleted() {
         return deleted;
     }
 
@@ -327,7 +308,7 @@ public class TLUser extends TLAbsUser {
         this.deleted = deleted;
     }
 
-    public boolean getBot() {
+    public boolean isBot() {
         return bot;
     }
 
@@ -335,7 +316,7 @@ public class TLUser extends TLAbsUser {
         this.bot = bot;
     }
 
-    public boolean getBotChatHistory() {
+    public boolean isBotChatHistory() {
         return botChatHistory;
     }
 
@@ -343,7 +324,7 @@ public class TLUser extends TLAbsUser {
         this.botChatHistory = botChatHistory;
     }
 
-    public boolean getBotNochats() {
+    public boolean isBotNochats() {
         return botNochats;
     }
 
@@ -351,7 +332,7 @@ public class TLUser extends TLAbsUser {
         this.botNochats = botNochats;
     }
 
-    public boolean getVerified() {
+    public boolean isVerified() {
         return verified;
     }
 
@@ -359,7 +340,7 @@ public class TLUser extends TLAbsUser {
         this.verified = verified;
     }
 
-    public boolean getRestricted() {
+    public boolean isRestricted() {
         return restricted;
     }
 
@@ -367,7 +348,7 @@ public class TLUser extends TLAbsUser {
         this.restricted = restricted;
     }
 
-    public boolean getMin() {
+    public boolean isMin() {
         return min;
     }
 
@@ -375,7 +356,7 @@ public class TLUser extends TLAbsUser {
         this.min = min;
     }
 
-    public boolean getBotInlineGeo() {
+    public boolean isBotInlineGeo() {
         return botInlineGeo;
     }
 
@@ -383,12 +364,36 @@ public class TLUser extends TLAbsUser {
         this.botInlineGeo = botInlineGeo;
     }
 
-    public long getId() {
-        return id;
+    public boolean isSupport() {
+        return support;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setSupport(boolean support) {
+        this.support = support;
+    }
+
+    public boolean isScam() {
+        return scam;
+    }
+
+    public void setScam(boolean scam) {
+        this.scam = scam;
+    }
+
+    public boolean isApplyMinPhoto() {
+        return applyMinPhoto;
+    }
+
+    public void setApplyMinPhoto(boolean applyMinPhoto) {
+        this.applyMinPhoto = applyMinPhoto;
+    }
+
+    public boolean isFake() {
+        return fake;
+    }
+
+    public void setFake(boolean fake) {
+        this.fake = fake;
     }
 
     public Long getAccessHash() {

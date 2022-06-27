@@ -3,7 +3,7 @@
   "chats": [
     {
       "title": "gkYRj9t1GI659UxVFAemUCJRFYuq",
-      "_constructor": "chatForbidden#7328bdb",
+      "_constructor": "chatForbidden#6592a1a7",
       "id": 0
     }
   ],
@@ -42,7 +42,7 @@
           "localId": 0,
           "secret": 0
         },
-        "_constructor": "userProfilePhoto#d559d8c8"
+        "_constructor": "userProfilePhoto#82d1f706"
       },
       "status": {
         "_constructor": "userStatusLastMonth#77ebc742"

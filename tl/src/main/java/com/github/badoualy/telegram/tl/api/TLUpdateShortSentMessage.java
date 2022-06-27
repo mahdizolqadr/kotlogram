@@ -193,4 +193,12 @@ public class TLUpdateShortSentMessage extends TLAbsUpdates {
     public void setEntities(TLVector<TLAbsMessageEntity> entities) {
         this.entities = entities;
     }
+
+    public Integer getTtlPeriod() {
+        return ttlPeriod;
+    }
+
+    public void setTtlPeriod(Integer ttlPeriod) {
+        this.ttlPeriod = ttlPeriod;
+    }
 }

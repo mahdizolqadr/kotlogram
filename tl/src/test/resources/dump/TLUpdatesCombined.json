@@ -20,7 +20,7 @@
       "action": {
         "_constructor": "sendMessageCancelAction#fd5ec8f5"
       },
-      "_constructor": "updateChatUserTyping#9a65ea1f"
+      "_constructor": "updateChatUserTyping#83487af0"
     }
   ],
   "users": [
@@ -56,7 +56,7 @@
           "localId": 0,
           "secret": 0
         },
-        "_constructor": "userProfilePhoto#d559d8c8"
+        "_constructor": "userProfilePhoto#82d1f706"
       },
       "status": {
         "_constructor": "userStatusRecently#e26f42f1"

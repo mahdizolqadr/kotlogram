@@ -26,6 +26,7 @@ public class TLPassword extends TLAbsPassword {
     protected TLBytes srpB;
     protected Long srpId;
     protected String hint;
+    protected String emailUnconfirmedPattern;
     protected TLAbsPasswordKdfAlgo newAlgo;
     protected TLAbsSecurePasswordKdfAlgo newSecureAlgo;
     protected TLBytes secureRandom;
@@ -37,9 +38,9 @@ public class TLPassword extends TLAbsPassword {
     }
 
     public TLPassword(boolean hasRecovery, boolean hasSecureValues, boolean hasPassword,
-                      TLAbsPasswordKdfAlgo currentAlgo, TLBytes srpB, long srpId,
-                      String hint, TLAbsPasswordKdfAlgo newAlgo, TLAbsSecurePasswordKdfAlgo newSecureAlgo,
-                      TLBytes secureRandom, int pendingResetDate) {
+                      TLAbsPasswordKdfAlgo currentAlgo, TLBytes srpB, long srpId, String hint,
+                      String emailUnconfirmedPattern, TLAbsPasswordKdfAlgo newAlgo,
+                      TLAbsSecurePasswordKdfAlgo newSecureAlgo, TLBytes secureRandom, int pendingResetDate) {
         this.hasRecovery = hasRecovery;
         this.hasSecureValues = hasSecureValues;
         this.hasPassword = hasPassword;
@@ -47,6 +48,7 @@ public class TLPassword extends TLAbsPassword {
         this.srpB = srpB;
         this.srpId = srpId;
         this.hint = hint;
+        this.emailUnconfirmedPattern = emailUnconfirmedPattern;
         this.newAlgo = newAlgo;
         this.newSecureAlgo = newSecureAlgo;
         this.secureRandom = secureRandom;
@@ -96,7 +98,6 @@ public class TLPassword extends TLAbsPassword {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         hasRecovery = (flags & 1) != 0;
@@ -128,11 +129,11 @@ public class TLPassword extends TLAbsPassword {
         }
         if ((flags & 8) != 0) {
             if (hint == null) throwNullFieldException("hint", flags);
-            computeTLStringSerializedSize(hint);
+            size += computeTLStringSerializedSize(hint);
         }
         if ((flags & 16) != 0) {
             if (emailUnconfirmedPattern == null) throwNullFieldException("emailUnconfirmedPattern", flags);
-            computeTLStringSerializedSize(emailUnconfirmedPattern);
+            size += computeTLStringSerializedSize(emailUnconfirmedPattern);
         }
         size += newAlgo.computeSerializedSize();
         size += newSecureAlgo.computeSerializedSize();
@@ -208,6 +209,16 @@ public class TLPassword extends TLAbsPassword {
 
     public void setHint(String hint) {
         this.hint = hint;
+    }
+
+    @Override
+    public String getEmailUnconfirmedPattern() {
+        return emailUnconfirmedPattern;
+    }
+
+    @Override
+    public void setEmailUnconfirmedPattern(String emailUnconfirmedPattern) {
+        this.emailUnconfirmedPattern = emailUnconfirmedPattern;
     }
 
     public TLAbsPasswordKdfAlgo getNewAlgo() {

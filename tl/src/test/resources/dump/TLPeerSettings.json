@@ -1,5 +1,13 @@
 {
   "flags": 0,
   "reportSpam": false,
-  "_constructor": "peerSettings#818426cd"
+  "addContact": false,
+  "blockContact": false,
+  "shareContact": false,
+  "needContactsException": false,
+  "reportGeo": false,
+  "autoarchived": false,
+  "inviteMembers": false,
+  "geoDistance": false,
+  "_constructor": "peerSettings#733f2961"
 }

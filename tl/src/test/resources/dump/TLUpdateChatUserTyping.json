@@ -4,5 +4,5 @@
   "action": {
     "_constructor": "sendMessageTypingAction#16bf744e"
   },
-  "_constructor": "updateChatUserTyping#9a65ea1f"
+  "_constructor": "updateChatUserTyping#83487af0"
 }

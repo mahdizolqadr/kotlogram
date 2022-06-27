@@ -1,18 +1,22 @@
 package com.github.badoualy.telegram.tl.api;
 
 import com.github.badoualy.telegram.tl.TLContext;
+import com.github.badoualy.telegram.tl.core.TLBytes;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
 import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
-import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLBytes;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLBytes;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLBytesSerializedSize;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -20,38 +24,39 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
  */
 public class TLInputDocumentFileLocation extends TLAbsInputFileLocation {
 
-    public static final int CONSTRUCTOR_ID = 0x430f0724;
+    public static final int CONSTRUCTOR_ID = 0xbad07584;
 
     protected long id;
-
     protected long accessHash;
+    protected TLBytes fileReference;
+    protected String thumbSize;
 
-    protected int version;
-
-    private final String _constructor = "inputDocumentFileLocation#430f0724";
+    private final String _constructor = "inputDocumentFileLocation#bad07584";
 
     public TLInputDocumentFileLocation() {
     }
 
-    public TLInputDocumentFileLocation(long id, long accessHash, int version) {
+    public TLInputDocumentFileLocation(long id, long accessHash, TLBytes fileReference, String thumbSize) {
         this.id = id;
         this.accessHash = accessHash;
-        this.version = version;
+        this.fileReference = fileReference;
+        this.thumbSize = thumbSize;
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
         writeLong(id, stream);
         writeLong(accessHash, stream);
-        writeInt(version, stream);
+        writeTLBytes(fileReference, stream);
+        writeString(thumbSize, stream);
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         id = readLong(stream);
         accessHash = readLong(stream);
-        version = readInt(stream);
+        fileReference = readTLBytes(stream, context);
+        thumbSize = readTLString(stream);
     }
 
     @Override
@@ -59,7 +64,8 @@ public class TLInputDocumentFileLocation extends TLAbsInputFileLocation {
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT64;
         size += SIZE_INT64;
-        size += SIZE_INT32;
+        size += computeTLBytesSerializedSize(fileReference);
+        size += computeTLStringSerializedSize(thumbSize);
         return size;
     }
 
@@ -89,11 +95,19 @@ public class TLInputDocumentFileLocation extends TLAbsInputFileLocation {
         this.accessHash = accessHash;
     }
 
-    public int getVersion() {
-        return version;
+    public TLBytes getFileReference() {
+        return fileReference;
     }
 
-    public void setVersion(int version) {
-        this.version = version;
+    public void setFileReference(TLBytes fileReference) {
+        this.fileReference = fileReference;
+    }
+
+    public String getThumbSize() {
+        return thumbSize;
+    }
+
+    public void setThumbSize(String thumbSize) {
+        this.thumbSize = thumbSize;
     }
 }

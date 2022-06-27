@@ -1,7 +1,7 @@
 package com.github.badoualy.telegram.tl.api.request;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.api.TLAbsInputPeer;
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputDialogPeer;
 import com.github.badoualy.telegram.tl.core.TLBool;
 import com.github.badoualy.telegram.tl.core.TLMethod;
 import com.github.badoualy.telegram.tl.core.TLObject;
@@ -23,26 +23,25 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
  */
 public class TLRequestMessagesToggleDialogPin extends TLMethod<TLBool> {
 
-    public static final int CONSTRUCTOR_ID = 0x3289be6a;
+    public static final int CONSTRUCTOR_ID = 0xa731e257;
 
     protected int flags;
 
     protected boolean pinned;
 
-    protected TLAbsInputPeer peer;
+    protected TLAbsInputDialogPeer peer;
 
-    private final String _constructor = "messages.toggleDialogPin#3289be6a";
+    private final String _constructor = "messages.toggleDialogPin#a731e257";
 
     public TLRequestMessagesToggleDialogPin() {
     }
 
-    public TLRequestMessagesToggleDialogPin(boolean pinned, TLAbsInputPeer peer) {
+    public TLRequestMessagesToggleDialogPin(boolean pinned, TLAbsInputDialogPeer peer) {
         this.pinned = pinned;
         this.peer = peer;
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public TLBool deserializeResponse(InputStream stream, TLContext context) throws IOException {
         final TLObject response = readTLObject(stream, context);
         if (response == null) {
@@ -70,11 +69,10 @@ public class TLRequestMessagesToggleDialogPin extends TLMethod<TLBool> {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         pinned = (flags & 1) != 0;
-        peer = readTLObject(stream, context, TLAbsInputPeer.class, -1);
+        peer = readTLObject(stream, context, TLAbsInputDialogPeer.class, -1);
     }
 
     @Override
@@ -105,11 +103,11 @@ public class TLRequestMessagesToggleDialogPin extends TLMethod<TLBool> {
         this.pinned = pinned;
     }
 
-    public TLAbsInputPeer getPeer() {
+    public TLAbsInputDialogPeer getPeer() {
         return peer;
     }
 
-    public void setPeer(TLAbsInputPeer peer) {
+    public void setPeer(TLAbsInputDialogPeer peer) {
         this.peer = peer;
     }
 }

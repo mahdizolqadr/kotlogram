@@ -88,9 +88,9 @@ private fun createType(typeName: String, types: Map<String, TLTypeRaw>, isParame
         val groups = flagRegex.matchEntire(typeName)?.groups
         val maskName = groups?.get(1)?.value ?: throw RuntimeException(
                 "Unknown error with type $typeName")
-        val value = groups?.get(2)?.value?.toInt() ?: throw RuntimeException(
+        val value = groups.get(2)?.value?.toInt() ?: throw RuntimeException(
                 "Unknown error with type $typeName")
-        val realType = groups?.get(3)?.value ?: throw RuntimeException(
+        val realType = groups.get(3)?.value ?: throw RuntimeException(
                 "Unknown error with type $typeName")
         if (maskName != "flags") throw RuntimeException("Unsupported flag name, expected `flags`")
 
@@ -100,7 +100,7 @@ private fun createType(typeName: String, types: Map<String, TLTypeRaw>, isParame
         val groups = genericRegex.matchEntire(typeName)?.groups
         val tlName: String = groups?.get(1)?.value ?: throw RuntimeException(
                 "Unknown error with type $typeName")
-        val genericName: String = groups?.get(2)?.value ?: throw RuntimeException(
+        val genericName: String = groups.get(2)?.value ?: throw RuntimeException(
                 "Unknown error with type $typeName")
         if (!SupportedGenericTypes.contains(tlName)) throw RuntimeException(
                 "Unsupported generic type $tlName")

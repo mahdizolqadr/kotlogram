@@ -25,7 +25,7 @@ public class TLCodeSettings extends TLObject {
 
     protected boolean allowAppHash;
 
-    private final String _constructor = "auth.sendCode#debebe83";
+    private final String _constructor = "codeSettings#debebe83";
 
     public TLCodeSettings() {
     }
@@ -39,8 +39,6 @@ public class TLCodeSettings extends TLObject {
     private void computeFlags() {
         flags = 0;
         flags = allowFlashcall ? (flags | 1) : (flags & ~1);
-        // If field is not serialized force it to false
-        if (currentNumber && (flags & 1) == 0) currentNumber = false;
         flags = currentNumber ? (flags | 2) : (flags & ~2);
         flags = allowAppHash ? (flags | 16) : (flags & ~16);
     }
@@ -52,11 +50,10 @@ public class TLCodeSettings extends TLObject {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         allowFlashcall = (flags & 1) != 0;
-        currentNumber = (flags & 1) != 0  && (flags & 2) != 0;
+        currentNumber = (flags & 2) != 0;
         allowAppHash = (flags & 16) != 0;
     }
 

@@ -1,10 +1,10 @@
 package com.github.badoualy.telegram.tl.api.request;
 
 import com.github.badoualy.telegram.tl.TLContext;
-import com.github.badoualy.telegram.tl.api.TLAbsInputPeer;
 import com.github.badoualy.telegram.tl.api.TLAbsMessageEntity;
 import com.github.badoualy.telegram.tl.api.TLAbsReplyMarkup;
 import com.github.badoualy.telegram.tl.api.TLAbsUpdates;
+import com.github.badoualy.telegram.tl.api.peer.TLAbsInputPeer;
 import com.github.badoualy.telegram.tl.core.TLMethod;
 import com.github.badoualy.telegram.tl.core.TLObject;
 import com.github.badoualy.telegram.tl.core.TLVector;
@@ -13,8 +13,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLVector;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLVector;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -23,7 +35,7 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
 public class TLRequestMessagesSendMessage extends TLMethod<TLAbsUpdates> {
 
     public static final int CONSTRUCTOR_ID = 0x520c3870;
-    private final String _constructor = "messages.sendMessage#520c3870";
+
     protected int flags;
     protected boolean noWebpage;
     protected boolean silent;
@@ -37,6 +49,8 @@ public class TLRequestMessagesSendMessage extends TLMethod<TLAbsUpdates> {
     protected TLVector<TLAbsMessageEntity> entities;
     protected Integer scheduleDate;
 
+    private final String _constructor = "messages.sendMessage#520c3870";
+
     public TLRequestMessagesSendMessage() {
     }
 
@@ -44,7 +58,6 @@ public class TLRequestMessagesSendMessage extends TLMethod<TLAbsUpdates> {
                                         boolean clearDraft, TLAbsInputPeer peer, Integer replyToMsgId,
                                         String message, long randomId, TLAbsReplyMarkup replyMarkup,
                                         TLVector<TLAbsMessageEntity> entities, Integer scheduleDate) {
-        this.flags = flags;
         this.noWebpage = noWebpage;
         this.silent = silent;
         this.background = background;
@@ -59,7 +72,6 @@ public class TLRequestMessagesSendMessage extends TLMethod<TLAbsUpdates> {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public TLAbsUpdates deserializeResponse(InputStream stream, TLContext context) throws IOException {
         final TLObject response = readTLObject(stream, context);
         if (response == null) {
@@ -105,10 +117,16 @@ public class TLRequestMessagesSendMessage extends TLMethod<TLAbsUpdates> {
             if (entities == null) throwNullFieldException("entities", flags);
             writeTLVector(entities, stream);
         }
+        if ((flags & 1024) != 0) {
+            if (scheduleDate == null) {
+                throwNullFieldException("scheduleDate", flags);
+            }
+            writeInt(scheduleDate, stream);
+        }
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
+    @SuppressWarnings({"unchecked"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         noWebpage = (flags & 2) != 0;
@@ -121,12 +139,12 @@ public class TLRequestMessagesSendMessage extends TLMethod<TLAbsUpdates> {
         randomId = readLong(stream);
         replyMarkup = (flags & 4) != 0 ? readTLObject(stream, context, TLAbsReplyMarkup.class, -1) : null;
         entities = (flags & 8) != 0 ? readTLVector(stream, context) : null;
+        scheduleDate = (flags & 1024) != 0 ? readInt(stream) : null;
     }
 
     @Override
     public int computeSerializedSize() {
         computeFlags();
-
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
         size += peer.computeSerializedSize();
@@ -144,6 +162,12 @@ public class TLRequestMessagesSendMessage extends TLMethod<TLAbsUpdates> {
             if (entities == null) throwNullFieldException("entities", flags);
             size += entities.computeSerializedSize();
         }
+        if ((flags & 1024) != 0) {
+            if (scheduleDate == null) {
+                throwNullFieldException("scheduleDate", flags);
+            }
+            size += SIZE_INT32;
+        }
         return size;
     }
 
@@ -155,22 +179,6 @@ public class TLRequestMessagesSendMessage extends TLMethod<TLAbsUpdates> {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
-    }
-
-    public boolean getNoWebpage() {
-        return noWebpage;
-    }
-
-    public boolean getSilent() {
-        return silent;
-    }
-
-    public boolean getBackground() {
-        return background;
-    }
-
-    public boolean getClearDraft() {
-        return clearDraft;
     }
 
     public TLAbsInputPeer getPeer() {

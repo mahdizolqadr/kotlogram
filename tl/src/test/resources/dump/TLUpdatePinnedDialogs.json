@@ -2,9 +2,12 @@
   "flags": 1,
   "order": [
     {
-      "chatId": 0,
-      "_constructor": "peerChat#bad0e5bb"
+      "peer": {
+        "chatId": 0,
+        "_constructor": "peerChat#36c6019a"
+      },
+      "_constructor": "dialogPeer#e56dbf05"
     }
   ],
-  "_constructor": "updatePinnedDialogs#d8caf68d"
+  "_constructor": "updatePinnedDialogs#fa0f3ca2"
 }

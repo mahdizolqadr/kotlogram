@@ -5,7 +5,7 @@ import com.github.badoualy.telegram.tl.core.TLObject;
 /**
  * Abstraction level for the following constructors:
  * <ul>
- * <li>{@link TLPeerNotifySettings}: peerNotifySettings#9acda4c0</li>
+ * <li>{@link TLPeerNotifySettings}: peerNotifySettings#af509d20</li>
  * <li>{@link TLPeerNotifySettingsEmpty}: peerNotifySettingsEmpty#70a68512</li>
  * </ul>
  *

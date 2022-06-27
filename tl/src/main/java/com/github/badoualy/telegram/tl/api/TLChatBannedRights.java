@@ -7,11 +7,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 
 public class TLChatBannedRights extends TLObject {
-
 
     public static final int CONSTRUCTOR_ID = 0x9f120418;
     protected int flags;
@@ -74,16 +75,10 @@ public class TLChatBannedRights extends TLObject {
     public void serializeBody(OutputStream stream) throws IOException {
         computeFlags();
         writeInt(flags, stream);
-
-
-
-
-
         writeInt(untilDate, stream);
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         viewMessages = (flags & 1) != 0;
@@ -98,6 +93,7 @@ public class TLChatBannedRights extends TLObject {
         changeInfo = (flags & 1024) != 0;
         inviteUsers = (flags & 32768) != 0;
         pinMessages = (flags & 131072) != 0;
+        untilDate = readInt(stream);
     }
 
     @Override

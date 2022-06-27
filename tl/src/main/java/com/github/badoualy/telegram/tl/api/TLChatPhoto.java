@@ -52,13 +52,15 @@ public class TLChatPhoto extends TLAbsChatPhoto {
         writeInt(flags, stream);
         writeLong(photoId, stream);
         if ((flags & 2) != 0) {
+            if (strippedThumb == null) {
+                throwNullFieldException("strippedThumb", flags);
+            }
             writeTLBytes(strippedThumb, stream);
         }
         writeInt(dcId, stream);
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         hasVideo = (flags & 1) != 0;
@@ -71,12 +73,13 @@ public class TLChatPhoto extends TLAbsChatPhoto {
     public int computeSerializedSize() {
         computeFlags();
         int size = SIZE_CONSTRUCTOR_ID;
-        if ((flags & 1) != 0) {
-            size += SIZE_BOOLEAN;
-        }
+        size += SIZE_INT32;
         size += SIZE_INT64;
         if ((flags & 2) != 0) {
-            computeTLBytesSerializedSize(strippedThumb);
+            if (strippedThumb == null) {
+                throwNullFieldException("strippedThumb", flags);
+            }
+            size += computeTLBytesSerializedSize(strippedThumb);
         }
         size += SIZE_INT32;
         return size;

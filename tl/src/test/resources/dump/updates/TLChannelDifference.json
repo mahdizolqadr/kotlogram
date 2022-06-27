@@ -1,7 +1,8 @@
 {
   "newMessages": [
     {
-      "_constructor": "messageEmpty#83e5de54",
+      "_constructor": "messageEmpty#90a6ca84",
+      "flags": 0,
       "id": 0
     }
   ],
@@ -34,7 +35,7 @@
       "date": 0,
       "version": 0,
       "restrictionReason": "OhdwPawNbG7N14F7zeJjgePv7",
-      "_constructor": "channel#a14dca52",
+      "_constructor": "channel#8261ac61",
       "id": 0
     }
   ],

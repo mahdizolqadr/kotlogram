@@ -52,9 +52,8 @@ public class TLMessageService extends TLAbsMessage {
     public TLMessageService() {
     }
 
-    public TLMessageService(boolean out, boolean mentioned, boolean mediaUnread,
-                            boolean silent, boolean post, boolean legacy,
-                            TLAbsPeer fromId, TLAbsPeer peerId, TLMessageReplyHeader replyTo,
+    public TLMessageService(boolean out, boolean mentioned, boolean mediaUnread, boolean silent, boolean post,
+                            boolean legacy, int id, TLAbsPeer fromId, TLAbsPeer peerId, TLMessageReplyHeader replyTo,
                             int date, TLAbsMessageAction action, Integer ttlPeriod) {
         this.out = out;
         this.mentioned = mentioned;
@@ -62,6 +61,7 @@ public class TLMessageService extends TLAbsMessage {
         this.silent = silent;
         this.post = post;
         this.legacy = legacy;
+        this.id = id;
         this.fromId = fromId;
         this.peerId = peerId;
         this.replyTo = replyTo;
@@ -106,7 +106,6 @@ public class TLMessageService extends TLAbsMessage {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         out = (flags & 2) != 0;

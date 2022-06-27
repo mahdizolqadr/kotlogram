@@ -20,7 +20,6 @@ public class TLInputEncryptedFileLocation extends TLAbsInputFileLocation {
     public static final int CONSTRUCTOR_ID = 0xf5235d55;
 
     protected long id;
-
     protected long accessHash;
 
     private final String _constructor = "inputEncryptedFileLocation#f5235d55";

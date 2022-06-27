@@ -7,9 +7,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.badoualy.telegram.tl.StreamUtils.readInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLObject;
+import static com.github.badoualy.telegram.tl.StreamUtils.readTLString;
 import static com.github.badoualy.telegram.tl.StreamUtils.writeInt;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeString;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeTLObject;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
 import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.computeTLStringSerializedSize;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -17,32 +25,60 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
  */
 public class TLChannelParticipantCreator extends TLAbsChannelParticipant {
 
-    public static final int CONSTRUCTOR_ID = 0xe3e2e1f9;
+    public static final int CONSTRUCTOR_ID = 0x2fe601d3;
 
-    private final String _constructor = "channelParticipantCreator#e3e2e1f9";
+    protected int flags;
+
+    protected TLChatAdminRights adminRights;
+
+    protected String rank;
+
+    private final String _constructor = "channelParticipantCreator#2fe601d3";
 
     public TLChannelParticipantCreator() {
     }
 
-    public TLChannelParticipantCreator(int userId) {
+    public TLChannelParticipantCreator(long userId, TLChatAdminRights adminRights, String rank) {
         this.userId = userId;
+        this.adminRights = adminRights;
+        this.rank = rank;
+    }
+
+    private void computeFlags() {
+        flags = rank != null ? (flags | 1) : (flags & ~1);
     }
 
     @Override
     public void serializeBody(OutputStream stream) throws IOException {
-        writeInt(userId, stream);
+        computeFlags();
+        writeInt(flags, stream);
+        writeLong(userId, stream);
+        writeTLObject(adminRights, stream);
+        if ((flags & 1) != 0) {
+            writeString(rank, stream);
+        }
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        userId = readInt(stream);
+        flags = readInt(stream);
+        userId = readLong(stream);
+        adminRights = readTLObject(stream, context, TLChatAdminRights.class, TLChatAdminRights.CONSTRUCTOR_ID);
+        if ((flags & 1) != 0) {
+            rank = readTLString(stream);
+        }
     }
 
     @Override
     public int computeSerializedSize() {
+        computeFlags();
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
+        size += SIZE_INT64;
+        size += adminRights.computeSerializedSize();
+        if ((flags & 1) != 0) {
+            size += computeTLStringSerializedSize(rank);
+        }
         return size;
     }
 
@@ -56,11 +92,19 @@ public class TLChannelParticipantCreator extends TLAbsChannelParticipant {
         return CONSTRUCTOR_ID;
     }
 
-    public int getUserId() {
-        return userId;
+    public TLChatAdminRights getAdminRights() {
+        return adminRights;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setAdminRights(TLChatAdminRights adminRights) {
+        this.adminRights = adminRights;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
     }
 }

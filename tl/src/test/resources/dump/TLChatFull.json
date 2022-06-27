@@ -5,7 +5,7 @@
     "_constructor": "chatParticipants#3f460fed",
     "chatId": 0
   },
-  "_constructor": "chatFull#2e02a614",
+  "_constructor": "chatFull#4dbdc099",
   "id": 0,
   "chatPhoto": {
     "flags": 0,
@@ -68,22 +68,31 @@
         "type": "B30NvlnxjQAZ"
       }
     ],
-    "_constructor": "photo#9288dd29",
+    "_constructor": "photo#fb197a65",
     "id": 0
   },
   "notifySettings": {
     "_constructor": "peerNotifySettingsEmpty#70a68512"
   },
   "exportedInvite": {
+    "flags": 30,
+    "revoked": false,
+    "permanent": false,
     "link": "Xv29m7cwUYYS9Dg5G8tJo",
-    "_constructor": "chatInviteExported#fc2e05bc"
+    "adminId": 0,
+    "date": 0,
+    "startDate": 0,
+    "expireDate": 0,
+    "usageLimit": 0,
+    "usage": 0,
+    "_constructor": "chatInviteExported#b18105e8"
   },
   "botInfo": [
     {
       "userId": 0,
       "description": "FT33KOSX8cBBSN74T8hJkCXFa",
       "commands": [],
-      "_constructor": "botInfo#98e81d3a"
+      "_constructor": "botInfo#1b74b335"
     }
   ]
 }
