@@ -40,7 +40,6 @@ public class TLRestrictionReason extends TLObject {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         platform = readTLString(stream);
         reason = readTLString(stream);
