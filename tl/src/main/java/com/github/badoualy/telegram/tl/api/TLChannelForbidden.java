@@ -28,30 +28,31 @@ public class TLChannelForbidden extends TLAbsChat {
     protected int flags;
 
     protected boolean broadcast;
-
     protected boolean megagroup;
-
     protected long accessHash;
-
     protected String title;
+    protected Integer untilDate;
 
     private final String _constructor = "channelForbidden#17d493d5";
 
     public TLChannelForbidden() {
     }
 
-    public TLChannelForbidden(boolean broadcast, boolean megagroup, long id, long accessHash, String title) {
+    public TLChannelForbidden(boolean broadcast, boolean megagroup, long id, long accessHash, String title,
+                              Integer untilDate) {
         this.broadcast = broadcast;
         this.megagroup = megagroup;
         this.id = id;
         this.accessHash = accessHash;
         this.title = title;
+        this.untilDate = untilDate;
     }
 
     private void computeFlags() {
         flags = 0;
         flags = broadcast ? (flags | 32) : (flags & ~32);
         flags = megagroup ? (flags | 256) : (flags & ~256);
+        flags = untilDate != null ? (flags | 65536) : (flags & ~65536);
     }
 
     @Override
@@ -62,10 +63,15 @@ public class TLChannelForbidden extends TLAbsChat {
         writeLong(id, stream);
         writeLong(accessHash, stream);
         writeString(title, stream);
+        if ((flags & 65536) != 0) {
+            if (untilDate == null) {
+                throwNullFieldException("untilDate", flags);
+            }
+            writeInt(untilDate, stream);
+        }
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         broadcast = (flags & 32) != 0;
@@ -73,6 +79,7 @@ public class TLChannelForbidden extends TLAbsChat {
         id = readLong(stream);
         accessHash = readLong(stream);
         title = readTLString(stream);
+        untilDate = (flags & 65536) != 0 ? readInt(stream) : null;
     }
 
     @Override
@@ -84,6 +91,12 @@ public class TLChannelForbidden extends TLAbsChat {
         size += SIZE_INT64;
         size += SIZE_INT64;
         size += computeTLStringSerializedSize(title);
+        if ((flags & 65536) != 0) {
+            if (untilDate == null) {
+                throwNullFieldException("untilDate", flags);
+            }
+            size += SIZE_INT32;
+        }
         return size;
     }
 
@@ -113,14 +126,6 @@ public class TLChannelForbidden extends TLAbsChat {
         this.megagroup = megagroup;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public long getAccessHash() {
         return accessHash;
     }
@@ -135,5 +140,13 @@ public class TLChannelForbidden extends TLAbsChat {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getUntilDate() {
+        return untilDate;
+    }
+
+    public void setUntilDate(Integer untilDate) {
+        this.untilDate = untilDate;
     }
 }

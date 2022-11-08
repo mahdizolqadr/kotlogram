@@ -36,7 +36,6 @@ public class TLInputPeerChat extends TLAbsInputPeer {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         chatId = readLong(stream);
     }

@@ -21,7 +21,7 @@ public class TLInputPeerUserFromMessage extends TLAbsInputPeer {
 
     public static final int CONSTRUCTOR_ID = 0xa87b0a1c;
 
-    protected TLAbsPeer peer;
+    protected TLAbsInputPeer peer;
     protected int msgId;
     protected long userId;
 
@@ -30,7 +30,7 @@ public class TLInputPeerUserFromMessage extends TLAbsInputPeer {
     public TLInputPeerUserFromMessage() {
     }
 
-    public TLInputPeerUserFromMessage(TLAbsPeer peer, int msgId, long userId) {
+    public TLInputPeerUserFromMessage(TLAbsInputPeer peer, int msgId, long userId) {
         this.peer = peer;
         this.msgId = msgId;
         this.userId = userId;
@@ -45,7 +45,7 @@ public class TLInputPeerUserFromMessage extends TLAbsInputPeer {
 
     @Override
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
-        peer = readTLObject(stream, context, TLAbsPeer.class, -1);
+        peer = readTLObject(stream, context, TLAbsInputPeer.class, -1);
         msgId = readInt(stream);
         userId = readLong(stream);
     }
@@ -69,11 +69,11 @@ public class TLInputPeerUserFromMessage extends TLAbsInputPeer {
         return CONSTRUCTOR_ID;
     }
 
-    public TLAbsPeer getPeer() {
+    public TLAbsInputPeer getPeer() {
         return peer;
     }
 
-    public void setPeer(TLAbsPeer peer) {
+    public void setPeer(TLAbsInputPeer peer) {
         this.peer = peer;
     }
 

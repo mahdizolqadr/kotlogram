@@ -30,33 +30,18 @@ public class TLChat extends TLAbsChat {
     protected int flags;
 
     protected boolean creator;
-
-    protected boolean kicked;
-
     protected boolean left;
-
     protected boolean deactivated;
-
     protected boolean callActive;
-
     protected boolean callNotEmpty;
-
     protected boolean noforwards;
-
     protected String title;
-
     protected TLAbsChatPhoto photo;
-
     protected int participantsCount;
-
     protected int date;
-
     protected int version;
-
     protected TLAbsInputChannel migratedTo;
-
     protected TLChatAdminRights adminRights;
-
     protected TLChatBannedRights defaultBannedRights;
 
     private final String _constructor = "chat#41cbf256";
@@ -64,14 +49,11 @@ public class TLChat extends TLAbsChat {
     public TLChat() {
     }
 
-    public TLChat(boolean creator, boolean kicked, boolean left,
-                  boolean deactivated, boolean callActive, boolean callNotEmpty,
-                  boolean noforwards, long id,
-                  String title, TLAbsChatPhoto photo, int participantsCount,
+    public TLChat(boolean creator, boolean left, boolean deactivated, boolean callActive, boolean callNotEmpty,
+                  boolean noforwards, long id, String title, TLAbsChatPhoto photo, int participantsCount,
                   int date, int version, TLAbsInputChannel migratedTo,
                   TLChatAdminRights adminRights, TLChatBannedRights defaultBannedRights) {
         this.creator = creator;
-        this.kicked = kicked;
         this.left = left;
         this.deactivated = deactivated;
         this.callActive = callActive;
@@ -91,7 +73,6 @@ public class TLChat extends TLAbsChat {
     private void computeFlags() {
         flags = 0;
         flags = creator ? (flags | 1) : (flags & ~1);
-        flags = kicked ? (flags | 2) : (flags & ~2);
         flags = left ? (flags | 4) : (flags & ~4);
         flags = deactivated ? (flags | 32) : (flags & ~32);
         flags = callActive ? (flags | 8388608) : (flags & ~8388608);
@@ -112,15 +93,21 @@ public class TLChat extends TLAbsChat {
         writeInt(date, stream);
         writeInt(version, stream);
         if ((flags & 64) != 0) {
-            if (migratedTo == null) throwNullFieldException("migratedTo", flags);
+            if (migratedTo == null) {
+                throwNullFieldException("migratedTo", flags);
+            }
             writeTLObject(migratedTo, stream);
         }
         if ((flags & 16384) != 0) {
-            if (adminRights == null) throwNullFieldException("adminRights", flags);
+            if (adminRights == null) {
+                throwNullFieldException("adminRights", flags);
+            }
             writeTLObject(adminRights, stream);
         }
         if ((flags & 262144) != 0) {
-            if (defaultBannedRights == null) throwNullFieldException("defaultBannedRights", flags);
+            if (defaultBannedRights == null) {
+                throwNullFieldException("defaultBannedRights", flags);
+            }
             writeTLObject(defaultBannedRights, stream);
         }
     }
@@ -129,7 +116,6 @@ public class TLChat extends TLAbsChat {
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         flags = readInt(stream);
         creator = (flags & 1) != 0;
-        kicked = (flags & 2) != 0;
         left = (flags & 4) != 0;
         deactivated = (flags & 32) != 0;
         callActive = (flags & 8388608) != 0;
@@ -150,24 +136,28 @@ public class TLChat extends TLAbsChat {
         computeFlags();
         int size = SIZE_CONSTRUCTOR_ID;
         size += SIZE_INT32;
-        size += SIZE_INT32;
+        size += SIZE_INT64;
         size += computeTLStringSerializedSize(title);
         size += photo.computeSerializedSize();
-        size += SIZE_INT64;
         size += SIZE_INT32;
         size += SIZE_INT32;
-        size += adminRights.computeSerializedSize();
-        size += defaultBannedRights.computeSerializedSize();
+        size += SIZE_INT32;
         if ((flags & 64) != 0) {
-            if (migratedTo == null) throwNullFieldException("migratedTo", flags);
+            if (migratedTo == null) {
+                throwNullFieldException("migratedTo", flags);
+            }
             size += migratedTo.computeSerializedSize();
         }
         if ((flags & 16384) != 0) {
-            if (adminRights == null) throwNullFieldException("adminRights", flags);
+            if (adminRights == null) {
+                throwNullFieldException("adminRights", flags);
+            }
             size += adminRights.computeSerializedSize();
         }
         if ((flags & 262144) != 0) {
-            if (defaultBannedRights == null) throwNullFieldException("defaultBannedRights", flags);
+            if (defaultBannedRights == null) {
+                throwNullFieldException("defaultBannedRights", flags);
+            }
             size += defaultBannedRights.computeSerializedSize();
         }
         return size;
@@ -189,14 +179,6 @@ public class TLChat extends TLAbsChat {
 
     public void setCreator(boolean creator) {
         this.creator = creator;
-    }
-
-    public boolean isKicked() {
-        return kicked;
-    }
-
-    public void setKicked(boolean kicked) {
-        this.kicked = kicked;
     }
 
     public boolean isLeft() {

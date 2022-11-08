@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.github.badoualy.telegram.tl.StreamUtils.*;
-import static com.github.badoualy.telegram.tl.TLObjectUtils.*;
+import static com.github.badoualy.telegram.tl.StreamUtils.readLong;
+import static com.github.badoualy.telegram.tl.StreamUtils.writeLong;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_CONSTRUCTOR_ID;
+import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT64;
 
 /**
  * @author Yannick Badoual yann.badoual@gmail.com
@@ -32,7 +34,6 @@ public class TLChatEmpty extends TLAbsChat {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         id = readLong(stream);
     }
@@ -52,13 +53,5 @@ public class TLChatEmpty extends TLAbsChat {
     @Override
     public int getConstructorId() {
         return CONSTRUCTOR_ID;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }
