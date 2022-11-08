@@ -15,6 +15,7 @@ import static com.github.badoualy.telegram.tl.TLObjectUtils.SIZE_INT32;
 public class TLChatBannedRights extends TLObject {
 
     public static final int CONSTRUCTOR_ID = 0x9f120418;
+
     protected int flags;
     protected boolean viewMessages;
     protected boolean sendMessages;

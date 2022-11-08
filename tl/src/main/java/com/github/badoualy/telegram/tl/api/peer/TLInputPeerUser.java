@@ -40,7 +40,6 @@ public class TLInputPeerUser extends TLAbsInputPeer {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "SimplifiableConditionalExpression"})
     public void deserializeBody(InputStream stream, TLContext context) throws IOException {
         userId = readLong(stream);
         accessHash = readLong(stream);

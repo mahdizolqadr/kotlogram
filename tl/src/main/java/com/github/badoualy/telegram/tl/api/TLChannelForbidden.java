@@ -28,13 +28,9 @@ public class TLChannelForbidden extends TLAbsChat {
     protected int flags;
 
     protected boolean broadcast;
-
     protected boolean megagroup;
-
     protected long accessHash;
-
     protected String title;
-
     protected Integer untilDate;
 
     private final String _constructor = "channelForbidden#17d493d5";
