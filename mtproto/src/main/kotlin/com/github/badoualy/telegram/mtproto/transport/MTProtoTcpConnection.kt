@@ -47,10 +47,10 @@ internal class MTProtoTcpConnection
 
                 if (abridgedProtocol) {
                     // @see https://core.telegram.org/mtproto/samples-auth_key
-                    logger.info(marker, "Using abridged protocol")
+                    logger.debug(marker, "Using abridged protocol")
                     socketChannel.write(ByteBuffer.wrap(byteArrayOf(0xef.toByte())))
                 }
-                logger.info(marker, "Connected to $ip:$port")
+                logger.debug(marker, "Connected to $ip:$port")
 
                 break
             } catch(e: Exception) {

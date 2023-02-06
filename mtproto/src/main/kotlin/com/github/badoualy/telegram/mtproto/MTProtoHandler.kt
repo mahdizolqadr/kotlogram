@@ -78,12 +78,12 @@ class MTProtoHandler {
 
     private fun newSession(dataCenter: DataCenter): MTSession {
         val session = MTSession(dataCenter, tag = tag)
-        logger.warn(session.marker, "New session created")
+        logger.debug(session.marker, "New session created")
         return session
     }
 
     fun startWatchdog() {
-        logger.info(session.marker, "startWatchdog()")
+        logger.debug(session.marker, "startWatchdog()")
         MTProtoWatchdog.start(connection!!)
                 .observeOn(Schedulers.computation())
                 .subscribe({ onMessageReceived(it) },
@@ -108,7 +108,7 @@ class MTProtoHandler {
 
     /** Properly close the connection to Telegram's server after sending ACK for messages if any to send */
     fun close() {
-        logger.info(session.marker, "close()")
+        logger.debug(session.marker, "close()")
         bufferTimeoutTask?.cancel()
         onBufferTimeout(bufferId)
         try {
@@ -205,7 +205,7 @@ class MTProtoHandler {
                                               session.generateSeqNo(method),
                                               method.serialize())
                     mtMessages.add(mtMessage)
-                    logger.info(session.marker,
+                    logger.debug(session.marker,
                                 "Sending method $method with msgId ${mtMessage.messageId} and seqNo ${mtMessage.seqNo}")
 
                     subscriberMap.put(mtMessage.messageId, s)
@@ -273,7 +273,7 @@ class MTProtoHandler {
             }
         }
         if (flush) {
-            logger.info(session.marker, "Flushing ack buffer")
+            logger.debug(session.marker, "Flushing ack buffer")
             bufferTimeoutTask?.cancel()
             bufferTimeoutTask = null
             sendMessagesAck(list!!.toLongArray())
@@ -504,7 +504,7 @@ class MTProtoHandler {
                 // Resend message with good salt
                 val sentMessage = sentMessageList.filter { it.messageId == messageContent.badMsgId }.firstOrNull()
                 if (sentMessage != null) {
-                    logger.warn(session.marker,
+                    logger.debug(session.marker,
                                 "Re-sending message ${messageContent.badMsgId} with new salt")
                     sendMessage(sentMessage)
                 } else {
@@ -513,19 +513,19 @@ class MTProtoHandler {
                 }
             }
             is MTNeedResendMessage -> {
-                logger.warn(session.marker, "TODO MTNeedResendMessage")
+                logger.debug(session.marker, "TODO MTNeedResendMessage")
                 // TODO
             }
             is MTNewMessageDetailedInfo -> {
-                logger.warn(session.marker, "TODO MTNewMessageDetailedInfo")
+                logger.debug(session.marker, "TODO MTNewMessageDetailedInfo")
                 // TODO
             }
             is MTMessageDetailedInfo -> {
-                logger.warn(session.marker, "TODO MTMessageDetailedInfo")
+                logger.debug(session.marker, "TODO MTMessageDetailedInfo")
                 // TODO
             }
             is MTFutureSalts -> {
-                logger.warn(session.marker, "TODO MTFutureSalts")
+                logger.debug(session.marker, "TODO MTFutureSalts")
                 // TODO
             }
             else -> {
@@ -572,7 +572,7 @@ class MTProtoHandler {
                 // Resend message with good seqno
                 val sentMessage = sentMessageList.filter { it.messageId == badMessage.badMsgId }.firstOrNull()
                 if (sentMessage != null) {
-                    logger.warn(session.marker,
+                    logger.debug(session.marker,
                                 "Re-sending message ${badMessage.badMsgId} with new seqno")
                     sendMessage(sentMessage)
                 } else {
@@ -604,7 +604,7 @@ class MTProtoHandler {
                 if (subscriberMap.containsKey(result.messageId)) {
                     subscriberMap.remove(result.messageId)!!
                 } else {
-                    logger.warn(session.marker, "No subscriber found for msgId ${result.messageId}")
+                    logger.debug(session.marker, "No subscriber found for msgId ${result.messageId}")
                     null
                 }
 
@@ -612,7 +612,7 @@ class MTProtoHandler {
                 if (requestMap.containsKey(result.messageId)) {
                     requestMap.remove(result.messageId)!!
                 } else {
-                    logger.warn(session.marker,
+                    logger.debug(session.marker,
                                 "No request object found for msgId ${result.messageId}")
                     null
                 }
@@ -662,7 +662,7 @@ class MTProtoHandler {
         /** Shutdown all the threads and common resources associated to this instance */
         @JvmStatic
         fun shutdown() {
-            logger.warn("shutdown()")
+            logger.debug("shutdown()")
             MTProtoWatchdog.shutdown()
             MTProtoTimer.shutdown()
         }
