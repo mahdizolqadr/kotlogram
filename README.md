@@ -4,7 +4,7 @@
 **Easy to use** and **straightforward** Kotlin and Java binding of [Telegram API](https://core.telegram.org/api).
 The project is coded in **Kotlin**, with some classes (mostly legacy classes) in Java
 
-Current layer: 66
+Current layer: 133 (partially updated)
 ===========
 Documentation@[http://kotlogram.badoualy.com](http://kotlogram.badoualy.com)
 ===========
