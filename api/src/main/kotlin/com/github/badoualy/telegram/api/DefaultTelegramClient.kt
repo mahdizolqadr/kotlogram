@@ -74,7 +74,7 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
 
         // No need to check DC if we have an authKey in storage
         init(checkNearestDc = generateAuthKey)
-        logger.info(marker, "Client ready")
+        logger.debug(marker, "Client ready")
     }
 
     private fun init(checkNearestDc: Boolean = true) {
@@ -149,7 +149,7 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
             }
             migrate(nearestDc.nearestDc)
         } else {
-            logger.info(marker, "Connected to the nearest DC${nearestDc.thisDc}")
+            logger.debug(marker, "Connected to the nearest DC${nearestDc.thisDc}")
         }
     }
 
@@ -204,7 +204,7 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
         if (Kotlogram.getDcById(dcId) == dataCenter)
             return executeRpcQueries(methods)
 
-        logger.info(marker, "Need to export handler")
+        logger.debug(marker, "Need to export handler")
         val exportedHandler = getExportedMTProtoHandler(dcId)
         try {
             return executeRpcQueries(methods, exportedHandler)
@@ -317,7 +317,7 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
             true, false, false, false, peer, null, message, randomId, null, null)!!
 
     private fun migrate(dcId: Int) {
-        logger.info(marker, "Migrating to DC$dcId")
+        logger.debug(marker, "Migrating to DC$dcId")
         mtProtoHandler?.close()
         authKey = null
         dataCenter = Kotlogram.getDcById(dcId)
