@@ -496,7 +496,9 @@ class MTProtoHandler {
             }
             is MTBadMessageNotification -> handleBadMessage(messageContent, message)
             is MTBadServerSalt -> {
-                logger.error(session.marker, messageContent.toPrettyString())
+                if (logger.isDebugEnabled) {
+                    logger.debug(session.marker, messageContent.toPrettyString())
+                }
 
                 // Message contains a good salt to use
                 session.salt = messageContent.newSalt
@@ -538,7 +540,13 @@ class MTProtoHandler {
 
     @Throws(IOException::class)
     private fun handleBadMessage(badMessage: MTBadMessageNotification, container: MTMessage) {
-        logger.error(session.marker, badMessage.toPrettyString())
+        if (badMessage.errorCode == 48) {
+            if (logger.isDebugEnabled) {
+                logger.debug(session.marker, badMessage.toPrettyString())
+            }
+        } else {
+            logger.error(session.marker, badMessage.toPrettyString())
+        }
 
         when (badMessage.errorCode) {
             MTBadMessage.ERROR_MSG_ID_TOO_LOW, MTBadMessage.ERROR_MSG_ID_TOO_HIGH -> {

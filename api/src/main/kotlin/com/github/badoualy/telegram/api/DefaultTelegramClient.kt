@@ -74,7 +74,9 @@ internal class DefaultTelegramClient internal constructor(val application: Teleg
 
         // No need to check DC if we have an authKey in storage
         init(checkNearestDc = generateAuthKey)
-        logger.debug(marker, "Client ready")
+        if (logger.isDebugEnabled) {
+            logger.debug(marker, "Client ready")
+        }
     }
 
     private fun init(checkNearestDc: Boolean = true) {
