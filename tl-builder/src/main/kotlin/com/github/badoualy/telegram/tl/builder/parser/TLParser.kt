@@ -3,9 +3,15 @@ package com.github.badoualy.telegram.tl.builder.parser
 import com.fasterxml.jackson.databind.JsonNode
 import java.util.*
 
-private val genericRegex = Regex("([a-zA-Z]+)<([a-zA-Z]+)>") // Vector<SomeKindOfType>
-private val flagRegex = Regex("([a-zA-Z]+).(\\d+)\\?([a-zA-Z<>.]+)") // flags.0?true
+private val genericRegex = Regex("([a-zA-Z]+)<([a-zA-Z.]+)>") // Vector<SomeKindOfType>
+private val flagRegex = Regex("([a-zA-Z]+)(\\d?).(\\d+)\\?([a-zA-Z<>.]+)") // flags.0?true
 private val rawRegex = Regex("[a-zA-Z].+")
+
+fun validateName(pName: String): String {
+    if (pName in listOf("static", "long", "default", "short"))
+        return "${pName[0]}$pName"
+    return pName
+}
 
 fun buildFromJson(root: JsonNode): TLDefinition {
     println("Reading TL-Schema...")
@@ -38,14 +44,14 @@ fun buildFromJson(root: JsonNode): TLDefinition {
 
         val constructorParameters = ArrayList<TLParameter>()
         for (p in constructor["params"]) {
-            val pName = p["name"]!!.textValue().toString()
+            var pName = p["name"]!!.textValue().toString()
             val pType = p["type"]!!.textValue().toString()
             val pTlType = createType(pType, types)
 
-            constructorParameters.add(TLParameter(pName, pTlType))
+            constructorParameters.add(TLParameter(validateName(pName), pTlType))
         }
 
-        constructors.add(TLConstructor(name, id, constructorParameters, tlType))
+        constructors.add(TLConstructor(validateName(name), id, constructorParameters, tlType))
     }
 
     // Build constructors: type classes
@@ -66,10 +72,10 @@ fun buildFromJson(root: JsonNode): TLDefinition {
             val pType = p["type"]!!.textValue().toString()
             val pTlType = createType(pType, types)
 
-            methodParameters.add(TLParameter(pName, pTlType))
+            methodParameters.add(TLParameter(validateName(pName), pTlType))
         }
 
-        methods.add(TLMethod(name, id, methodParameters, tlType))
+        methods.add(TLMethod(validateName(name), id, methodParameters, tlType))
     }
 
     return TLDefinition(types, constructors, methods)
@@ -88,13 +94,15 @@ private fun createType(typeName: String, types: Map<String, TLTypeRaw>, isParame
         val groups = flagRegex.matchEntire(typeName)?.groups
         val maskName = groups?.get(1)?.value ?: throw RuntimeException(
                 "Unknown error with type $typeName")
-        val value = groups.get(2)?.value?.toInt() ?: throw RuntimeException(
-                "Unknown error with type $typeName")
-        val realType = groups.get(3)?.value ?: throw RuntimeException(
-                "Unknown error with type $typeName")
-        if (maskName != "flags") throw RuntimeException("Unsupported flag name, expected `flags`")
+        val tmp = groups?.get(2)?.value ?: ""
+        val flagGroup = if (tmp.isEmpty()) "" else tmp
+        val value = groups?.get(3)?.value?.toInt() ?: throw RuntimeException(
+            "Unknown error with type $typeName")
+        val realType = groups?.get(4)?.value ?: throw RuntimeException(
+            "Unknown error with type $typeName")
+        if (maskName != "flags" && maskName != "flags2" ) throw RuntimeException("Unsupported flag name, expected `flags`")
 
-        TLTypeConditional(value, createType(realType, types))
+        TLTypeConditional(value, createType(realType, types), flagGroup)
     }
     typeName.matches(genericRegex) -> {
         val groups = genericRegex.matchEntire(typeName)?.groups

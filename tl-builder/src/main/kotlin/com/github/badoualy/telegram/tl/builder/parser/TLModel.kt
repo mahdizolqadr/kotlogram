@@ -41,11 +41,17 @@ class TLTypeFlag() : TLType() {
     override fun hashCode() = toString().hashCode()
 }
 
-class TLTypeConditional(val value: Int, val realType: TLType) : TLType() {
+class TLTypeFlag2() : TLType() {
+    override fun toString() = "#Flag2"
+    override fun equals(other: Any?) = other is TLTypeFlag2
+    override fun hashCode() = toString().hashCode()
+}
+
+class TLTypeConditional(val value: Int, val realType: TLType, val conditionGroup:String = "") : TLType() {
     fun pow2Value() = Math.pow(2.toDouble(), value.toDouble()).toInt()
 
     override fun serializable() = !(realType is TLTypeRaw && realType.name.equals("true", true))
-    override fun toString() = "flag.$value?$realType"
+    override fun toString() = "flag$conditionGroup.$value?$realType"
     override fun equals(other: Any?) = other is TLTypeConditional && other.value == value && other.realType == realType
     override fun hashCode() = toString().hashCode()
 }

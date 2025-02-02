@@ -413,49 +413,55 @@ object JavaPoet {
         // Compute flag for serialization
         val condParameters = parameters.filter { it.tlType is TLTypeConditional }
         if (condParameters.isNotEmpty() && id != null) {
-            val computeFlagsMethod = MethodSpec.methodBuilder("computeFlags")
+            val flagGroups = condParameters.groupBy { (it.tlType as? TLTypeConditional)!!.conditionGroup }
+            for ((conditionGroup, condParametersInGroup) in flagGroups) {
+                val computeFlagsMethod = MethodSpec.methodBuilder("computeFlags$conditionGroup")
                     .addModifiers(Modifier.PRIVATE)
 
-            val condBoolean = ArrayList<TLParameter>()
+                val condBoolean = ArrayList<TLParameter>()
 
-            computeFlagsMethod.addStatement("flags = 0")
-            for (parameter in condParameters) {
-                val tlType = parameter.tlType as TLTypeConditional
-                val realType = tlType.realType
-                val fieldName = parameter.name.lCamelCase().javaEscape()
+                computeFlagsMethod.addStatement("flags$conditionGroup = 0")
+                for (parameter in condParametersInGroup) {
+                    val tlType = parameter.tlType as TLTypeConditional
+                    val realType = tlType.realType
+                    val fieldName = parameter.name.lCamelCase().javaEscape()
 
-                if (realType is TLTypeRaw && arrayOf("true", "false").contains(realType.name)) {
-                    computeFlagsMethod.addStatement("flags = $fieldName ? (flags | ${tlType.pow2Value()}) : (flags & ~${tlType.pow2Value()})")
-                    if (condParameters.any {
-                        (it != parameter
-                                && !((it.tlType as TLTypeConditional).realType is TLTypeRaw && (it.tlType.realType as TLTypeRaw).name == "Bool")
-                                && (it.tlType as TLTypeConditional).value == tlType.value)
-                    })
-                        condBoolean.add(parameter)
-                } else {
-                    if (realType is TLTypeRaw && realType.name == "Bool" && condParameters.any { it != parameter && (it.tlType as TLTypeConditional).value == tlType.value }) {
-                        computeFlagsMethod.addCode("// If field is not serialized force it to false\n")
-                        computeFlagsMethod.addStatement("if ($fieldName && (flags & ${tlType.pow2Value()}) == 0) $fieldName = false")
+                    if (realType is TLTypeRaw && arrayOf("true", "false").contains(realType.name)) {
+                        computeFlagsMethod.addStatement("flags$conditionGroup = $fieldName ? (flags$conditionGroup | ${tlType.pow2Value()}) : (flags$conditionGroup & ~${tlType.pow2Value()})")
+                        if (condParameters.any {
+                                (it != parameter
+                                        && !((it.tlType as TLTypeConditional).realType is TLTypeRaw && (it.tlType.realType as TLTypeRaw).name == "Bool")
+                                        && (it.tlType as TLTypeConditional).value == tlType.value)
+                            })
+                            condBoolean.add(parameter)
                     } else {
-                        computeFlagsMethod.addStatement("flags = $fieldName != null ? (flags | ${tlType.pow2Value()}) : (flags & ~${tlType.pow2Value()})")
+                        if (realType is TLTypeRaw && realType.name == "Bool" && condParameters.any { it != parameter && (it.tlType as TLTypeConditional).value == tlType.value }) {
+                            computeFlagsMethod.addCode("// If field is not serialized force it to false\n")
+                            computeFlagsMethod.addStatement("if ($fieldName && (flags$conditionGroup & ${tlType.pow2Value()}) == 0) $fieldName = false")
+                        } else {
+                            computeFlagsMethod.addStatement("flags$conditionGroup = $fieldName != null ? (flags | ${tlType.pow2Value()}) : (flags$conditionGroup & ~${tlType.pow2Value()})")
+                        }
                     }
                 }
-            }
 
-            if (condBoolean.isNotEmpty()) {
-                computeFlagsMethod.addCode("\n// Following parameters might be forced to true by another field that updated the flags\n")
-                for (parameter in condBoolean) {
-                    computeFlagsMethod.addStatement("" + parameter.name.lCamelCase().javaEscape() + " = (flags & ${(parameter.tlType as TLTypeConditional).pow2Value()}) != 0")
+                if (condBoolean.isNotEmpty()) {
+                    computeFlagsMethod.addCode("\n// Following parameters might be forced to true by another field that updated the flags\n")
+                    for (parameter in condBoolean) {
+                        computeFlagsMethod.addStatement(
+                            "" + parameter.name.lCamelCase()
+                                .javaEscape() + " = (flags$conditionGroup & ${(parameter.tlType as TLTypeConditional).pow2Value()}) != 0"
+                        )
+                    }
                 }
+
+                clazz.addMethod(computeFlagsMethod.build())
+
+                serializeMethod.addStatement("computeFlags$conditionGroup()")
+                serializeMethod.addCode("\n")
+
+                computeSizeMethod.addStatement("computeFlags$conditionGroup()")
+                computeSizeMethod.addCode("\n")
             }
-
-            clazz.addMethod(computeFlagsMethod.build())
-
-            serializeMethod.addStatement("computeFlags()")
-            serializeMethod.addCode("\n")
-
-            computeSizeMethod.addStatement("computeFlags()")
-            computeSizeMethod.addCode("\n")
         }
 
         computeSizeMethod.addStatement("int size = SIZE_CONSTRUCTOR_ID")
@@ -473,7 +479,7 @@ object JavaPoet {
                 fieldType = ParameterizedTypeName.get(fieldType.rawType, typeArg)
             }
             // Build field
-            val fieldName = parameter.name.lCamelCase().javaEscape()
+            val fieldName = validateName(parameter.name.lCamelCase().javaEscape())
             if (!parameter.inherited || id == null) {
                 // Null-id is superclass
                 val fieldBuilder = FieldSpec.builder(fieldType, fieldName, Modifier.PROTECTED)
@@ -596,11 +602,11 @@ object JavaPoet {
         is TLTypeFlag -> "writeInt($fieldName, stream);"
         is TLTypeConditional -> {
             val statement = StringBuilder()
-            statement.append("if ((flags & ${fieldTlType.pow2Value()}) != 0) {\n")
-                    .append("    ")
+            statement.append("if ((flags${fieldTlType.conditionGroup} & ${fieldTlType.pow2Value()}) != 0) {\n")
+                .append("    ")
             if (fieldTlType.realType !is TLTypeRaw || fieldTlType.realType.name != "Bool") {
-                statement.append("""if ($fieldName == null) throwNullFieldException("$fieldName", flags);""").append('\n')
-                        .append("    ")
+                statement.append("""if ($fieldName == null) throwNullFieldException("$fieldName", flags${fieldTlType.conditionGroup});""").append('\n')
+                    .append("    ")
             }
             statement.append(serializeParameter(fieldName, fieldTlType.realType)).append('\n')
                     .append('}')
@@ -625,7 +631,7 @@ object JavaPoet {
         is TLTypeFunctional -> "readTLMethod(stream, context)"
         is TLTypeFlag -> "readInt(stream)"
         is TLTypeConditional -> {
-            val prefix = "(flags & ${fieldTlType.pow2Value()}) != 0"
+            val prefix = "(flags${fieldTlType.conditionGroup} & ${fieldTlType.pow2Value()}) != 0"
             val realType = fieldTlType.realType
             val suffix = if (realType is TLTypeRaw && "Bool" == realType.name) "false" else "null"
             if (realType is TLTypeRaw && arrayOf("true", "false").contains(realType.name)) prefix
@@ -660,11 +666,11 @@ object JavaPoet {
         is TLTypeFlag -> "size += SIZE_INT32;"
         is TLTypeConditional -> {
             val statement = StringBuilder()
-            statement.append("if ((flags & ${fieldTlType.pow2Value()}) != 0) {\n")
-                    .append("    ")
+            statement.append("if ((flags${fieldTlType.conditionGroup} & ${fieldTlType.pow2Value()}) != 0) {\n")
+                .append("    ")
             if (fieldTlType.realType !is TLTypeRaw || fieldTlType.realType.name != "Bool") {
-                statement.append("""if ($fieldName == null) throwNullFieldException("$fieldName", flags);""").append('\n')
-                        .append("    ")
+                statement.append("""if ($fieldName == null) throwNullFieldException("$fieldName", flags${fieldTlType.conditionGroup});""").append('\n')
+                    .append("    ")
             }
             statement.append(computeSizeParameter(fieldName, fieldTlType.realType)).append("\n")
                     .append('}')
