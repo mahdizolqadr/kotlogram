@@ -4,7 +4,7 @@ subprojects {
     apply plugin: "maven"
 
     version = "1.1.6-SNAPSHOT"
-    group = 'com.github.badoualy'
+    group = 'com.github.mahdizolqadr'
 
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
@@ -12,6 +12,7 @@ subprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
